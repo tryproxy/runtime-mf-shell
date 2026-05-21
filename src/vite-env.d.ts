@@ -4,6 +4,7 @@ declare module 'demo_remote/mount' {
   export type HostBridge = {
     theme: {
       getSnapshot(): { mode: ThemeMode };
+      subscribe(listener: () => void): () => void;
     };
     auth: {
       getSession(): {

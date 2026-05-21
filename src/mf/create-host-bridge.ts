@@ -1,9 +1,24 @@
-import type { HostBridge } from 'demo_remote/mount';
+import type { HostBridge, ThemeMode } from 'demo_remote/mount';
 
-export function createHostBridge(): HostBridge {
-  return {
+type ThemeListener = () => void;
+
+export function createHostBridge(initialTheme: ThemeMode): {
+  bridge: HostBridge;
+  setTheme(theme: ThemeMode): void;
+} {
+  let currentTheme = initialTheme;
+  const listeners = new Set<ThemeListener>();
+
+  const bridge: HostBridge = {
     theme: {
-      getSnapshot: () => ({ mode: 'light' }),
+      getSnapshot: () => ({ mode: currentTheme }),
+      subscribe: (listener) => {
+        listeners.add(listener);
+
+        return () => {
+          listeners.delete(listener);
+        };
+      },
     },
 
     auth: {
@@ -30,6 +45,14 @@ export function createHostBridge(): HostBridge {
         window.history.replaceState(null, '', path);
         window.dispatchEvent(new PopStateEvent('popstate'));
       },
+    },
+  };
+
+  return {
+    bridge,
+    setTheme(theme) {
+      currentTheme = theme;
+      listeners.forEach((listener) => listener());
     },
   };
 }
