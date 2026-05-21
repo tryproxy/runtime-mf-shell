@@ -1,3 +1,4 @@
+import { DemoRemotePage } from '@/pages/demo-remote';
 import { OverviewPage } from '@/pages/overview';
 import { SettingsPage } from '@/pages/settings';
 import {
@@ -23,6 +24,10 @@ type PageContentProps = {
 };
 
 function PageContent({ activePage }: PageContentProps) {
+  if (activePage === 'demo' || activePage === 'whatever') {
+    return <DemoRemotePage />;
+  }
+
   if (activePage === 'settings') {
     return <SettingsPage />;
   }

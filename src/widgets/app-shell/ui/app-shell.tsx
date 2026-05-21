@@ -1,12 +1,19 @@
 import { cn } from '@/shared/lib/cn';
 import { type PageMeta, pages } from '@/shared/lib/routing/use-active-page';
-import type { PropsWithChildren } from 'react';
+import type { MouseEvent, PropsWithChildren } from 'react';
 
 type AppShellProps = PropsWithChildren<{
   currentPage: PageMeta;
 }>;
 
 export function AppShell({ currentPage, children }: AppShellProps) {
+  const handleNavigate =
+    (href: string) => (event: MouseEvent<HTMLAnchorElement>) => {
+      event.preventDefault();
+      window.history.pushState(null, '', href);
+      window.dispatchEvent(new PopStateEvent('popstate'));
+    };
+
   return (
     <div className="min-h-screen bg-slate-100 text-slate-900">
       <div className="grid min-h-screen grid-cols-1 md:grid-cols-[240px_minmax(0,1fr)]">
@@ -33,6 +40,7 @@ export function AppShell({ currentPage, children }: AppShellProps) {
                         : 'text-slate-300 hover:bg-slate-800 hover:text-white'
                     )}
                     href={page.href}
+                    onClick={handleNavigate(page.href)}
                   >
                     <div className="text-sm font-medium">{page.label}</div>
                     <div
