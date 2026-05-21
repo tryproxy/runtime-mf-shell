@@ -148,13 +148,13 @@ federation({
     demo_remote: 'http://localhost:5001/assets/remoteEntry.js',
   },
   shared: ['react', 'react-dom'],
-})
+});
 ```
 
 The remote import is:
 
 ```ts
-import('demo_remote/mount')
+import('demo_remote/mount');
 ```
 
 That works because:
@@ -175,7 +175,7 @@ federation({
     './mount': './src/mount.tsx',
   },
   shared: ['react', 'react-dom'],
-})
+});
 ```
 
 Its `mount` function lives in [src/mount.tsx](/mnt/secure/@home/dashweb/dev/dash/selfed/runtime-mf/runtime-mf-module/src/mount.tsx).
@@ -189,26 +189,26 @@ Current bridge shape:
 ```ts
 type HostBridge = {
   theme: {
-    getSnapshot(): { mode: 'light' | 'dark' }
-    subscribe(listener: () => void): () => void
-  }
+    getSnapshot(): { mode: 'light' | 'dark' };
+    subscribe(listener: () => void): () => void;
+  };
   auth: {
     getSession(): {
-      userId: string
-      displayName?: string
-      roles: string[]
-    } | null
-  }
+      userId: string;
+      displayName?: string;
+      roles: string[];
+    } | null;
+  };
   navigation: {
     getLocation(): {
-      pathname: string
-      search: string
-      hash: string
-    }
-    navigate(path: string): void
-    replace(path: string): void
-  }
-}
+      pathname: string;
+      search: string;
+      hash: string;
+    };
+    navigate(path: string): void;
+    replace(path: string): void;
+  };
+};
 ```
 
 Why this approach is useful:
