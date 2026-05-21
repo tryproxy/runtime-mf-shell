@@ -1,24 +1,33 @@
-import { cn } from '@/shared/lib/cn';
-import { useState } from 'react';
+import { OverviewPage } from '@/pages/overview';
+import { SettingsPage } from '@/pages/settings';
+import {
+  type PageKey,
+  getPageByKey,
+  useActivePage,
+} from '@/shared/lib/routing/use-active-page';
+import { AppShell } from '@/widgets/app-shell';
 
 function App() {
-  const [count, setCount] = useState(0);
+  const activePage = useActivePage();
+  const currentPage = getPageByKey(activePage);
 
   return (
-    <div
-      className={cn(
-        'flex h-screen flex-col items-center justify-center bg-gray-500'
-      )}
-    >
-      <button
-        className="cursor-pointer font-bold text-black"
-        onClick={() => setCount(count + 1)}
-      >
-        [ CENTERED ]
-      </button>
-      <div>{count}</div>
-    </div>
+    <AppShell currentPage={currentPage}>
+      <PageContent activePage={activePage} />
+    </AppShell>
   );
+}
+
+type PageContentProps = {
+  activePage: PageKey;
+};
+
+function PageContent({ activePage }: PageContentProps) {
+  if (activePage === 'settings') {
+    return <SettingsPage />;
+  }
+
+  return <OverviewPage />;
 }
 
 export default App;
