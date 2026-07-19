@@ -29,10 +29,13 @@ type RemoteSlotProps = {
 export function RemoteSlot({ basename, loader, theme }: RemoteSlotProps) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const hostBridgeRef = useRef(createHostBridge(theme));
+  const loaderRef = useRef(loader);
   const [status, setStatus] = useState<'loading' | 'ready' | 'error'>(
     'loading'
   );
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  loaderRef.current = loader;
 
   const hostBridge = hostBridgeRef.current;
   const bridge: HostBridge = hostBridge.bridge;
@@ -41,6 +44,8 @@ export function RemoteSlot({ basename, loader, theme }: RemoteSlotProps) {
     hostBridge.setTheme(theme);
   }, [hostBridge, theme]);
 
+  // Mount once per basename. Do not depend on loader/theme — unstable
+  // loader identities (and theme toggles) must not tear down the remote.
   useEffect(() => {
     let instance: RemoteAppInstance | null = null;
     let cancelled = false;
@@ -50,7 +55,7 @@ export function RemoteSlot({ basename, loader, theme }: RemoteSlotProps) {
         setStatus('loading');
         setErrorMessage(null);
 
-        const remote = await loader();
+        const remote = await loaderRef.current();
         const resolvedRemote = 'default' in remote ? remote.default : remote;
 
         if (cancelled || !containerRef.current) {
@@ -79,7 +84,7 @@ export function RemoteSlot({ basename, loader, theme }: RemoteSlotProps) {
       cancelled = true;
       instance?.unmount();
     };
-  }, [basename, bridge, loader]);
+  }, [basename, bridge]);
 
   return (
     <section>

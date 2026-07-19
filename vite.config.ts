@@ -27,7 +27,10 @@ export default defineConfig(({ mode }) => {
         remotes: {
           demo_remote: remoteEntryUrl,
         },
-        shared: ['react', 'react-dom'],
+        shared: {
+          react: { singleton: true },
+          'react-dom': { singleton: true },
+        },
       }),
       {
         name: 'fix-federation-share-scope-placeholder',
