@@ -1,3 +1,11 @@
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/shared/ui/shadcn';
+
 type PanelProps = {
   title: string;
   value: string;
@@ -6,10 +14,14 @@ type PanelProps = {
 
 export function Panel({ title, value, description }: PanelProps) {
   return (
-    <div className="rounded-rmf-md border-rmf-border bg-rmf-surface shadow-rmf-sm border p-5">
-      <p className="text-rmf-subtle text-sm font-medium">{title}</p>
-      <p className="text-rmf-fg mt-3 text-2xl font-semibold">{value}</p>
-      <p className="text-rmf-muted mt-2 text-sm">{description}</p>
-    </div>
+    <Card size="sm">
+      <CardHeader>
+        <CardDescription>{title}</CardDescription>
+        <CardTitle className="text-2xl">{value}</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <p className="text-muted-foreground text-sm">{description}</p>
+      </CardContent>
+    </Card>
   );
 }

@@ -1,29 +1,32 @@
 /**
- * Runtime MF design-token contract (sketch).
- * Shell owns these values. Remotes may only read them via var(--rmf-*).
+ * Runtime MF design-token contract.
+ * Shell owns paint. Remotes read via var(--rmf-*).
+ * Values bridge from shadcn semantic tokens so shell UI and remotes stay aligned.
  *
- * Applied on <html data-rmf-theme="light|dark">.
+ * Theme switches: html[data-rmf-theme] + class "dark" (shadcn).
  */
 
-html[data-rmf-theme='light'] {
-  --rmf-color-page: #f1f5f9;
-  --rmf-color-surface: #ffffff;
-  --rmf-color-fg: #0f172a;
-  --rmf-color-muted: #475569;
-  --rmf-color-subtle: #64748b;
-  --rmf-color-border: #e2e8f0;
-  --rmf-radius-md: 0.5rem;
+html[data-rmf-theme='light'],
+html:not(.dark) {
+  --rmf-color-page: var(--background);
+  --rmf-color-surface: var(--card);
+  --rmf-color-fg: var(--foreground);
+  --rmf-color-muted: var(--muted-foreground);
+  --rmf-color-subtle: var(--muted-foreground);
+  --rmf-color-border: var(--border);
+  --rmf-radius-md: var(--radius);
   --rmf-shadow-sm: 0 1px 2px rgb(15 23 42 / 0.06);
 }
 
-html[data-rmf-theme='dark'] {
-  --rmf-color-page: #020617;
-  --rmf-color-surface: #0f172a;
-  --rmf-color-fg: #f1f5f9;
-  --rmf-color-muted: #94a3b8;
-  --rmf-color-subtle: #64748b;
-  --rmf-color-border: #1e293b;
-  --rmf-radius-md: 0.5rem;
+html[data-rmf-theme='dark'],
+html.dark {
+  --rmf-color-page: var(--background);
+  --rmf-color-surface: var(--card);
+  --rmf-color-fg: var(--foreground);
+  --rmf-color-muted: var(--muted-foreground);
+  --rmf-color-subtle: var(--muted-foreground);
+  --rmf-color-border: var(--border);
+  --rmf-radius-md: var(--radius);
   --rmf-shadow-sm: 0 1px 2px rgb(0 0 0 / 0.35);
 }
 

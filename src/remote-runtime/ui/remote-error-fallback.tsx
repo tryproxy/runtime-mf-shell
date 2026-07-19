@@ -1,3 +1,10 @@
+import {
+  Alert,
+  AlertDescription,
+  AlertTitle,
+  Button,
+} from '@/shared/ui/shadcn';
+import { AlertCircleIcon } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
 type RemoteErrorFallbackProps = {
@@ -14,28 +21,28 @@ export function RemoteErrorFallback({
   const { t } = useTranslation();
 
   return (
-    <div className="rounded-rmf-md border-rmf-border bg-rmf-surface shadow-rmf-sm border p-5">
-      <p className="text-rmf-subtle text-sm font-medium">Error</p>
-      <p className="text-rmf-fg mt-3 text-lg font-semibold">
-        {title ?? t('remote.unavailableTitle')}
-      </p>
-      <p className="text-rmf-muted mt-2 text-sm">
-        {t('remote.unavailableDesc')}
-      </p>
-      {message ? (
-        <pre className="text-rmf-muted mt-4 max-h-40 overflow-auto text-xs whitespace-pre-wrap">
-          {message}
-        </pre>
-      ) : null}
-      {onRetry ? (
-        <button
-          type="button"
-          className="border-rmf-border text-rmf-fg rounded-rmf-md mt-4 border px-3 py-1.5 text-sm"
-          onClick={onRetry}
-        >
-          {t('remote.retry')}
-        </button>
-      ) : null}
-    </div>
+    <Alert variant="destructive">
+      <AlertCircleIcon />
+      <AlertTitle>{title ?? t('remote.unavailableTitle')}</AlertTitle>
+      <AlertDescription>
+        <p>{t('remote.unavailableDesc')}</p>
+        {message ? (
+          <pre className="mt-3 max-h-40 overflow-auto text-xs whitespace-pre-wrap">
+            {message}
+          </pre>
+        ) : null}
+        {onRetry ? (
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            className="mt-3"
+            onClick={onRetry}
+          >
+            {t('remote.retry')}
+          </Button>
+        ) : null}
+      </AlertDescription>
+    </Alert>
   );
 }

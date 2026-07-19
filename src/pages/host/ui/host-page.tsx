@@ -1,4 +1,12 @@
 import { Panel } from '@/shared/ui/panel';
+import {
+  Button,
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/shared/ui/shadcn';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -13,8 +21,12 @@ export function HostPage() {
   return (
     <section className="space-y-6">
       <div>
-        <h3 className="text-rmf-fg text-lg font-semibold">{t('host.title')}</h3>
-        <p className="text-rmf-muted mt-1 text-sm">{t('host.description')}</p>
+        <h3 className="text-lg font-semibold tracking-tight">
+          {t('host.title')}
+        </h3>
+        <p className="text-muted-foreground mt-1 text-sm">
+          {t('host.description')}
+        </p>
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2">
@@ -30,19 +42,21 @@ export function HostPage() {
         />
       </div>
 
-      <div className="rounded-rmf-md border-rmf-border bg-rmf-surface shadow-rmf-sm border p-5">
-        <p className="text-rmf-subtle text-sm font-medium">
-          {t('host.crashTitle')}
-        </p>
-        <p className="text-rmf-muted mt-2 text-sm">{t('host.crashDesc')}</p>
-        <button
-          type="button"
-          className="rounded-rmf-md mt-4 border border-red-300 bg-red-50 px-3 py-1.5 text-sm text-red-700"
-          onClick={() => setShouldCrash(true)}
-        >
-          {t('host.crashButton')}
-        </button>
-      </div>
+      <Card>
+        <CardHeader>
+          <CardTitle>{t('host.crashTitle')}</CardTitle>
+          <CardDescription>{t('host.crashDesc')}</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Button
+            type="button"
+            variant="destructive"
+            onClick={() => setShouldCrash(true)}
+          >
+            {t('host.crashButton')}
+          </Button>
+        </CardContent>
+      </Card>
     </section>
   );
 }

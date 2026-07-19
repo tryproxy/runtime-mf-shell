@@ -105,7 +105,7 @@ export function RemoteSlot({
     <RemoteErrorBoundary resetKey={`${basename}:${retryCount}`}>
       <section>
         {status === 'loading' ? (
-          <p className="text-rmf-muted text-sm">{t('remote.loading')}</p>
+          <p className="text-muted-foreground text-sm">{t('remote.loading')}</p>
         ) : null}
         {status === 'error' ? (
           <RemoteErrorFallback

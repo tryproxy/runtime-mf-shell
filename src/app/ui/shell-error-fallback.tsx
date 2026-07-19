@@ -1,3 +1,10 @@
+import {
+  Alert,
+  AlertDescription,
+  AlertTitle,
+  Button,
+} from '@/shared/ui/shadcn';
+import { AlertCircleIcon } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
 type ShellErrorFallbackProps = {
@@ -14,32 +21,30 @@ export function ShellErrorFallback({
   const { t } = useTranslation();
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-slate-100 p-6 text-slate-900">
-      <div className="rounded-rmf-md border-rmf-border bg-rmf-surface shadow-rmf-sm w-full max-w-lg border p-5">
-        <p className="text-rmf-subtle text-sm font-medium">
-          {t('shellError.label')}
-        </p>
-        <p className="text-rmf-fg mt-3 text-lg font-semibold">
-          {title ?? t('shellError.title')}
-        </p>
-        <p className="text-rmf-muted mt-2 text-sm">
-          {t('shellError.description')}
-        </p>
-        {message ? (
-          <pre className="text-rmf-muted mt-4 max-h-40 overflow-auto text-xs whitespace-pre-wrap">
-            {message}
-          </pre>
-        ) : null}
-        {onRetry ? (
-          <button
-            type="button"
-            className="border-rmf-border text-rmf-fg rounded-rmf-md mt-4 border px-3 py-1.5 text-sm"
-            onClick={onRetry}
-          >
-            {t('shellError.retry')}
-          </button>
-        ) : null}
-      </div>
+    <div className="bg-background flex min-h-screen items-center justify-center p-6">
+      <Alert variant="destructive" className="max-w-lg">
+        <AlertCircleIcon />
+        <AlertTitle>{title ?? t('shellError.title')}</AlertTitle>
+        <AlertDescription>
+          <p>{t('shellError.description')}</p>
+          {message ? (
+            <pre className="mt-3 max-h-40 overflow-auto text-xs whitespace-pre-wrap">
+              {message}
+            </pre>
+          ) : null}
+          {onRetry ? (
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              className="mt-3"
+              onClick={onRetry}
+            >
+              {t('shellError.retry')}
+            </Button>
+          ) : null}
+        </AlertDescription>
+      </Alert>
     </div>
   );
 }

@@ -8,6 +8,7 @@ import {
   persistLocale,
   readStoredLocale,
 } from '@/shared/i18n';
+import { applyShellTheme } from '@/shared/lib/apply-shell-theme';
 import type { ShellTheme } from '@/shared/model';
 import { useEffect, useState } from 'react';
 
@@ -23,7 +24,7 @@ function App() {
 
   useEffect(() => {
     window.localStorage.setItem('shell-theme', theme);
-    document.documentElement.dataset.rmfTheme = theme;
+    applyShellTheme(theme);
   }, [theme]);
 
   useEffect(() => {
