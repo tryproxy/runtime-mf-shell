@@ -1,4 +1,5 @@
 import { type PageMeta, pages } from '@/app/model/routing';
+import { AppNavSwitcher } from '@/app/ui/app-nav-switcher';
 import { APP_LOCALES, type AppLocale } from '@/shared/i18n';
 import { cn } from '@/shared/lib';
 import {
@@ -24,6 +25,11 @@ type AppShellProps = PropsWithChildren<{
   onLocaleChange(locale: AppLocale): void;
 }>;
 
+function navigateTo(href: string) {
+  window.history.pushState(null, '', href);
+  window.dispatchEvent(new PopStateEvent('popstate'));
+}
+
 export function AppShell({
   currentPage,
   theme,
@@ -38,8 +44,7 @@ export function AppShell({
   const handleNavigate =
     (href: string) => (event: MouseEvent<HTMLAnchorElement>) => {
       event.preventDefault();
-      window.history.pushState(null, '', href);
-      window.dispatchEvent(new PopStateEvent('popstate'));
+      navigateTo(href);
     };
 
   return (
@@ -74,19 +79,25 @@ export function AppShell({
         </ScrollArea>
       </aside>
 
-      <div className="flex min-w-0 flex-1 flex-col">
-        <header className="bg-card/80 supports-backdrop-filter:bg-card/60 sticky top-0 z-10 border-b px-4 py-3 backdrop-blur md:px-6">
-          <div className="flex items-center justify-between gap-4">
+      <div className="flex min-w-0 flex-1 flex-col overflow-x-hidden">
+        <header className="bg-card/80 supports-backdrop-filter:bg-card/60 wideMobile:px-6 sticky top-0 z-10 border-b px-4 py-3 backdrop-blur">
+          <div className="flex flex-wrap items-center justify-between gap-3">
             <div className="min-w-0">
               <p className="text-muted-foreground text-xs font-semibold tracking-wide uppercase">
                 {t('shell.header')}
               </p>
-              <h2 className="truncate text-xl font-semibold tracking-tight">
+              <h2 className="hidden truncate text-xl font-semibold tracking-tight md:block">
                 {t(currentPage.labelKey)}
               </h2>
+              <div className="mt-1 md:hidden">
+                <AppNavSwitcher
+                  currentPage={currentPage}
+                  onNavigate={navigateTo}
+                />
+              </div>
             </div>
-            <div className="flex shrink-0 items-center gap-2">
-              <span className="text-muted-foreground hidden text-sm sm:inline">
+            <div className="flex min-w-0 flex-wrap items-center justify-end gap-2">
+              <span className="text-muted-foreground wideMobile:inline hidden text-sm">
                 {t('shell.tagline')}
               </span>
               <Select
@@ -115,13 +126,17 @@ export function AppShell({
                 ) : (
                   <SunIcon className="size-4" />
                 )}
-                {isDark ? t('shell.themeDark') : t('shell.themeLight')}
+                <span className="comfortable:inline hidden">
+                  {isDark ? t('shell.themeDark') : t('shell.themeLight')}
+                </span>
               </Button>
             </div>
           </div>
         </header>
 
-        <main className="bg-background flex-1 p-4 md:p-6">{children}</main>
+        <main className="bg-background wideMobile:p-6 min-w-0 flex-1 overflow-x-auto p-4">
+          {children}
+        </main>
       </div>
     </div>
   );

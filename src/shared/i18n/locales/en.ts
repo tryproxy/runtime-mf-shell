@@ -15,6 +15,7 @@ export const en = {
     hostHomeDesc: 'Shell-owned page.',
     remoteModule: 'Remote module',
     remoteModuleDesc: 'Mounts the remote module.',
+    switcherAria: 'Switch page',
   },
   host: {
     title: 'Host page',

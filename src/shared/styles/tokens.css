@@ -39,4 +39,9 @@ html.dark {
   --color-rmf-border: var(--rmf-color-border);
   --radius-rmf-md: var(--rmf-radius-md);
   --shadow-rmf-sm: var(--rmf-shadow-sm);
+
+  /* Company custom screens (see APP_BREAKPOINTS). sm/md/lg/xl keep TW defaults. */
+  --breakpoint-compact: 500px;
+  --breakpoint-comfortable: 560px;
+  --breakpoint-wideMobile: 740px;
 }

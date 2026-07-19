@@ -15,6 +15,7 @@ export const ru = {
     hostHomeDesc: 'Страница, принадлежащая shell.',
     remoteModule: 'Удалённый модуль',
     remoteModuleDesc: 'Монтирует remote-модуль.',
+    switcherAria: 'Переключить страницу',
   },
   host: {
     title: 'Страница хоста',
