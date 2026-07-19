@@ -1,4 +1,14 @@
-import { type PageMeta, pages } from '@/app/model/routing';
+import {
+  type ModuleMeta,
+  type ModulePageMeta,
+  type NavLayer,
+  getActiveModulePage,
+  getModuleByKey,
+  getModuleFromPath,
+  moduleHasPages,
+  modules,
+  useLocationPathname,
+} from '@/app/model/routing';
 import { AppNavSwitcher } from '@/app/ui/app-nav-switcher';
 import { APP_LOCALES, type AppLocale } from '@/shared/i18n';
 import { cn } from '@/shared/lib';
@@ -13,12 +23,21 @@ import {
   Separator,
 } from '@/shared/ui/shadcn';
 import type { ShellTheme } from '@/shared/model';
-import { MoonIcon, SunIcon } from 'lucide-react';
-import type { MouseEvent, PropsWithChildren } from 'react';
+import {
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  MoonIcon,
+  SunIcon,
+} from 'lucide-react';
+import {
+  type MouseEvent,
+  type PropsWithChildren,
+  useEffect,
+  useState,
+} from 'react';
 import { useTranslation } from 'react-i18next';
 
 type AppShellProps = PropsWithChildren<{
-  currentPage: PageMeta;
   theme: ShellTheme;
   locale: AppLocale;
   onThemeToggle(): void;
@@ -31,7 +50,6 @@ function navigateTo(href: string) {
 }
 
 export function AppShell({
-  currentPage,
   theme,
   locale,
   onThemeToggle,
@@ -39,13 +57,47 @@ export function AppShell({
   children,
 }: AppShellProps) {
   const { t } = useTranslation();
+  const pathname = useLocationPathname();
+  const activeModuleKey = getModuleFromPath(pathname);
+  const activeModule = getModuleByKey(activeModuleKey);
+  const activePage = getActiveModulePage(activeModule, pathname);
   const isDark = theme === 'dark';
+
+  // Multi-page modules open Layer 2; single-page modules stay on Layer 1.
+  // "Back" stays on the current route and only swaps sidebar to modules.
+  const [navLayer, setNavLayer] = useState<NavLayer>(() =>
+    moduleHasPages(activeModule) ? 'pages' : 'modules'
+  );
+  const [browsedModuleKey, setBrowsedModuleKey] = useState(activeModuleKey);
+
+  useEffect(() => {
+    const module = getModuleByKey(activeModuleKey);
+    setBrowsedModuleKey(activeModuleKey);
+    setNavLayer(moduleHasPages(module) ? 'pages' : 'modules');
+  }, [activeModuleKey]);
+
+  const layerModule =
+    navLayer === 'pages' ? getModuleByKey(browsedModuleKey) : activeModule;
 
   const handleNavigate =
     (href: string) => (event: MouseEvent<HTMLAnchorElement>) => {
       event.preventDefault();
       navigateTo(href);
     };
+
+  const openModule = (module: ModuleMeta) => {
+    if (moduleHasPages(module)) {
+      setBrowsedModuleKey(module.key);
+      setNavLayer('pages');
+    } else {
+      setNavLayer('modules');
+    }
+    navigateTo(module.href);
+  };
+
+  const backToModules = () => {
+    setNavLayer('modules');
+  };
 
   return (
     <div className="bg-background text-foreground flex min-h-screen">
@@ -59,23 +111,33 @@ export function AppShell({
           </h1>
         </div>
         <Separator />
-        <ScrollArea className="flex-1 px-3 py-4">
-          <nav className="flex flex-col gap-4">
-            <NavGroup
-              label={t('nav.groupShell')}
-              items={pages.filter((page) => page.owner === 'shell')}
-              currentKey={currentPage.key}
-              onNavigate={handleNavigate}
-              t={t}
-            />
-            <NavGroup
-              label={t('nav.groupModule')}
-              items={pages.filter((page) => page.owner === 'module')}
-              currentKey={currentPage.key}
-              onNavigate={handleNavigate}
-              t={t}
-            />
-          </nav>
+        <ScrollArea className="min-h-0 min-w-0 flex-1 px-3 py-4">
+          <div
+            key={navLayer}
+            className={cn(
+              'animate-in fade-in-0 w-full min-w-0 duration-150',
+              navLayer === 'pages'
+                ? 'slide-in-from-right-2'
+                : 'slide-in-from-left-2'
+            )}
+          >
+            {navLayer === 'modules' ? (
+              <ModulesLayer
+                modules={modules}
+                activeModuleKey={activeModuleKey}
+                onOpenModule={openModule}
+                t={t}
+              />
+            ) : (
+              <PagesLayer
+                module={layerModule}
+                activePageKey={activePage.key}
+                onBack={backToModules}
+                onNavigate={handleNavigate}
+                t={t}
+              />
+            )}
+          </div>
         </ScrollArea>
       </aside>
 
@@ -87,11 +149,19 @@ export function AppShell({
                 {t('shell.header')}
               </p>
               <h2 className="hidden truncate text-xl font-semibold tracking-tight md:block">
-                {t(currentPage.labelKey)}
+                <span className="text-muted-foreground font-medium">
+                  {t(activeModule.labelKey)}
+                </span>
+                <span className="text-muted-foreground mx-1.5 font-normal">
+                  /
+                </span>
+                {t(activePage.labelKey)}
               </h2>
               <div className="mt-1 md:hidden">
                 <AppNavSwitcher
-                  currentPage={currentPage}
+                  modules={modules}
+                  activeModule={activeModule}
+                  activePage={activePage}
                   onNavigate={navigateTo}
                 />
               </div>
@@ -142,22 +212,95 @@ export function AppShell({
   );
 }
 
-type NavGroupProps = {
-  label: string;
-  items: PageMeta[];
-  currentKey: PageMeta['key'];
-  onNavigate: (href: string) => (event: MouseEvent<HTMLAnchorElement>) => void;
-  t: (key: string) => string;
+type Translate = (key: string) => string;
+
+type ModulesLayerProps = {
+  modules: ModuleMeta[];
+  activeModuleKey: ModuleMeta['key'];
+  onOpenModule: (module: ModuleMeta) => void;
+  t: Translate;
 };
 
-function NavGroup({ label, items, currentKey, onNavigate, t }: NavGroupProps) {
+function ModulesLayer({
+  modules: moduleList,
+  activeModuleKey,
+  onOpenModule,
+  t,
+}: ModulesLayerProps) {
   return (
-    <div className="flex flex-col gap-1">
-      <p className="text-muted-foreground px-2 text-[11px] font-semibold tracking-wide uppercase">
-        {label}
+    <nav className="flex flex-col gap-1" aria-label={t('nav.modulesAria')}>
+      <p className="text-muted-foreground px-2 pb-1 text-[11px] font-semibold tracking-wide uppercase">
+        {t('nav.groupModules')}
       </p>
-      {items.map((page) => {
-        const isActive = page.key === currentKey;
+      {moduleList.map((module) => {
+        const isActive = module.key === activeModuleKey;
+        const hasPages = moduleHasPages(module);
+
+        return (
+          <button
+            key={module.key}
+            type="button"
+            onClick={() => onOpenModule(module)}
+            className={cn(
+              'flex w-full min-w-0 cursor-pointer items-center gap-2 rounded-lg px-3 py-2.5 text-left transition-colors',
+              isActive
+                ? 'bg-sidebar-accent text-sidebar-accent-foreground'
+                : 'text-sidebar-foreground/80 hover:bg-sidebar-accent/70 hover:text-sidebar-accent-foreground'
+            )}
+          >
+            <span className="min-w-0 flex-1 overflow-hidden">
+              <span className="block truncate text-sm font-medium">
+                {t(module.labelKey)}
+              </span>
+              <span className="text-muted-foreground mt-0.5 block truncate text-xs">
+                {t(module.descriptionKey)}
+              </span>
+            </span>
+            {hasPages ? (
+              <ChevronRightIcon
+                aria-hidden
+                className="text-muted-foreground size-4 shrink-0"
+              />
+            ) : null}
+          </button>
+        );
+      })}
+    </nav>
+  );
+}
+
+type PagesLayerProps = {
+  module: ModuleMeta;
+  activePageKey: ModulePageMeta['key'];
+  onBack: () => void;
+  onNavigate: (href: string) => (event: MouseEvent<HTMLAnchorElement>) => void;
+  t: Translate;
+};
+
+function PagesLayer({
+  module,
+  activePageKey,
+  onBack,
+  onNavigate,
+  t,
+}: PagesLayerProps) {
+  return (
+    <nav className="flex flex-col gap-1" aria-label={t('nav.pagesAria')}>
+      <button
+        type="button"
+        onClick={onBack}
+        className="text-sidebar-foreground/90 hover:bg-sidebar-accent/70 hover:text-sidebar-accent-foreground mb-2 flex w-full cursor-pointer items-center gap-1.5 rounded-lg px-2 py-2 text-left transition-colors"
+      >
+        <ChevronLeftIcon className="text-muted-foreground size-4 shrink-0" />
+        <span className="min-w-0 truncate text-sm font-semibold">
+          {t(module.labelKey)}
+        </span>
+      </button>
+      <p className="text-muted-foreground px-2 pb-1 text-[11px] font-semibold tracking-wide uppercase">
+        {t('nav.groupPages')}
+      </p>
+      {module.pages.map((page) => {
+        const isActive = page.key === activePageKey;
 
         return (
           <a
@@ -165,19 +308,16 @@ function NavGroup({ label, items, currentKey, onNavigate, t }: NavGroupProps) {
             href={page.href}
             onClick={onNavigate(page.href)}
             className={cn(
-              'rounded-lg px-3 py-2.5 transition-colors',
+              'cursor-pointer truncate rounded-lg px-3 py-2 text-sm font-medium transition-colors',
               isActive
                 ? 'bg-sidebar-accent text-sidebar-accent-foreground'
                 : 'text-sidebar-foreground/80 hover:bg-sidebar-accent/70 hover:text-sidebar-accent-foreground'
             )}
           >
-            <div className="text-sm font-medium">{t(page.labelKey)}</div>
-            <div className="text-muted-foreground mt-0.5 text-xs">
-              {t(page.descriptionKey)}
-            </div>
+            {t(page.labelKey)}
           </a>
         );
       })}
-    </div>
+    </nav>
   );
 }

@@ -1,4 +1,4 @@
-import { type PageKey, getPageByKey, useActivePage } from '@/app/model/routing';
+import { type ModuleKey, useActivePage } from '@/app/model/routing';
 import { AppShell } from '@/app/ui/app-shell';
 import { HostPage } from '@/pages/host';
 import { RemotePage } from '@/pages/remote';
@@ -14,8 +14,7 @@ import type { ShellTheme } from '@/shared/model';
 import { useEffect, useState } from 'react';
 
 function App() {
-  const activePage = useActivePage();
-  const currentPage = getPageByKey(activePage);
+  const activeModule = useActivePage();
   const [theme, setTheme] = useState<ShellTheme>(() => {
     const storedTheme = window.localStorage.getItem('shell-theme');
 
@@ -35,7 +34,6 @@ function App() {
 
   return (
     <AppShell
-      currentPage={currentPage}
       theme={theme}
       locale={locale}
       onThemeToggle={() =>
@@ -45,23 +43,23 @@ function App() {
       }
       onLocaleChange={setLocale}
     >
-      <PageContent activePage={activePage} theme={theme} locale={locale} />
+      <PageContent activeModule={activeModule} theme={theme} locale={locale} />
     </AppShell>
   );
 }
 
 type PageContentProps = {
-  activePage: PageKey;
+  activeModule: ModuleKey;
   theme: ShellTheme;
   locale: AppLocale;
 };
 
-function PageContent({ activePage, theme, locale }: PageContentProps) {
-  if (activePage === 'remote') {
+function PageContent({ activeModule, theme, locale }: PageContentProps) {
+  if (activeModule === 'remote') {
     return <RemotePage theme={theme} locale={locale} />;
   }
 
-  if (activePage === 'remoteAngular') {
+  if (activeModule === 'remoteAngular') {
     return <RemoteAngularPage theme={theme} locale={locale} />;
   }
 
