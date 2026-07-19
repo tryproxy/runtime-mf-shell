@@ -8,8 +8,7 @@ import federation from '@originjs/vite-plugin-federation';
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, '.', '');
   const remoteEntryUrl =
-    env.VITE_REMOTE_ENTRY_URL ||
-    'http://localhost:5001/assets/remoteEntry.js';
+    env.VITE_REMOTE_ENTRY_URL || 'http://localhost:5001/assets/remoteEntry.js';
 
   return {
     plugins: [
