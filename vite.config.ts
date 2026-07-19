@@ -27,24 +27,21 @@ export default defineConfig(({ mode }) => {
         remotes: {
           demo_remote: remoteEntryUrl,
         },
-        shared: {
-          react: { requiredVersion: '^19.1.1' },
-          'react-dom': { requiredVersion: '^19.1.1' },
-        },
+        shared: ['react', 'react-dom'],
       }),
       {
         name: 'fix-federation-share-scope-placeholder',
         enforce: 'post',
         transform(code, id) {
-          if (!id.includes('__federation__')) {
+          if (
+            !id.includes('__federation__') ||
+            !code.includes('__rf_placeholder__shareScope')
+          ) {
             return null;
           }
 
-          if (!code.includes('__rf_placeholder__shareScope')) {
-            return null;
-          }
-
-          return code.replaceAll('{__rf_placeholder__shareScope}', '{}');
+          // Bare identifier left by originjs when share rewrite fails.
+          return code.replaceAll('__rf_placeholder__shareScope', '');
         },
         generateBundle(_options, bundle) {
           for (const file of Object.values(bundle)) {
@@ -57,8 +54,8 @@ export default defineConfig(({ mode }) => {
             }
 
             file.code = file.code.replaceAll(
-              '{__rf_placeholder__shareScope}',
-              '{}'
+              '__rf_placeholder__shareScope',
+              ''
             );
           }
         },
