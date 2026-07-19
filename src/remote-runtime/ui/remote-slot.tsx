@@ -1,9 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
 import type {
+  AppLocale,
   HostBridge,
   RemoteAppInstance,
   ThemeMode,
 } from 'demo_remote/mount';
+import { useTranslation } from 'react-i18next';
 import { createHostBridge } from '../lib/create-host-bridge';
 import { RemoteErrorBoundary } from './remote-error-boundary';
 import { RemoteErrorFallback } from './remote-error-fallback';
@@ -26,11 +28,18 @@ type RemoteSlotProps = {
   basename: string;
   loader: () => Promise<RemoteModuleLoaderResult>;
   theme: ThemeMode;
+  locale: AppLocale;
 };
 
-export function RemoteSlot({ basename, loader, theme }: RemoteSlotProps) {
+export function RemoteSlot({
+  basename,
+  loader,
+  theme,
+  locale,
+}: RemoteSlotProps) {
+  const { t } = useTranslation();
   const containerRef = useRef<HTMLDivElement | null>(null);
-  const hostBridgeRef = useRef(createHostBridge(theme));
+  const hostBridgeRef = useRef(createHostBridge(theme, locale));
   const loaderRef = useRef(loader);
   const [status, setStatus] = useState<'loading' | 'ready' | 'error'>(
     'loading'
@@ -47,7 +56,11 @@ export function RemoteSlot({ basename, loader, theme }: RemoteSlotProps) {
     hostBridge.setTheme(theme);
   }, [hostBridge, theme]);
 
-  // Mount once per basename (+ explicit retry). Do not depend on loader/theme.
+  useEffect(() => {
+    hostBridge.setLocale(locale);
+  }, [hostBridge, locale]);
+
+  // Mount once per basename (+ explicit retry). Not on theme/locale.
   useEffect(() => {
     let instance: RemoteAppInstance | null = null;
     let cancelled = false;
@@ -92,11 +105,11 @@ export function RemoteSlot({ basename, loader, theme }: RemoteSlotProps) {
     <RemoteErrorBoundary resetKey={`${basename}:${retryCount}`}>
       <section>
         {status === 'loading' ? (
-          <p className="text-rmf-muted text-sm">Loading remote...</p>
+          <p className="text-rmf-muted text-sm">{t('remote.loading')}</p>
         ) : null}
         {status === 'error' ? (
           <RemoteErrorFallback
-            title="Remote failed to load"
+            title={t('remote.failedTitle')}
             message={errorMessage}
             onRetry={() => setRetryCount((count) => count + 1)}
           />

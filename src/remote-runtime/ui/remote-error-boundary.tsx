@@ -1,7 +1,8 @@
 import { Component, type ErrorInfo, type ReactNode } from 'react';
+import { withTranslation, type WithTranslation } from 'react-i18next';
 import { RemoteErrorFallback } from './remote-error-fallback';
 
-type RemoteErrorBoundaryProps = {
+type RemoteErrorBoundaryProps = WithTranslation & {
   children: ReactNode;
   resetKey?: string | number;
 };
@@ -10,7 +11,7 @@ type RemoteErrorBoundaryState = {
   error: Error | null;
 };
 
-export class RemoteErrorBoundary extends Component<
+class RemoteErrorBoundaryBase extends Component<
   RemoteErrorBoundaryProps,
   RemoteErrorBoundaryState
 > {
@@ -38,7 +39,7 @@ export class RemoteErrorBoundary extends Component<
     if (this.state.error) {
       return (
         <RemoteErrorFallback
-          title="Remote slot crashed"
+          title={this.props.t('remote.slotCrashedTitle')}
           message={this.state.error.message}
           onRetry={this.handleRetry}
         />
@@ -48,3 +49,5 @@ export class RemoteErrorBoundary extends Component<
     return this.props.children;
   }
 }
+
+export const RemoteErrorBoundary = withTranslation()(RemoteErrorBoundaryBase);

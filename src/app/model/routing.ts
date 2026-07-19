@@ -4,26 +4,26 @@ export type PageKey = 'host' | 'remote';
 
 export type PageMeta = {
   key: PageKey;
-  label: string;
   href: string;
-  description: string;
   owner: 'shell' | 'module';
+  labelKey: 'nav.hostHome' | 'nav.remoteModule';
+  descriptionKey: 'nav.hostHomeDesc' | 'nav.remoteModuleDesc';
 };
 
 export const pages: PageMeta[] = [
   {
     key: 'host',
-    label: 'Host home',
     href: '/host',
-    description: 'Shell-owned page.',
     owner: 'shell',
+    labelKey: 'nav.hostHome',
+    descriptionKey: 'nav.hostHomeDesc',
   },
   {
     key: 'remote',
-    label: 'Remote module',
     href: '/remote',
-    description: 'Mounts the remote module.',
     owner: 'module',
+    labelKey: 'nav.remoteModule',
+    descriptionKey: 'nav.remoteModuleDesc',
   },
 ];
 

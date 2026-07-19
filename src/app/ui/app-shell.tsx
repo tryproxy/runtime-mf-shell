@@ -1,20 +1,28 @@
-import { cn } from '@/shared/lib/cn';
-import { type PageMeta, pages } from '@/shared/lib/routing/use-active-page';
-import type { ShellTheme } from '@/shared/model/theme';
+import { type PageMeta, pages } from '@/app/model/routing';
+import { APP_LOCALES, type AppLocale } from '@/shared/i18n';
+import { cn } from '@/shared/lib';
+import type { ShellTheme } from '@/shared/model';
 import type { MouseEvent, PropsWithChildren } from 'react';
+import { useTranslation } from 'react-i18next';
 
 type AppShellProps = PropsWithChildren<{
   currentPage: PageMeta;
   theme: ShellTheme;
+  locale: AppLocale;
   onThemeToggle(): void;
+  onLocaleChange(locale: AppLocale): void;
 }>;
 
 export function AppShell({
   currentPage,
   theme,
+  locale,
   onThemeToggle,
+  onLocaleChange,
   children,
 }: AppShellProps) {
+  const { t } = useTranslation();
+
   const handleNavigate =
     (href: string) => (event: MouseEvent<HTMLAnchorElement>) => {
       event.preventDefault();
@@ -43,15 +51,15 @@ export function AppShell({
           <div className="flex h-full flex-col">
             <div className="border-b border-slate-800 px-6 py-5">
               <p className="text-xs font-semibold tracking-wide text-slate-400 uppercase">
-                Dash
+                {t('shell.brand')}
               </p>
-              <h1 className="mt-2 text-lg font-semibold">Runtime shell</h1>
+              <h1 className="mt-2 text-lg font-semibold">{t('shell.title')}</h1>
             </div>
 
             <nav className="flex flex-1 flex-col gap-4 px-3 py-4">
               <div className="flex flex-col gap-2">
                 <p className="px-3 text-[11px] font-semibold tracking-wide text-slate-500 uppercase">
-                  Shell
+                  {t('nav.groupShell')}
                 </p>
                 {pages
                   .filter((page) => page.owner === 'shell')
@@ -70,14 +78,16 @@ export function AppShell({
                         href={page.href}
                         onClick={handleNavigate(page.href)}
                       >
-                        <div className="text-sm font-medium">{page.label}</div>
+                        <div className="text-sm font-medium">
+                          {t(page.labelKey)}
+                        </div>
                         <div
                           className={cn(
                             'mt-1 text-xs',
                             isActive ? 'text-slate-600' : 'text-slate-400'
                           )}
                         >
-                          {page.description}
+                          {t(page.descriptionKey)}
                         </div>
                       </a>
                     );
@@ -86,7 +96,7 @@ export function AppShell({
 
               <div className="flex flex-col gap-2">
                 <p className="px-3 text-[11px] font-semibold tracking-wide text-slate-500 uppercase">
-                  Module
+                  {t('nav.groupModule')}
                 </p>
                 {pages
                   .filter((page) => page.owner === 'module')
@@ -105,14 +115,16 @@ export function AppShell({
                         href={page.href}
                         onClick={handleNavigate(page.href)}
                       >
-                        <div className="text-sm font-medium">{page.label}</div>
+                        <div className="text-sm font-medium">
+                          {t(page.labelKey)}
+                        </div>
                         <div
                           className={cn(
                             'mt-1 text-xs',
                             isActive ? 'text-slate-600' : 'text-slate-400'
                           )}
                         >
-                          {page.description}
+                          {t(page.descriptionKey)}
                         </div>
                       </a>
                     );
@@ -139,10 +151,10 @@ export function AppShell({
                     isDark ? 'text-slate-400' : 'text-slate-500'
                   )}
                 >
-                  Header
+                  {t('shell.header')}
                 </p>
                 <h2 className="mt-1 text-xl font-semibold">
-                  {currentPage.label}
+                  {t(currentPage.labelKey)}
                 </h2>
               </div>
               <div className="flex items-center gap-3">
@@ -152,8 +164,30 @@ export function AppShell({
                     isDark ? 'text-slate-400' : 'text-slate-500'
                   )}
                 >
-                  Simple app shell
+                  {t('shell.tagline')}
                 </div>
+                <label className="sr-only" htmlFor="shell-locale">
+                  {t('shell.language')}
+                </label>
+                <select
+                  id="shell-locale"
+                  className={cn(
+                    'rounded-md border px-2 py-2 text-sm font-medium transition-colors',
+                    isDark
+                      ? 'border-slate-700 bg-slate-800 text-slate-100'
+                      : 'border-slate-300 bg-slate-100 text-slate-900'
+                  )}
+                  value={locale}
+                  onChange={(event) =>
+                    onLocaleChange(event.target.value as AppLocale)
+                  }
+                >
+                  {APP_LOCALES.map((code) => (
+                    <option key={code} value={code}>
+                      {code.toUpperCase()}
+                    </option>
+                  ))}
+                </select>
                 <button
                   className={cn(
                     'rounded-md border px-3 py-2 text-sm font-medium transition-colors',
@@ -164,7 +198,7 @@ export function AppShell({
                   type="button"
                   onClick={onThemeToggle}
                 >
-                  {isDark ? 'Dark' : 'Light'}
+                  {isDark ? t('shell.themeDark') : t('shell.themeLight')}
                 </button>
               </div>
             </div>

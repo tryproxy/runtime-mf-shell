@@ -1,7 +1,9 @@
 import { Panel } from '@/shared/ui/panel';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 export function HostPage() {
+  const { t } = useTranslation();
   const [shouldCrash, setShouldCrash] = useState(false);
 
   if (shouldCrash) {
@@ -11,37 +13,34 @@ export function HostPage() {
   return (
     <section className="space-y-6">
       <div>
-        <h3 className="text-rmf-fg text-lg font-semibold">Host page</h3>
-        <p className="text-rmf-muted mt-1 text-sm">
-          Shell-owned content. This page lives only in the host app.
-        </p>
+        <h3 className="text-rmf-fg text-lg font-semibold">{t('host.title')}</h3>
+        <p className="text-rmf-muted mt-1 text-sm">{t('host.description')}</p>
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2">
         <Panel
-          title="Owner"
-          value="Shell"
-          description="Rendered by runtime-mf-shell."
+          title={t('host.owner')}
+          value={t('host.ownerValue')}
+          description={t('host.ownerDesc')}
         />
         <Panel
-          title="Role"
-          value="Host home"
-          description="One shell tab / one shell path."
+          title={t('host.role')}
+          value={t('host.roleValue')}
+          description={t('host.roleDesc')}
         />
       </div>
 
       <div className="rounded-rmf-md border-rmf-border bg-rmf-surface shadow-rmf-sm border p-5">
-        <p className="text-rmf-subtle text-sm font-medium">Shell crash test</p>
-        <p className="text-rmf-muted mt-2 text-sm">
-          Throws in the shell React tree. You should see ShellErrorBoundary
-          (full page), not the remote slot fallback.
+        <p className="text-rmf-subtle text-sm font-medium">
+          {t('host.crashTitle')}
         </p>
+        <p className="text-rmf-muted mt-2 text-sm">{t('host.crashDesc')}</p>
         <button
           type="button"
           className="rounded-rmf-md mt-4 border border-red-300 bg-red-50 px-3 py-1.5 text-sm text-red-700"
           onClick={() => setShouldCrash(true)}
         >
-          Crash shell render
+          {t('host.crashButton')}
         </button>
       </div>
     </section>
