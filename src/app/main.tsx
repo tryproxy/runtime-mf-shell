@@ -2,6 +2,7 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import './index.css';
 import App from './app';
+import { ShellErrorBoundary } from './ui/shell-error-boundary';
 
 const storedTheme = window.localStorage.getItem('shell-theme');
 document.documentElement.dataset.rmfTheme =
@@ -9,6 +10,8 @@ document.documentElement.dataset.rmfTheme =
 
 createRoot(document.getElementById('root') as HTMLElement).render(
   <StrictMode>
-    <App />
+    <ShellErrorBoundary>
+      <App />
+    </ShellErrorBoundary>
   </StrictMode>
 );
