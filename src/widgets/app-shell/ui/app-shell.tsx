@@ -1,6 +1,6 @@
 import { cn } from '@/shared/lib/cn';
-import type { ShellTheme } from '@/app/app';
 import { type PageMeta, pages } from '@/shared/lib/routing/use-active-page';
+import type { ShellTheme } from '@/shared/model/theme';
 import type { MouseEvent, PropsWithChildren } from 'react';
 
 type AppShellProps = PropsWithChildren<{
@@ -48,36 +48,76 @@ export function AppShell({
               <h1 className="mt-2 text-lg font-semibold">Runtime shell</h1>
             </div>
 
-            <nav className="flex flex-1 flex-col gap-2 px-3 py-4">
-              {pages.map((page) => {
-                const isActive = page.key === currentPage.key;
+            <nav className="flex flex-1 flex-col gap-4 px-3 py-4">
+              <div className="flex flex-col gap-2">
+                <p className="px-3 text-[11px] font-semibold tracking-wide text-slate-500 uppercase">
+                  Shell
+                </p>
+                {pages
+                  .filter((page) => page.owner === 'shell')
+                  .map((page) => {
+                    const isActive = page.key === currentPage.key;
 
-                return (
-                  <a
-                    key={page.key}
-                    className={cn(
-                      'block rounded-lg px-3 py-3 transition-colors',
-                      isActive
-                        ? isDark
-                          ? 'bg-slate-100 text-slate-900'
-                          : 'bg-slate-100 text-slate-900'
-                        : 'text-slate-300 hover:bg-slate-800 hover:text-white'
-                    )}
-                    href={page.href}
-                    onClick={handleNavigate(page.href)}
-                  >
-                    <div className="text-sm font-medium">{page.label}</div>
-                    <div
-                      className={cn(
-                        'mt-1 text-xs',
-                        isActive ? 'text-slate-600' : 'text-slate-400'
-                      )}
-                    >
-                      {page.description}
-                    </div>
-                  </a>
-                );
-              })}
+                    return (
+                      <a
+                        key={page.key}
+                        className={cn(
+                          'block rounded-lg px-3 py-3 transition-colors',
+                          isActive
+                            ? 'bg-slate-100 text-slate-900'
+                            : 'text-slate-300 hover:bg-slate-800 hover:text-white'
+                        )}
+                        href={page.href}
+                        onClick={handleNavigate(page.href)}
+                      >
+                        <div className="text-sm font-medium">{page.label}</div>
+                        <div
+                          className={cn(
+                            'mt-1 text-xs',
+                            isActive ? 'text-slate-600' : 'text-slate-400'
+                          )}
+                        >
+                          {page.description}
+                        </div>
+                      </a>
+                    );
+                  })}
+              </div>
+
+              <div className="flex flex-col gap-2">
+                <p className="px-3 text-[11px] font-semibold tracking-wide text-slate-500 uppercase">
+                  Module
+                </p>
+                {pages
+                  .filter((page) => page.owner === 'module')
+                  .map((page) => {
+                    const isActive = page.key === currentPage.key;
+
+                    return (
+                      <a
+                        key={page.key}
+                        className={cn(
+                          'block rounded-lg px-3 py-3 transition-colors',
+                          isActive
+                            ? 'bg-slate-100 text-slate-900'
+                            : 'text-slate-300 hover:bg-slate-800 hover:text-white'
+                        )}
+                        href={page.href}
+                        onClick={handleNavigate(page.href)}
+                      >
+                        <div className="text-sm font-medium">{page.label}</div>
+                        <div
+                          className={cn(
+                            'mt-1 text-xs',
+                            isActive ? 'text-slate-600' : 'text-slate-400'
+                          )}
+                        >
+                          {page.description}
+                        </div>
+                      </a>
+                    );
+                  })}
+              </div>
             </nav>
           </div>
         </aside>

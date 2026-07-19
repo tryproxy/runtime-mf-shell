@@ -1,15 +1,13 @@
-import { DemoRemotePage } from '@/pages/demo-remote';
-import { OverviewPage } from '@/pages/overview';
-import { SettingsPage } from '@/pages/settings';
+import { HostPage } from '@/pages/host';
+import { RemotePage } from '@/pages/remote';
 import {
   type PageKey,
   getPageByKey,
   useActivePage,
 } from '@/shared/lib/routing/use-active-page';
+import type { ShellTheme } from '@/shared/model/theme';
 import { AppShell } from '@/widgets/app-shell';
 import { useEffect, useState } from 'react';
-
-export type ShellTheme = 'light' | 'dark';
 
 function App() {
   const activePage = useActivePage();
@@ -45,15 +43,11 @@ type PageContentProps = {
 };
 
 function PageContent({ activePage, theme }: PageContentProps) {
-  if (activePage === 'demo' || activePage === 'whatever') {
-    return <DemoRemotePage theme={theme} />;
+  if (activePage === 'remote') {
+    return <RemotePage theme={theme} />;
   }
 
-  if (activePage === 'settings') {
-    return <SettingsPage />;
-  }
-
-  return <OverviewPage />;
+  return <HostPage />;
 }
 
 export default App;

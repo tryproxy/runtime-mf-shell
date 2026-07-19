@@ -27,6 +27,7 @@ dist-ssr
 .env.local
 .env.*.local
 
+*.local
 
 bundle.*
 .vite

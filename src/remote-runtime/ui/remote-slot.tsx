@@ -4,7 +4,7 @@ import type {
   RemoteAppInstance,
   ThemeMode,
 } from 'demo_remote/mount';
-import { createHostBridge } from './create-host-bridge';
+import { createHostBridge } from '../lib/create-host-bridge';
 
 type RemoteModule = {
   mount(params: {

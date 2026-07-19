@@ -1,55 +1,42 @@
 import { useEffect, useState } from 'react';
 
-export type PageKey = 'overview' | 'settings' | 'demo' | 'whatever';
+export type PageKey = 'host' | 'remote';
 
 export type PageMeta = {
   key: PageKey;
   label: string;
   href: string;
   description: string;
+  owner: 'shell' | 'module';
 };
 
 export const pages: PageMeta[] = [
   {
-    key: 'overview',
-    label: 'Overview',
-    href: '/overview',
-    description: 'Summary widgets and recent activity.',
+    key: 'host',
+    label: 'Host home',
+    href: '/host',
+    description: 'Shell-owned page.',
+    owner: 'shell',
   },
   {
-    key: 'settings',
-    label: 'Settings',
-    href: '/settings',
-    description: 'Basic project and environment settings.',
-  },
-  {
-    key: 'demo',
-    label: 'Demo',
-    href: '/demo',
-    description: 'Remote microfrontend mounted in the host shell.',
-  },
-  {
-    key: 'whatever',
-    label: 'Whatever',
-    href: '/demo/product',
-    description: 'Remote product view inside the shell.',
+    key: 'remote',
+    label: 'Remote module',
+    href: '/remote',
+    description: 'Mounts the remote module.',
+    owner: 'module',
   },
 ];
 
 export function getPageFromPath(pathname: string): PageKey {
-  if (pathname.startsWith('/demo/product')) {
-    return 'whatever';
+  if (pathname === '/host' || pathname.startsWith('/host/')) {
+    return 'host';
   }
 
-  if (pathname.startsWith('/demo')) {
-    return 'demo';
+  if (pathname === '/remote' || pathname.startsWith('/remote/')) {
+    return 'remote';
   }
 
-  if (pathname === '/settings') {
-    return 'settings';
-  }
-
-  return 'overview';
+  return 'host';
 }
 
 export function getPageByKey(pageKey: PageKey): PageMeta {
