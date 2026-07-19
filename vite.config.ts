@@ -28,8 +28,8 @@ export default defineConfig(({ mode }) => {
           demo_remote: remoteEntryUrl,
         },
         shared: {
-          react: { singleton: true },
-          'react-dom': { singleton: true },
+          react: { requiredVersion: '^19.1.1' },
+          'react-dom': { requiredVersion: '^19.1.1' },
         },
       }),
       {
