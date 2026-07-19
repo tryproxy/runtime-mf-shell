@@ -1,8 +1,9 @@
 @import 'tailwindcss';
+@import '../shared/styles/tokens.css';
 
 :root {
-  color: #0f172a;
-  background-color: #f1f5f9;
+  color: var(--rmf-color-fg, #0f172a);
+  background-color: var(--rmf-color-page, #f1f5f9);
   font-family:
     Inter,
     ui-sans-serif,

@@ -6,10 +6,10 @@ type PanelProps = {
 
 export function Panel({ title, value, description }: PanelProps) {
   return (
-    <div className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
-      <p className="text-sm font-medium text-slate-500">{title}</p>
-      <p className="mt-3 text-2xl font-semibold text-slate-900">{value}</p>
-      <p className="mt-2 text-sm text-slate-600">{description}</p>
+    <div className="rounded-rmf-md border-rmf-border bg-rmf-surface shadow-rmf-sm border p-5">
+      <p className="text-rmf-subtle text-sm font-medium">{title}</p>
+      <p className="text-rmf-fg mt-3 text-2xl font-semibold">{value}</p>
+      <p className="text-rmf-muted mt-2 text-sm">{description}</p>
     </div>
   );
 }

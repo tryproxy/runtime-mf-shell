@@ -20,6 +20,7 @@ function App() {
 
   useEffect(() => {
     window.localStorage.setItem('shell-theme', theme);
+    document.documentElement.dataset.rmfTheme = theme;
   }, [theme]);
 
   return (

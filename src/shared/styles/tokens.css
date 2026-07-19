@@ -1,0 +1,39 @@
+/**
+ * Runtime MF design-token contract (sketch).
+ * Shell owns these values. Remotes may only read them via var(--rmf-*).
+ *
+ * Applied on <html data-rmf-theme="light|dark">.
+ */
+
+html[data-rmf-theme='light'] {
+  --rmf-color-page: #f1f5f9;
+  --rmf-color-surface: #ffffff;
+  --rmf-color-fg: #0f172a;
+  --rmf-color-muted: #475569;
+  --rmf-color-subtle: #64748b;
+  --rmf-color-border: #e2e8f0;
+  --rmf-radius-md: 0.5rem;
+  --rmf-shadow-sm: 0 1px 2px rgb(15 23 42 / 0.06);
+}
+
+html[data-rmf-theme='dark'] {
+  --rmf-color-page: #020617;
+  --rmf-color-surface: #0f172a;
+  --rmf-color-fg: #f1f5f9;
+  --rmf-color-muted: #94a3b8;
+  --rmf-color-subtle: #64748b;
+  --rmf-color-border: #1e293b;
+  --rmf-radius-md: 0.5rem;
+  --rmf-shadow-sm: 0 1px 2px rgb(0 0 0 / 0.35);
+}
+
+@theme {
+  --color-rmf-page: var(--rmf-color-page);
+  --color-rmf-surface: var(--rmf-color-surface);
+  --color-rmf-fg: var(--rmf-color-fg);
+  --color-rmf-muted: var(--rmf-color-muted);
+  --color-rmf-subtle: var(--rmf-color-subtle);
+  --color-rmf-border: var(--rmf-color-border);
+  --radius-rmf-md: var(--rmf-radius-md);
+  --shadow-rmf-sm: var(--rmf-shadow-sm);
+}

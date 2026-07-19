@@ -4,8 +4,8 @@ export function HostPage() {
   return (
     <section className="space-y-6">
       <div>
-        <h3 className="text-lg font-semibold">Host page</h3>
-        <p className="mt-1 text-sm text-slate-600">
+        <h3 className="text-rmf-fg text-lg font-semibold">Host page</h3>
+        <p className="text-rmf-muted mt-1 text-sm">
           Shell-owned content. This page lives only in the host app.
         </p>
       </div>
