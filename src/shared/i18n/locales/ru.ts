@@ -13,8 +13,10 @@ export const ru = {
     groupModule: 'Модуль',
     hostHome: 'Домашняя хоста',
     hostHomeDesc: 'Страница, принадлежащая shell.',
-    remoteModule: 'Удалённый модуль',
-    remoteModuleDesc: 'Монтирует remote-модуль.',
+    remoteModule: '(React) Удалённый модуль',
+    remoteModuleDesc: 'Монтирует React remote-модуль.',
+    remoteAngular: '(Angular) Удалённый модуль',
+    remoteAngularDesc: 'Монтирует Angular remote-модуль.',
     switcherAria: 'Переключить страницу',
   },
   host: {

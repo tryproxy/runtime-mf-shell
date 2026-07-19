@@ -1,13 +1,16 @@
 import { useEffect, useState } from 'react';
 
-export type PageKey = 'host' | 'remote';
+export type PageKey = 'host' | 'remote' | 'remoteAngular';
 
 export type PageMeta = {
   key: PageKey;
   href: string;
   owner: 'shell' | 'module';
-  labelKey: 'nav.hostHome' | 'nav.remoteModule';
-  descriptionKey: 'nav.hostHomeDesc' | 'nav.remoteModuleDesc';
+  labelKey: 'nav.hostHome' | 'nav.remoteModule' | 'nav.remoteAngular';
+  descriptionKey:
+    | 'nav.hostHomeDesc'
+    | 'nav.remoteModuleDesc'
+    | 'nav.remoteAngularDesc';
 };
 
 export const pages: PageMeta[] = [
@@ -25,11 +28,25 @@ export const pages: PageMeta[] = [
     labelKey: 'nav.remoteModule',
     descriptionKey: 'nav.remoteModuleDesc',
   },
+  {
+    key: 'remoteAngular',
+    href: '/remote-angular',
+    owner: 'module',
+    labelKey: 'nav.remoteAngular',
+    descriptionKey: 'nav.remoteAngularDesc',
+  },
 ];
 
 export function getPageFromPath(pathname: string): PageKey {
   if (pathname === '/host' || pathname.startsWith('/host/')) {
     return 'host';
+  }
+
+  if (
+    pathname === '/remote-angular' ||
+    pathname.startsWith('/remote-angular/')
+  ) {
+    return 'remoteAngular';
   }
 
   if (pathname === '/remote' || pathname.startsWith('/remote/')) {

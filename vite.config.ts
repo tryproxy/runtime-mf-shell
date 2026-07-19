@@ -9,6 +9,9 @@ export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, '.', '');
   const remoteEntryUrl =
     env.VITE_REMOTE_ENTRY_URL || 'http://localhost:5001/assets/remoteEntry.js';
+  const angularRemoteEntryUrl =
+    env.VITE_ANGULAR_REMOTE_ENTRY_URL ||
+    'http://localhost:5002/assets/remoteEntry.js';
 
   return {
     plugins: [
@@ -26,6 +29,7 @@ export default defineConfig(({ mode }) => {
         name: 'runtime_mf_shell',
         remotes: {
           demo_remote: remoteEntryUrl,
+          angular_remote: angularRemoteEntryUrl,
         },
         shared: ['react', 'react-dom'],
       }),

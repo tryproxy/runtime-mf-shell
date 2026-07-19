@@ -2,6 +2,7 @@ import { type PageKey, getPageByKey, useActivePage } from '@/app/model/routing';
 import { AppShell } from '@/app/ui/app-shell';
 import { HostPage } from '@/pages/host';
 import { RemotePage } from '@/pages/remote';
+import { RemoteAngularPage } from '@/pages/remote-angular';
 import {
   type AppLocale,
   i18n,
@@ -58,6 +59,10 @@ type PageContentProps = {
 function PageContent({ activePage, theme, locale }: PageContentProps) {
   if (activePage === 'remote') {
     return <RemotePage theme={theme} locale={locale} />;
+  }
+
+  if (activePage === 'remoteAngular') {
+    return <RemoteAngularPage theme={theme} locale={locale} />;
   }
 
   return <HostPage />;

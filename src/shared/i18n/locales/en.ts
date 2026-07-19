@@ -13,8 +13,10 @@ export const en = {
     groupModule: 'Module',
     hostHome: 'Host home',
     hostHomeDesc: 'Shell-owned page.',
-    remoteModule: 'Remote module',
-    remoteModuleDesc: 'Mounts the remote module.',
+    remoteModule: '(React) Remote module',
+    remoteModuleDesc: 'Mounts the React remote module.',
+    remoteAngular: '(Angular) Remote module',
+    remoteAngularDesc: 'Mounts the Angular remote module.',
     switcherAria: 'Switch page',
   },
   host: {

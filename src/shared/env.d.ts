@@ -4,6 +4,7 @@
 interface ImportMetaEnv {
   readonly VITE_API_BASE_URL: string;
   readonly VITE_REMOTE_ENTRY_URL: string;
+  readonly VITE_ANGULAR_REMOTE_ENTRY_URL: string;
 }
 
 interface ImportMeta {
