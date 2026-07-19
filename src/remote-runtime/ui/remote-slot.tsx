@@ -5,6 +5,8 @@ import type {
   ThemeMode,
 } from 'demo_remote/mount';
 import { createHostBridge } from '../lib/create-host-bridge';
+import { RemoteErrorBoundary } from './remote-error-boundary';
+import { RemoteErrorFallback } from './remote-error-fallback';
 
 type RemoteModule = {
   mount(params: {
@@ -34,6 +36,7 @@ export function RemoteSlot({ basename, loader, theme }: RemoteSlotProps) {
     'loading'
   );
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [retryCount, setRetryCount] = useState(0);
 
   loaderRef.current = loader;
 
@@ -44,8 +47,7 @@ export function RemoteSlot({ basename, loader, theme }: RemoteSlotProps) {
     hostBridge.setTheme(theme);
   }, [hostBridge, theme]);
 
-  // Mount once per basename. Do not depend on loader/theme — unstable
-  // loader identities (and theme toggles) must not tear down the remote.
+  // Mount once per basename (+ explicit retry). Do not depend on loader/theme.
   useEffect(() => {
     let instance: RemoteAppInstance | null = null;
     let cancelled = false;
@@ -84,20 +86,23 @@ export function RemoteSlot({ basename, loader, theme }: RemoteSlotProps) {
       cancelled = true;
       instance?.unmount();
     };
-  }, [basename, bridge]);
+  }, [basename, bridge, retryCount]);
 
   return (
-    <section>
-      {status === 'loading' ? <p>Loading remote...</p> : null}
-      {status === 'error' ? (
-        <div className="space-y-2 text-sm text-red-600">
-          <p>Remote failed to load.</p>
-          {errorMessage ? (
-            <pre className="whitespace-pre-wrap">{errorMessage}</pre>
-          ) : null}
-        </div>
-      ) : null}
-      <div ref={containerRef} />
-    </section>
+    <RemoteErrorBoundary resetKey={`${basename}:${retryCount}`}>
+      <section>
+        {status === 'loading' ? (
+          <p className="text-rmf-muted text-sm">Loading remote...</p>
+        ) : null}
+        {status === 'error' ? (
+          <RemoteErrorFallback
+            title="Remote failed to load"
+            message={errorMessage}
+            onRetry={() => setRetryCount((count) => count + 1)}
+          />
+        ) : null}
+        <div ref={containerRef} />
+      </section>
+    </RemoteErrorBoundary>
   );
 }
