@@ -1,4 +1,5 @@
 import type { AppLocale, HostBridge, ThemeMode } from 'demo_remote/mount';
+import { createNoopTelemetry } from './create-noop-telemetry';
 
 type Listener = () => void;
 
@@ -63,6 +64,8 @@ export function createHostBridge(
         window.dispatchEvent(new PopStateEvent('popstate'));
       },
     },
+
+    telemetry: createNoopTelemetry(),
   };
 
   return {

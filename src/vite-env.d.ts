@@ -2,6 +2,21 @@ declare module 'demo_remote/mount' {
   export type ThemeMode = 'light' | 'dark';
   export type AppLocale = 'en' | 'ru';
 
+  export type TelemetryProps = Record<
+    string,
+    string | number | boolean | null | undefined
+  >;
+
+  export type HostTelemetry = {
+    track(event: string, props?: TelemetryProps): void;
+    captureException(error: unknown, props?: TelemetryProps): void;
+    captureMessage(
+      message: string,
+      level?: 'info' | 'warning' | 'error',
+      props?: TelemetryProps
+    ): void;
+  };
+
   export type HostBridge = {
     theme: {
       getSnapshot(): { mode: ThemeMode };
@@ -27,6 +42,7 @@ declare module 'demo_remote/mount' {
       navigate(path: string): void;
       replace(path: string): void;
     };
+    telemetry: HostTelemetry;
   };
 
   export type RemoteAppInstance = {
