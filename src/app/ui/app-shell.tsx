@@ -121,7 +121,9 @@ export function AppShell({
               <span className="text-muted-foreground font-medium">
                 {t(activeModule.labelKey)}
               </span>
-              <span className="text-muted-foreground mx-1.5 font-normal">/</span>
+              <span className="text-muted-foreground mx-1.5 font-normal">
+                /
+              </span>
               {t(activePage.labelKey)}
             </h2>
             <div className="mt-1 md:hidden">
@@ -181,7 +183,7 @@ export function AppShell({
         </div>
       </header>
 
-      <aside className="bg-sidebar text-sidebar-foreground border-sidebar-border hidden min-h-0 flex-col border-r md:flex md:row-start-2">
+      <aside className="bg-sidebar text-sidebar-foreground border-sidebar-border hidden min-h-0 flex-col border-r md:row-start-2 md:flex">
         <ScrollArea className="min-h-0 min-w-0 flex-1 px-3 py-4">
           <div
             key={navLayer}
