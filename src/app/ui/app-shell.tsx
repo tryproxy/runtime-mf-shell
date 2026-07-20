@@ -21,7 +21,6 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-  Separator,
 } from '@/shared/ui/shadcn';
 import type { ShellTheme } from '@/shared/model';
 import {
@@ -101,17 +100,88 @@ export function AppShell({
   };
 
   return (
-    <div className="bg-background text-foreground flex min-h-screen">
-      <aside className="bg-sidebar text-sidebar-foreground border-sidebar-border hidden w-60 shrink-0 flex-col border-r md:flex">
-        <div className="px-5 py-5">
-          <p className="text-muted-foreground text-xs font-semibold tracking-wide uppercase">
-            {t('shell.brand')}
-          </p>
-          <h1 className="mt-2 text-lg font-semibold tracking-tight">
-            {t('shell.title')}
-          </h1>
+    // Shared row 1 height so sidebar brand bottom border == hat bottom border.
+    <div className="bg-background text-foreground grid min-h-screen grid-cols-1 grid-rows-[auto_minmax(0,1fr)] md:grid-cols-[15rem_minmax(0,1fr)]">
+      <div className="bg-sidebar text-sidebar-foreground border-sidebar-border hidden border-r border-b px-5 py-5 md:flex md:flex-col md:justify-center">
+        <p className="text-muted-foreground text-xs font-semibold tracking-wide uppercase">
+          {t('shell.brand')}
+        </p>
+        <h1 className="mt-2 text-lg font-semibold tracking-tight">
+          {t('shell.title')}
+        </h1>
+      </div>
+
+      <header className="bg-card/80 supports-backdrop-filter:bg-card/60 wideMobile:px-6 sticky top-0 z-10 flex flex-col justify-center border-b px-4 py-3 backdrop-blur md:col-start-2 md:row-start-1">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div className="min-w-0">
+            <p className="text-muted-foreground text-xs font-semibold tracking-wide uppercase">
+              {t('shell.header')}
+            </p>
+            <h2 className="hidden truncate text-xl font-semibold tracking-tight md:block">
+              <span className="text-muted-foreground font-medium">
+                {t(activeModule.labelKey)}
+              </span>
+              <span className="text-muted-foreground mx-1.5 font-normal">/</span>
+              {t(activePage.labelKey)}
+            </h2>
+            <div className="mt-1 md:hidden">
+              <AppNavSwitcher
+                modules={modules}
+                activeModule={activeModule}
+                activePage={activePage}
+                onNavigate={navigateTo}
+              />
+            </div>
+          </div>
+          <div className="flex min-w-0 flex-wrap items-center justify-end gap-2">
+            <span className="text-muted-foreground wideMobile:inline hidden text-sm">
+              {t('shell.tagline')}
+            </span>
+            <Select
+              value={locale}
+              onValueChange={(value) => onLocaleChange(value as AppLocale)}
+            >
+              <SelectTrigger size="sm" aria-label={t('shell.language')}>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {APP_LOCALES.map((code) => (
+                  <SelectItem key={code} value={code}>
+                    {code.toUpperCase()}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={onThemeToggle}
+            >
+              {isDark ? (
+                <MoonIcon className="size-4" />
+              ) : (
+                <SunIcon className="size-4" />
+              )}
+              <span className="comfortable:inline hidden">
+                {isDark ? t('shell.themeDark') : t('shell.themeLight')}
+              </span>
+            </Button>
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={() => {
+                void logoutSession().then(() => navigateTo('/login'));
+              }}
+            >
+              {t('auth.logout')}
+            </Button>
+          </div>
         </div>
-        <Separator />
+      </header>
+
+      <aside className="bg-sidebar text-sidebar-foreground border-sidebar-border hidden min-h-0 flex-col border-r md:flex md:row-start-2">
         <ScrollArea className="min-h-0 min-w-0 flex-1 px-3 py-4">
           <div
             key={navLayer}
@@ -142,83 +212,9 @@ export function AppShell({
         </ScrollArea>
       </aside>
 
-      <div className="flex min-w-0 flex-1 flex-col overflow-x-hidden">
-        <header className="bg-card/80 supports-backdrop-filter:bg-card/60 wideMobile:px-6 sticky top-0 z-10 border-b px-4 py-3 backdrop-blur">
-          <div className="flex flex-wrap items-center justify-between gap-3">
-            <div className="min-w-0">
-              <p className="text-muted-foreground text-xs font-semibold tracking-wide uppercase">
-                {t('shell.header')}
-              </p>
-              <h2 className="hidden truncate text-xl font-semibold tracking-tight md:block">
-                <span className="text-muted-foreground font-medium">
-                  {t(activeModule.labelKey)}
-                </span>
-                <span className="text-muted-foreground mx-1.5 font-normal">
-                  /
-                </span>
-                {t(activePage.labelKey)}
-              </h2>
-              <div className="mt-1 md:hidden">
-                <AppNavSwitcher
-                  modules={modules}
-                  activeModule={activeModule}
-                  activePage={activePage}
-                  onNavigate={navigateTo}
-                />
-              </div>
-            </div>
-            <div className="flex min-w-0 flex-wrap items-center justify-end gap-2">
-              <span className="text-muted-foreground wideMobile:inline hidden text-sm">
-                {t('shell.tagline')}
-              </span>
-              <Select
-                value={locale}
-                onValueChange={(value) => onLocaleChange(value as AppLocale)}
-              >
-                <SelectTrigger size="sm" aria-label={t('shell.language')}>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {APP_LOCALES.map((code) => (
-                    <SelectItem key={code} value={code}>
-                      {code.toUpperCase()}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                onClick={onThemeToggle}
-              >
-                {isDark ? (
-                  <MoonIcon className="size-4" />
-                ) : (
-                  <SunIcon className="size-4" />
-                )}
-                <span className="comfortable:inline hidden">
-                  {isDark ? t('shell.themeDark') : t('shell.themeLight')}
-                </span>
-              </Button>
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                onClick={() => {
-                  void logoutSession().then(() => navigateTo('/login'));
-                }}
-              >
-                {t('auth.logout')}
-              </Button>
-            </div>
-          </div>
-        </header>
-
-        <main className="bg-background wideMobile:p-6 min-w-0 flex-1 overflow-x-auto p-4">
-          {children}
-        </main>
-      </div>
+      <main className="bg-background wideMobile:p-6 min-w-0 overflow-x-auto p-4 md:col-start-2 md:row-start-2">
+        {children}
+      </main>
     </div>
   );
 }
