@@ -1,4 +1,8 @@
-import type { AppLocale, HostBridge, ThemeMode } from 'demo_remote/mount';
+import type {
+  AppLocale,
+  HostBridge,
+  ThemeMode,
+} from '@platform/runtime-mf-contract';
 import { createNoopTelemetry } from './create-noop-telemetry';
 
 type Listener = () => void;
