@@ -1,9 +1,6 @@
 import {
-  moduleHasPages,
   moduleHref,
-  pageHref,
   type NavModule,
-  type NavPage,
 } from '@/app/model/nav-config';
 import { cn } from '@/shared/lib';
 import {
@@ -12,55 +9,31 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/shared/ui/shadcn';
-import {
-  CheckIcon,
-  ChevronLeftIcon,
-  ChevronRightIcon,
-  ChevronsUpDownIcon,
-} from 'lucide-react';
+import { CheckIcon, ChevronsUpDownIcon } from 'lucide-react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 type AppNavSwitcherProps = {
   modules: NavModule[];
   activeModule: NavModule;
-  activePage: NavPage;
   onNavigate: (href: string) => void;
   className?: string;
 };
 
+/** Mobile module picker only — pages use the compact hat tabs. */
 export function AppNavSwitcher({
   modules: moduleList,
   activeModule,
-  activePage,
   onNavigate,
   className,
 }: AppNavSwitcherProps) {
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
-  const [drillModuleId, setDrillModuleId] = useState<string | null>(null);
-
-  const drillModule =
-    drillModuleId === null
-      ? null
-      : (moduleList.find((module) => module.id === drillModuleId) ?? null);
-
-  const handleOpenChange = (nextOpen: boolean) => {
-    setOpen(nextOpen);
-    if (!nextOpen) {
-      setDrillModuleId(null);
-    }
-  };
-
-  const keepMenuOpen = (event: Event) => {
-    event.preventDefault();
-  };
 
   return (
-    <DropdownMenu open={open} onOpenChange={handleOpenChange}>
+    <DropdownMenu open={open} onOpenChange={setOpen}>
       <DropdownMenuTrigger asChild>
         <Button
           type="button"
@@ -72,115 +45,34 @@ export function AppNavSwitcher({
             className
           )}
         >
-          <span className="truncate">
-            {t(activeModule.labelKey)}
-            <span className="text-muted-foreground"> / </span>
-            {t(activePage.labelKey)}
-          </span>
+          <span className="truncate">{t(activeModule.labelKey)}</span>
           <ChevronsUpDownIcon className="text-muted-foreground size-4 shrink-0" />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="start" className="min-w-56">
-        {drillModule ? (
-          <>
+        <DropdownMenuLabel>{t('nav.groupModules')}</DropdownMenuLabel>
+        {moduleList.map((module) => {
+          const isActiveModule = module.id === activeModule.id;
+
+          return (
             <DropdownMenuItem
-              className="cursor-pointer"
-              onSelect={(event) => {
-                keepMenuOpen(event);
-                setDrillModuleId(null);
-              }}
+              key={module.id}
+              className={cn(
+                'cursor-pointer',
+                isActiveModule && 'bg-accent/60'
+              )}
+              onClick={() => onNavigate(moduleHref(module))}
             >
-              <ChevronLeftIcon className="size-4 shrink-0" />
-              <span className="min-w-0 truncate font-medium">
-                {t(drillModule.labelKey)}
-              </span>
+              <CheckIcon
+                className={cn(
+                  'size-4 shrink-0',
+                  isActiveModule ? 'opacity-100' : 'opacity-0'
+                )}
+              />
+              <span className="min-w-0 truncate">{t(module.labelKey)}</span>
             </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuLabel>{t('nav.groupPages')}</DropdownMenuLabel>
-            {drillModule.pages.map((page) => {
-              const isActivePage =
-                drillModule.id === activeModule.id && page.id === activePage.id;
-
-              return (
-                <DropdownMenuItem
-                  key={page.id}
-                  className={cn(
-                    'cursor-pointer',
-                    isActivePage && 'bg-accent/60'
-                  )}
-                  onClick={() => onNavigate(pageHref(drillModule, page))}
-                >
-                  <CheckIcon
-                    className={cn(
-                      'size-4 shrink-0',
-                      isActivePage ? 'opacity-100' : 'opacity-0'
-                    )}
-                  />
-                  <span className="min-w-0 truncate">{t(page.labelKey)}</span>
-                </DropdownMenuItem>
-              );
-            })}
-          </>
-        ) : (
-          <>
-            <DropdownMenuLabel>{t('nav.groupModules')}</DropdownMenuLabel>
-            {moduleList.map((module) => {
-              const isActiveModule = module.id === activeModule.id;
-              const hasPages = moduleHasPages(module);
-
-              if (!hasPages) {
-                return (
-                  <DropdownMenuItem
-                    key={module.id}
-                    className={cn(
-                      'cursor-pointer',
-                      isActiveModule && 'bg-accent/60'
-                    )}
-                    onClick={() => onNavigate(moduleHref(module))}
-                  >
-                    <CheckIcon
-                      className={cn(
-                        'size-4 shrink-0',
-                        isActiveModule ? 'opacity-100' : 'opacity-0'
-                      )}
-                    />
-                    <span className="min-w-0 truncate">
-                      {t(module.labelKey)}
-                    </span>
-                  </DropdownMenuItem>
-                );
-              }
-
-              return (
-                <DropdownMenuItem
-                  key={module.id}
-                  className={cn(
-                    'cursor-pointer',
-                    isActiveModule && 'bg-accent/60'
-                  )}
-                  onSelect={(event) => {
-                    keepMenuOpen(event);
-                    setDrillModuleId(module.id);
-                  }}
-                >
-                  <CheckIcon
-                    className={cn(
-                      'size-4 shrink-0',
-                      isActiveModule ? 'opacity-100' : 'opacity-0'
-                    )}
-                  />
-                  <span className="min-w-0 flex-1 truncate">
-                    {t(module.labelKey)}
-                  </span>
-                  <ChevronRightIcon
-                    aria-hidden
-                    className="text-muted-foreground ml-auto size-4 shrink-0"
-                  />
-                </DropdownMenuItem>
-              );
-            })}
-          </>
-        )}
+          );
+        })}
       </DropdownMenuContent>
     </DropdownMenu>
   );

@@ -25,7 +25,7 @@ export const en = {
     pageAbout: 'About',
     pageForm: 'Form',
     pageCrash: 'Crash test',
-    switcherAria: 'Switch module or page',
+    switcherAria: 'Switch module',
   },
   host: {
     title: 'Host page',

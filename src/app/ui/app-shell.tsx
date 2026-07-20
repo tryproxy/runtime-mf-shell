@@ -8,6 +8,7 @@ import {
 } from '@/app/model/nav-config';
 import { useActiveNav } from '@/app/model/use-active-nav';
 import { AppNavSwitcher } from '@/app/ui/app-nav-switcher';
+import { AppPageTabs } from '@/app/ui/app-page-tabs';
 import { logoutSession } from '@/pages/auth';
 import { APP_LOCALES, type AppLocale } from '@/shared/i18n';
 import { cn } from '@/shared/lib';
@@ -100,8 +101,8 @@ export function AppShell({
         </h1>
       </div>
 
-      <header className="bg-card/80 supports-backdrop-filter:bg-card/60 wideMobile:px-6 sticky top-0 z-10 flex flex-col justify-center border-b px-4 py-3 backdrop-blur md:col-start-2 md:row-start-1">
-        <div className="flex flex-wrap items-center justify-between gap-3">
+      <header className="bg-card/80 supports-backdrop-filter:bg-card/60 wideMobile:px-6 sticky top-0 z-10 flex flex-col justify-center border-b px-4 pt-3 backdrop-blur md:col-start-2 md:row-start-1 md:pb-3">
+        <div className="flex flex-wrap items-center justify-between gap-3 pb-3 md:pb-0">
           <div className="min-w-0">
             <p className="text-muted-foreground text-xs font-semibold tracking-wide uppercase">
               {t('shell.header')}
@@ -119,7 +120,6 @@ export function AppShell({
               <AppNavSwitcher
                 modules={navModules}
                 activeModule={activeModule}
-                activePage={activePage}
                 onNavigate={(href) => {
                   void navigate(href);
                 }}
@@ -174,6 +174,11 @@ export function AppShell({
             </Button>
           </div>
         </div>
+        <AppPageTabs
+          module={activeModule}
+          activePage={activePage}
+          className="md:hidden"
+        />
       </header>
 
       <aside className="bg-sidebar text-sidebar-foreground border-sidebar-border hidden min-h-0 flex-col border-r md:row-start-2 md:flex">

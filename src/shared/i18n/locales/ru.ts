@@ -25,7 +25,7 @@ export const ru = {
     pageAbout: 'О модуле',
     pageForm: 'Форма',
     pageCrash: 'Тест падения',
-    switcherAria: 'Переключить модуль или страницу',
+    switcherAria: 'Переключить модуль',
   },
   host: {
     title: 'Страница хоста',
