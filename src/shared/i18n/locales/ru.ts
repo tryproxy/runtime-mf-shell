@@ -1,6 +1,6 @@
 export const ru = {
   shell: {
-    brand: 'Dash',
+    brand: 'PLATFORM',
     title: 'Runtime shell',
     header: 'Шапка',
     tagline: 'Простой каркас приложения',

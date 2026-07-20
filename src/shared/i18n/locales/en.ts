@@ -1,6 +1,6 @@
 export const en = {
   shell: {
-    brand: 'Dash',
+    brand: 'PLATFORM',
     title: 'Runtime shell',
     header: 'Header',
     tagline: 'Simple app shell',
