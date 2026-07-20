@@ -18,6 +18,7 @@ import {
 import { EyeIcon, EyeOffIcon, MoonIcon, SunIcon } from 'lucide-react';
 import { type FormEvent, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 export type AuthMode = 'login' | 'register';
 
@@ -41,11 +42,6 @@ type AuthPageProps = {
   onThemeToggle(): void;
   onLocaleChange(locale: AppLocale): void;
 };
-
-function navigateTo(href: string) {
-  window.history.pushState(null, '', href);
-  window.dispatchEvent(new PopStateEvent('popstate'));
-}
 
 function persistSession(accessToken: string, email: string) {
   window.localStorage.setItem(RMF_ACCESS_TOKEN_KEY, accessToken);
@@ -105,6 +101,23 @@ export async function logoutSession(): Promise<void> {
   await logoutFromApi();
 }
 
+function resolvePostAuthPath(state: unknown): string {
+  if (
+    typeof state === 'object' &&
+    state !== null &&
+    'from' in state &&
+    typeof (state as { from: unknown }).from === 'string'
+  ) {
+    const from = (state as { from: string }).from;
+
+    if (from.startsWith('/') && !from.startsWith('//')) {
+      return from;
+    }
+  }
+
+  return '/host';
+}
+
 export function AuthPage({
   mode,
   theme,
@@ -113,8 +126,11 @@ export function AuthPage({
   onLocaleChange,
 }: AuthPageProps) {
   const { t } = useTranslation();
+  const navigate = useNavigate();
+  const location = useLocation();
   const isLogin = mode === 'login';
   const isDark = theme === 'dark';
+  const redirectTo = resolvePostAuthPath(location.state);
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -138,7 +154,7 @@ export function AuthPage({
           });
 
       persistSession(accessToken, email);
-      navigateTo('/host');
+      void navigate(redirectTo, { replace: true });
     } catch (err) {
       setError(err instanceof Error ? err.message : t('auth.errorGeneric'));
     } finally {
@@ -158,7 +174,7 @@ export function AuthPage({
         password: TEST_USER.password,
       });
       persistSession(accessToken, TEST_USER.email);
-      navigateTo('/host');
+      void navigate(redirectTo, { replace: true });
     } catch (err) {
       setError(err instanceof Error ? err.message : t('auth.errorGeneric'));
     } finally {
@@ -304,16 +320,24 @@ export function AuthPage({
               </div>
 
               {error ? (
-                <p className="text-destructive text-sm break-all">{error}</p>
+                <p className="text-destructive pt-2 text-sm break-all">
+                  {error}
+                </p>
               ) : null}
 
-              <Button type="submit" className="h-11 w-full" disabled={pending}>
-                {pending
-                  ? t('auth.pending')
-                  : isLogin
-                    ? t('auth.loginSubmit')
-                    : t('auth.registerSubmit')}
-              </Button>
+              <div className="pt-4">
+                <Button
+                  type="submit"
+                  className="h-11 w-full"
+                  disabled={pending}
+                >
+                  {pending
+                    ? t('auth.pending')
+                    : isLogin
+                      ? t('auth.loginSubmit')
+                      : t('auth.registerSubmit')}
+                </Button>
+              </div>
             </form>
           </CardContent>
           <CardFooter className="justify-center">
@@ -323,7 +347,9 @@ export function AuthPage({
                 <button
                   type="button"
                   className="text-foreground font-medium underline-offset-4 hover:underline"
-                  onClick={() => navigateTo('/register')}
+                  onClick={() => {
+                    void navigate('/register');
+                  }}
                 >
                   {t('auth.goRegister')}
                 </button>
@@ -334,7 +360,9 @@ export function AuthPage({
                 <button
                   type="button"
                   className="text-foreground font-medium underline-offset-4 hover:underline"
-                  onClick={() => navigateTo('/login')}
+                  onClick={() => {
+                    void navigate('/login');
+                  }}
                 >
                   {t('auth.goLogin')}
                 </button>

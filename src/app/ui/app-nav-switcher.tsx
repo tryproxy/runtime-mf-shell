@@ -1,8 +1,10 @@
 import {
-  type ModuleMeta,
-  type ModulePageMeta,
   moduleHasPages,
-} from '@/app/model/routing';
+  moduleHref,
+  pageHref,
+  type NavModule,
+  type NavPage,
+} from '@/app/model/nav-config';
 import { cn } from '@/shared/lib';
 import {
   Button,
@@ -23,9 +25,9 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 type AppNavSwitcherProps = {
-  modules: ModuleMeta[];
-  activeModule: ModuleMeta;
-  activePage: ModulePageMeta;
+  modules: NavModule[];
+  activeModule: NavModule;
+  activePage: NavPage;
   onNavigate: (href: string) => void;
   className?: string;
 };
@@ -39,19 +41,17 @@ export function AppNavSwitcher({
 }: AppNavSwitcherProps) {
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
-  const [drillModuleKey, setDrillModuleKey] = useState<
-    ModuleMeta['key'] | null
-  >(null);
+  const [drillModuleId, setDrillModuleId] = useState<string | null>(null);
 
   const drillModule =
-    drillModuleKey === null
+    drillModuleId === null
       ? null
-      : (moduleList.find((module) => module.key === drillModuleKey) ?? null);
+      : (moduleList.find((module) => module.id === drillModuleId) ?? null);
 
   const handleOpenChange = (nextOpen: boolean) => {
     setOpen(nextOpen);
     if (!nextOpen) {
-      setDrillModuleKey(null);
+      setDrillModuleId(null);
     }
   };
 
@@ -87,7 +87,7 @@ export function AppNavSwitcher({
               className="cursor-pointer"
               onSelect={(event) => {
                 keepMenuOpen(event);
-                setDrillModuleKey(null);
+                setDrillModuleId(null);
               }}
             >
               <ChevronLeftIcon className="size-4 shrink-0" />
@@ -99,17 +99,16 @@ export function AppNavSwitcher({
             <DropdownMenuLabel>{t('nav.groupPages')}</DropdownMenuLabel>
             {drillModule.pages.map((page) => {
               const isActivePage =
-                drillModule.key === activeModule.key &&
-                page.key === activePage.key;
+                drillModule.id === activeModule.id && page.id === activePage.id;
 
               return (
                 <DropdownMenuItem
-                  key={page.key}
+                  key={page.id}
                   className={cn(
                     'cursor-pointer',
                     isActivePage && 'bg-accent/60'
                   )}
-                  onClick={() => onNavigate(page.href)}
+                  onClick={() => onNavigate(pageHref(drillModule, page))}
                 >
                   <CheckIcon
                     className={cn(
@@ -126,18 +125,18 @@ export function AppNavSwitcher({
           <>
             <DropdownMenuLabel>{t('nav.groupModules')}</DropdownMenuLabel>
             {moduleList.map((module) => {
-              const isActiveModule = module.key === activeModule.key;
+              const isActiveModule = module.id === activeModule.id;
               const hasPages = moduleHasPages(module);
 
               if (!hasPages) {
                 return (
                   <DropdownMenuItem
-                    key={module.key}
+                    key={module.id}
                     className={cn(
                       'cursor-pointer',
                       isActiveModule && 'bg-accent/60'
                     )}
-                    onClick={() => onNavigate(module.href)}
+                    onClick={() => onNavigate(moduleHref(module))}
                   >
                     <CheckIcon
                       className={cn(
@@ -154,14 +153,14 @@ export function AppNavSwitcher({
 
               return (
                 <DropdownMenuItem
-                  key={module.key}
+                  key={module.id}
                   className={cn(
                     'cursor-pointer',
                     isActiveModule && 'bg-accent/60'
                   )}
                   onSelect={(event) => {
                     keepMenuOpen(event);
-                    setDrillModuleKey(module.key);
+                    setDrillModuleId(module.id);
                   }}
                 >
                   <CheckIcon

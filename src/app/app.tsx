@@ -1,13 +1,13 @@
-import {
-  type ModuleKey,
-  useActivePage,
-  useLocationPathname,
-} from '@/app/model/routing';
+import { setAppRouter } from '@/app/model/app-router-ref';
+import { buildModuleRoutes } from '@/app/model/build-module-routes';
+import { defaultModuleHref } from '@/app/model/nav-config';
 import { AppShell } from '@/app/ui/app-shell';
-import { AuthPage, type AuthMode } from '@/pages/auth';
+import { RequireAuth } from '@/app/ui/require-auth';
+import { AuthPage, getAccessToken } from '@/pages/auth';
 import { HostPage } from '@/pages/host';
 import { RemotePage } from '@/pages/remote';
 import { RemoteAngularPage } from '@/pages/remote-angular';
+import { installHistorySync } from '@/remote-runtime/lib/create-host-bridge';
 import {
   type AppLocale,
   i18n,
@@ -17,23 +17,22 @@ import {
 import { applyShellTheme } from '@/shared/lib/apply-shell-theme';
 import type { ShellTheme } from '@/shared/model';
 import { useEffect, useState } from 'react';
+import {
+  Navigate,
+  Outlet,
+  RouterProvider,
+  createBrowserRouter,
+  useOutletContext,
+} from 'react-router-dom';
 
-function getAuthMode(pathname: string): AuthMode | null {
-  if (pathname === '/login' || pathname.startsWith('/login/')) {
-    return 'login';
-  }
+export type ShellOutletContext = {
+  theme: ShellTheme;
+  locale: AppLocale;
+  onThemeToggle(): void;
+  onLocaleChange(locale: AppLocale): void;
+};
 
-  if (pathname === '/register' || pathname.startsWith('/register/')) {
-    return 'register';
-  }
-
-  return null;
-}
-
-function App() {
-  const pathname = useLocationPathname();
-  const authMode = getAuthMode(pathname);
-  const activeModule = useActivePage();
+function AppRoot() {
   const [theme, setTheme] = useState<ShellTheme>(() => {
     const storedTheme = window.localStorage.getItem('shell-theme');
 
@@ -51,49 +50,92 @@ function App() {
     void i18n.changeLanguage(locale);
   }, [locale]);
 
-  const onThemeToggle = () =>
-    setTheme((currentTheme) => (currentTheme === 'light' ? 'dark' : 'light'));
+  const context: ShellOutletContext = {
+    theme,
+    locale,
+    onThemeToggle: () =>
+      setTheme((current) => (current === 'light' ? 'dark' : 'light')),
+    onLocaleChange: setLocale,
+  };
 
-  if (authMode) {
-    return (
-      <AuthPage
-        mode={authMode}
-        theme={theme}
-        locale={locale}
-        onThemeToggle={onThemeToggle}
-        onLocaleChange={setLocale}
-      />
-    );
+  return <Outlet context={context} />;
+}
+
+function AuthRoute({ mode }: { mode: 'login' | 'register' }) {
+  const { theme, locale, onThemeToggle, onLocaleChange } =
+    useOutletContext<ShellOutletContext>();
+
+  if (getAccessToken()) {
+    return <Navigate replace to={defaultModuleHref} />;
   }
 
   return (
-    <AppShell
+    <AuthPage
+      mode={mode}
       theme={theme}
       locale={locale}
       onThemeToggle={onThemeToggle}
-      onLocaleChange={setLocale}
+      onLocaleChange={onLocaleChange}
+    />
+  );
+}
+
+function ShellLayout() {
+  const ctx = useOutletContext<ShellOutletContext>();
+
+  return (
+    <AppShell
+      theme={ctx.theme}
+      locale={ctx.locale}
+      onThemeToggle={ctx.onThemeToggle}
+      onLocaleChange={ctx.onLocaleChange}
     >
-      <PageContent activeModule={activeModule} theme={theme} locale={locale} />
+      <Outlet context={ctx} />
     </AppShell>
   );
 }
 
-type PageContentProps = {
-  activeModule: ModuleKey;
-  theme: ShellTheme;
-  locale: AppLocale;
-};
+function RemoteRoute() {
+  const { theme, locale } = useOutletContext<ShellOutletContext>();
 
-function PageContent({ activeModule, theme, locale }: PageContentProps) {
-  if (activeModule === 'remote') {
-    return <RemotePage theme={theme} locale={locale} />;
-  }
-
-  if (activeModule === 'remoteAngular') {
-    return <RemoteAngularPage theme={theme} locale={locale} />;
-  }
-
-  return <HostPage />;
+  return <RemotePage theme={theme} locale={locale} />;
 }
 
-export default App;
+function RemoteAngularRoute() {
+  const { theme, locale } = useOutletContext<ShellOutletContext>();
+
+  return <RemoteAngularPage theme={theme} locale={locale} />;
+}
+
+const router = createBrowserRouter([
+  {
+    path: '/',
+    element: <AppRoot />,
+    children: [
+      { index: true, element: <Navigate replace to={defaultModuleHref} /> },
+      { path: 'login', element: <AuthRoute mode="login" /> },
+      { path: 'register', element: <AuthRoute mode="register" /> },
+      {
+        element: <RequireAuth />,
+        children: [
+          {
+            element: <ShellLayout />,
+            children: buildModuleRoutes({
+              host: <HostPage />,
+              remote: <RemoteRoute />,
+              remoteAngular: <RemoteAngularRoute />,
+            }),
+          },
+        ],
+      },
+      { path: '*', element: <Navigate replace to={defaultModuleHref} /> },
+    ],
+  },
+]);
+
+setAppRouter(router);
+installHistorySync();
+
+export default function App() {
+  return <RouterProvider router={router} />;
+}

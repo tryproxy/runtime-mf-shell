@@ -10,14 +10,11 @@ import {
 } from '@/shared/ui/shadcn';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-
-function navigateTo(href: string) {
-  window.history.pushState(null, '', href);
-  window.dispatchEvent(new PopStateEvent('popstate'));
-}
+import { useNavigate } from 'react-router-dom';
 
 export function HostPage() {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const [shouldCrash, setShouldCrash] = useState(false);
   const [email, setEmail] = useState(() => getAuthEmail());
   const signedIn = Boolean(getAccessToken());
@@ -54,7 +51,7 @@ export function HostPage() {
               onClick={() => {
                 void logoutSession().then(() => {
                   setEmail(null);
-                  navigateTo('/login');
+                  void navigate('/login');
                 });
               }}
             >
@@ -62,13 +59,20 @@ export function HostPage() {
             </Button>
           ) : (
             <>
-              <Button type="button" onClick={() => navigateTo('/login')}>
+              <Button
+                type="button"
+                onClick={() => {
+                  void navigate('/login');
+                }}
+              >
                 {t('auth.goLoginPage')}
               </Button>
               <Button
                 type="button"
                 variant="outline"
-                onClick={() => navigateTo('/register')}
+                onClick={() => {
+                  void navigate('/register');
+                }}
               >
                 {t('auth.goRegisterPage')}
               </Button>

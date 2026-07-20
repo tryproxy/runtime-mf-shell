@@ -1,14 +1,12 @@
 import {
-  type ModuleMeta,
-  type ModulePageMeta,
-  type NavLayer,
-  getActiveModulePage,
-  getModuleByKey,
-  getModuleFromPath,
   moduleHasPages,
-  modules,
-  useLocationPathname,
-} from '@/app/model/routing';
+  moduleHref,
+  navModules,
+  pageHref,
+  type NavModule,
+  type NavPage,
+} from '@/app/model/nav-config';
+import { useActiveNav } from '@/app/model/use-active-nav';
 import { AppNavSwitcher } from '@/app/ui/app-nav-switcher';
 import { logoutSession } from '@/pages/auth';
 import { APP_LOCALES, type AppLocale } from '@/shared/i18n';
@@ -36,6 +34,9 @@ import {
   useState,
 } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
+
+type NavLayer = 'modules' | 'pages';
 
 type AppShellProps = PropsWithChildren<{
   theme: ShellTheme;
@@ -43,11 +44,6 @@ type AppShellProps = PropsWithChildren<{
   onThemeToggle(): void;
   onLocaleChange(locale: AppLocale): void;
 }>;
-
-function navigateTo(href: string) {
-  window.history.pushState(null, '', href);
-  window.dispatchEvent(new PopStateEvent('popstate'));
-}
 
 export function AppShell({
   theme,
@@ -57,50 +53,43 @@ export function AppShell({
   children,
 }: AppShellProps) {
   const { t } = useTranslation();
-  const pathname = useLocationPathname();
-  const activeModuleKey = getModuleFromPath(pathname);
-  const activeModule = getModuleByKey(activeModuleKey);
-  const activePage = getActiveModulePage(activeModule, pathname);
+  const navigate = useNavigate();
+  const { module: activeModule, page: activePage } = useActiveNav();
   const isDark = theme === 'dark';
 
-  // Multi-page modules open Layer 2; single-page modules stay on Layer 1.
-  // "Back" stays on the current route and only swaps sidebar to modules.
   const [navLayer, setNavLayer] = useState<NavLayer>(() =>
     moduleHasPages(activeModule) ? 'pages' : 'modules'
   );
-  const [browsedModuleKey, setBrowsedModuleKey] = useState(activeModuleKey);
+  const [browsedModuleId, setBrowsedModuleId] = useState(activeModule.id);
 
   useEffect(() => {
-    const module = getModuleByKey(activeModuleKey);
-    setBrowsedModuleKey(activeModuleKey);
-    setNavLayer(moduleHasPages(module) ? 'pages' : 'modules');
-  }, [activeModuleKey]);
+    setBrowsedModuleId(activeModule.id);
+    setNavLayer(moduleHasPages(activeModule) ? 'pages' : 'modules');
+  }, [activeModule]);
 
   const layerModule =
-    navLayer === 'pages' ? getModuleByKey(browsedModuleKey) : activeModule;
+    navLayer === 'pages'
+      ? (navModules.find((module) => module.id === browsedModuleId) ??
+        activeModule)
+      : activeModule;
 
   const handleNavigate =
     (href: string) => (event: MouseEvent<HTMLAnchorElement>) => {
       event.preventDefault();
-      navigateTo(href);
+      void navigate(href);
     };
 
-  const openModule = (module: ModuleMeta) => {
+  const openModule = (module: NavModule) => {
     if (moduleHasPages(module)) {
-      setBrowsedModuleKey(module.key);
+      setBrowsedModuleId(module.id);
       setNavLayer('pages');
     } else {
       setNavLayer('modules');
     }
-    navigateTo(module.href);
-  };
-
-  const backToModules = () => {
-    setNavLayer('modules');
+    void navigate(moduleHref(module));
   };
 
   return (
-    // Shared row 1 height so sidebar brand bottom border == hat bottom border.
     <div className="bg-background text-foreground grid min-h-screen grid-cols-1 grid-rows-[auto_minmax(0,1fr)] md:grid-cols-[15rem_minmax(0,1fr)]">
       <div className="bg-sidebar text-sidebar-foreground border-sidebar-border hidden border-r border-b px-5 py-5 md:flex md:flex-col md:justify-center">
         <p className="text-muted-foreground text-xs font-semibold tracking-wide uppercase">
@@ -128,10 +117,12 @@ export function AppShell({
             </h2>
             <div className="mt-1 md:hidden">
               <AppNavSwitcher
-                modules={modules}
+                modules={navModules}
                 activeModule={activeModule}
                 activePage={activePage}
-                onNavigate={navigateTo}
+                onNavigate={(href) => {
+                  void navigate(href);
+                }}
               />
             </div>
           </div>
@@ -174,7 +165,9 @@ export function AppShell({
               variant="outline"
               size="sm"
               onClick={() => {
-                void logoutSession().then(() => navigateTo('/login'));
+                void logoutSession().then(() => {
+                  void navigate('/login');
+                });
               }}
             >
               {t('auth.logout')}
@@ -196,17 +189,17 @@ export function AppShell({
           >
             {navLayer === 'modules' ? (
               <ModulesLayer
-                modules={modules}
-                activeModuleKey={activeModuleKey}
+                modules={navModules}
+                activeModuleId={activeModule.id}
                 t={t}
                 onOpenModule={openModule}
               />
             ) : (
               <PagesLayer
                 module={layerModule}
-                activePageKey={activePage.key}
+                activePageId={activePage.id}
                 t={t}
-                onBack={backToModules}
+                onBack={() => setNavLayer('modules')}
                 onNavigate={handleNavigate}
               />
             )}
@@ -223,31 +216,29 @@ export function AppShell({
 
 type Translate = (key: string) => string;
 
-type ModulesLayerProps = {
-  modules: ModuleMeta[];
-  activeModuleKey: ModuleMeta['key'];
-  onOpenModule: (module: ModuleMeta) => void;
-  t: Translate;
-};
-
 function ModulesLayer({
   modules: moduleList,
-  activeModuleKey,
+  activeModuleId,
   onOpenModule,
   t,
-}: ModulesLayerProps) {
+}: {
+  modules: NavModule[];
+  activeModuleId: string;
+  onOpenModule: (module: NavModule) => void;
+  t: Translate;
+}) {
   return (
     <nav className="flex flex-col gap-1" aria-label={t('nav.modulesAria')}>
       <p className="text-muted-foreground px-2 pb-1 text-[11px] font-semibold tracking-wide uppercase">
         {t('nav.groupModules')}
       </p>
       {moduleList.map((module) => {
-        const isActive = module.key === activeModuleKey;
+        const isActive = module.id === activeModuleId;
         const hasPages = moduleHasPages(module);
 
         return (
           <button
-            key={module.key}
+            key={module.id}
             type="button"
             className={cn(
               'flex w-full min-w-0 cursor-pointer items-center gap-2 rounded-lg px-3 py-2.5 text-left transition-colors',
@@ -278,21 +269,19 @@ function ModulesLayer({
   );
 }
 
-type PagesLayerProps = {
-  module: ModuleMeta;
-  activePageKey: ModulePageMeta['key'];
-  onBack: () => void;
-  onNavigate: (href: string) => (event: MouseEvent<HTMLAnchorElement>) => void;
-  t: Translate;
-};
-
 function PagesLayer({
   module,
-  activePageKey,
+  activePageId,
   onBack,
   onNavigate,
   t,
-}: PagesLayerProps) {
+}: {
+  module: NavModule;
+  activePageId: string;
+  onBack: () => void;
+  onNavigate: (href: string) => (event: MouseEvent<HTMLAnchorElement>) => void;
+  t: Translate;
+}) {
   return (
     <nav className="flex flex-col gap-1" aria-label={t('nav.pagesAria')}>
       <button
@@ -308,20 +297,21 @@ function PagesLayer({
       <p className="text-muted-foreground px-2 pb-1 text-[11px] font-semibold tracking-wide uppercase">
         {t('nav.groupPages')}
       </p>
-      {module.pages.map((page) => {
-        const isActive = page.key === activePageKey;
+      {module.pages.map((page: NavPage) => {
+        const href = pageHref(module, page);
+        const isActive = page.id === activePageId;
 
         return (
           <a
-            key={page.key}
-            href={page.href}
+            key={page.id}
+            href={href}
             className={cn(
               'cursor-pointer truncate rounded-lg px-3 py-2 text-sm font-medium transition-colors',
               isActive
                 ? 'bg-sidebar-accent text-sidebar-accent-foreground'
                 : 'text-sidebar-foreground/80 hover:bg-sidebar-accent/70 hover:text-sidebar-accent-foreground'
             )}
-            onClick={onNavigate(page.href)}
+            onClick={onNavigate(href)}
           >
             {t(page.labelKey)}
           </a>
