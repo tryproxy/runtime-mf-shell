@@ -9,6 +9,7 @@ import {
 import { useActiveNav } from '@/app/model/use-active-nav';
 import { AppNavSwitcher } from '@/app/ui/app-nav-switcher';
 import { AppPageTabs } from '@/app/ui/app-page-tabs';
+import { ShellAccountFooter } from '@/app/ui/shell-account-footer';
 import { logoutSession } from '@/pages/auth';
 import { APP_LOCALES, type AppLocale } from '@/shared/i18n';
 import { cn } from '@/shared/lib';
@@ -91,7 +92,7 @@ export function AppShell({
   };
 
   return (
-    <div className="bg-background text-foreground grid min-h-screen grid-cols-1 grid-rows-[auto_minmax(0,1fr)] md:grid-cols-[15rem_minmax(0,1fr)]">
+    <div className="bg-background text-foreground grid h-svh grid-cols-1 grid-rows-[auto_minmax(0,1fr)] overflow-hidden md:grid-cols-[15rem_minmax(0,1fr)]">
       <div className="bg-sidebar text-sidebar-foreground border-sidebar-border hidden border-r border-b px-5 py-5 md:flex md:flex-col md:justify-center">
         <p className="text-muted-foreground text-xs font-semibold tracking-wide uppercase">
           {t('shell.brand')}
@@ -101,7 +102,7 @@ export function AppShell({
         </h1>
       </div>
 
-      <header className="bg-card/80 supports-backdrop-filter:bg-card/60 wideMobile:px-6 sticky top-0 z-10 flex flex-col justify-center border-b px-4 pt-3 backdrop-blur md:col-start-2 md:row-start-1 md:pb-3">
+      <header className="bg-card/80 supports-backdrop-filter:bg-card/60 wideMobile:px-6 z-10 flex flex-col justify-center border-b px-4 pt-3 backdrop-blur md:col-start-2 md:row-start-1 md:pb-3">
         <div className="flex items-start justify-between gap-3 pb-3 md:pb-0">
           <div className="min-w-0">
             <p className="text-muted-foreground text-xs font-semibold tracking-wide uppercase">
@@ -208,9 +209,10 @@ export function AppShell({
             )}
           </div>
         </ScrollArea>
+        <ShellAccountFooter />
       </aside>
 
-      <main className="bg-background wideMobile:p-6 min-w-0 overflow-x-auto p-4 md:col-start-2 md:row-start-2">
+      <main className="bg-background wideMobile:p-6 min-h-0 min-w-0 overflow-x-auto overflow-y-auto p-4 md:col-start-2 md:row-start-2">
         {children}
       </main>
     </div>

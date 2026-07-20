@@ -86,5 +86,7 @@ export const en = {
     goRegisterPage: 'Register',
     testUserLogin: 'Log in as test user',
     or: 'or',
+    accountLoading: 'Loading…',
+    accountFallback: 'Account',
   },
 } as const;

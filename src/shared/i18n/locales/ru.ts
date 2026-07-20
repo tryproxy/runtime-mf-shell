@@ -86,5 +86,7 @@ export const ru = {
     goRegisterPage: 'Регистрация',
     testUserLogin: 'Войти как тестовый пользователь',
     or: 'или',
+    accountLoading: 'Загрузка…',
+    accountFallback: 'Аккаунт',
   },
 } as const;
