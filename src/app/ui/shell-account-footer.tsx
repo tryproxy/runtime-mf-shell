@@ -1,6 +1,5 @@
 import {
   initialFrom,
-  useShellAccount,
   type UseShellAccountResult,
 } from '@/app/model/use-shell-account';
 import { cn } from '@/shared/lib';
