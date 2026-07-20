@@ -11,6 +11,7 @@ import { useShellAccount } from '@/app/model/use-shell-account';
 import { AppNavSwitcher } from '@/app/ui/app-nav-switcher';
 import { AppPageTabs } from '@/app/ui/app-page-tabs';
 import { ShellAccountFooter } from '@/app/ui/shell-account-footer';
+import { ShellHeaderProfile } from '@/app/ui/shell-header-profile';
 import { ShellMobileBar } from '@/app/ui/shell-mobile-bar';
 import { logoutSession } from '@/pages/auth';
 import { APP_LOCALES, type AppLocale } from '@/shared/i18n';
@@ -107,11 +108,15 @@ export function AppShell({
 
       <header className="bg-card/80 supports-backdrop-filter:bg-card/60 wideMobile:px-6 z-10 flex flex-col justify-center border-b px-4 pt-3 backdrop-blur md:col-start-2 md:row-start-1 md:pb-3">
         <div className="flex items-start justify-between gap-3 pb-3 md:pb-0">
-          <div className="min-w-0">
+          <ShellHeaderProfile
+            account={account}
+            className="min-w-0 flex-1 md:hidden"
+          />
+          <div className="hidden min-w-0 md:block">
             <p className="text-muted-foreground text-xs font-semibold tracking-wide uppercase">
               {t('shell.header')}
             </p>
-            <h2 className="mt-1 hidden truncate text-xl font-semibold tracking-tight md:block">
+            <h2 className="mt-1 truncate text-xl font-semibold tracking-tight">
               <span className="text-muted-foreground font-medium">
                 {t(activeModule.labelKey)}
               </span>
