@@ -102,12 +102,12 @@ export function AppShell({
       </div>
 
       <header className="bg-card/80 supports-backdrop-filter:bg-card/60 wideMobile:px-6 sticky top-0 z-10 flex flex-col justify-center border-b px-4 pt-3 backdrop-blur md:col-start-2 md:row-start-1 md:pb-3">
-        <div className="flex flex-wrap items-center justify-between gap-3 pb-3 md:pb-0">
+        <div className="flex items-start justify-between gap-3 pb-3 md:pb-0">
           <div className="min-w-0">
             <p className="text-muted-foreground text-xs font-semibold tracking-wide uppercase">
               {t('shell.header')}
             </p>
-            <h2 className="hidden truncate text-xl font-semibold tracking-tight md:block">
+            <h2 className="mt-1 hidden truncate text-xl font-semibold tracking-tight md:block">
               <span className="text-muted-foreground font-medium">
                 {t(activeModule.labelKey)}
               </span>
@@ -116,17 +116,9 @@ export function AppShell({
               </span>
               {t(activePage.labelKey)}
             </h2>
-            <div className="mt-1 md:hidden">
-              <AppNavSwitcher
-                modules={navModules}
-                activeModule={activeModule}
-                onNavigate={(href) => {
-                  void navigate(href);
-                }}
-              />
-            </div>
           </div>
-          <div className="flex min-w-0 flex-wrap items-center justify-end gap-2">
+
+          <div className="flex shrink-0 items-center justify-end gap-2">
             <span className="text-muted-foreground wideMobile:inline hidden text-sm">
               {t('shell.tagline')}
             </span>
@@ -174,11 +166,17 @@ export function AppShell({
             </Button>
           </div>
         </div>
-        <AppPageTabs
-          module={activeModule}
-          activePage={activePage}
-          className="md:hidden"
-        />
+
+        <div className="md:hidden">
+          <AppNavSwitcher
+            modules={navModules}
+            activeModule={activeModule}
+            onNavigate={(href) => {
+              void navigate(href);
+            }}
+          />
+          <AppPageTabs module={activeModule} activePage={activePage} />
+        </div>
       </header>
 
       <aside className="bg-sidebar text-sidebar-foreground border-sidebar-border hidden min-h-0 flex-col border-r md:row-start-2 md:flex">

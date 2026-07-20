@@ -1,15 +1,6 @@
 import { moduleHref, type NavModule } from '@/app/model/nav-config';
 import { cn } from '@/shared/lib';
-import {
-  Button,
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuTrigger,
-} from '@/shared/ui/shadcn';
-import { CheckIcon, ChevronsUpDownIcon } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
 type AppNavSwitcherProps = {
@@ -19,7 +10,7 @@ type AppNavSwitcherProps = {
   className?: string;
 };
 
-/** Mobile module picker only — pages use the compact hat tabs. */
+/** Compact hat module tabs — primary Twitter-style underline strip. */
 export function AppNavSwitcher({
   modules: moduleList,
   activeModule,
@@ -27,47 +18,52 @@ export function AppNavSwitcher({
   className,
 }: AppNavSwitcherProps) {
   const { t } = useTranslation();
-  const [open, setOpen] = useState(false);
+  const activeRef = useRef<HTMLButtonElement | null>(null);
+
+  useEffect(() => {
+    activeRef.current?.scrollIntoView({
+      inline: 'center',
+      block: 'nearest',
+      behavior: 'smooth',
+    });
+  }, [activeModule.id]);
 
   return (
-    <DropdownMenu open={open} onOpenChange={setOpen}>
-      <DropdownMenuTrigger asChild>
-        <Button
-          type="button"
-          variant="outline"
-          size="sm"
-          aria-label={t('nav.switcherAria')}
-          className={cn(
-            'max-w-full min-w-0 cursor-pointer justify-between gap-1.5',
-            className
-          )}
-        >
-          <span className="truncate">{t(activeModule.labelKey)}</span>
-          <ChevronsUpDownIcon className="text-muted-foreground size-4 shrink-0" />
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="start" className="min-w-56">
-        <DropdownMenuLabel>{t('nav.groupModules')}</DropdownMenuLabel>
-        {moduleList.map((module) => {
-          const isActiveModule = module.id === activeModule.id;
+    <nav
+      aria-label={t('nav.modulesAria')}
+      className={cn(
+        'border-border -mx-4 flex overflow-x-auto border-t px-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden',
+        className
+      )}
+    >
+      {moduleList.map((module) => {
+        const isActive = module.id === activeModule.id;
 
-          return (
-            <DropdownMenuItem
-              key={module.id}
-              className={cn('cursor-pointer', isActiveModule && 'bg-accent/60')}
-              onClick={() => onNavigate(moduleHref(module))}
-            >
-              <CheckIcon
-                className={cn(
-                  'size-4 shrink-0',
-                  isActiveModule ? 'opacity-100' : 'opacity-0'
-                )}
-              />
-              <span className="min-w-0 truncate">{t(module.labelKey)}</span>
-            </DropdownMenuItem>
-          );
-        })}
-      </DropdownMenuContent>
-    </DropdownMenu>
+        return (
+          <button
+            key={module.id}
+            ref={isActive ? activeRef : undefined}
+            type="button"
+            aria-current={isActive ? 'page' : undefined}
+            className={cn(
+              'relative shrink-0 cursor-pointer px-3.5 pt-3 pb-2.5 text-[15px] transition-colors',
+              isActive
+                ? 'text-foreground font-bold'
+                : 'text-muted-foreground hover:text-foreground/85 font-medium'
+            )}
+            onClick={() => onNavigate(moduleHref(module))}
+          >
+            {t(module.labelKey)}
+            <span
+              aria-hidden
+              className={cn(
+                'absolute inset-x-3 bottom-0 h-0.5 rounded-full bg-sky-500 transition-opacity',
+                isActive ? 'opacity-100' : 'opacity-0'
+              )}
+            />
+          </button>
+        );
+      })}
+    </nav>
   );
 }

@@ -10,7 +10,7 @@ type AppPageTabsProps = {
   className?: string;
 };
 
-/** Compact hat page tabs — Twitter-style underline strip for mobile. */
+/** Compact hat page tabs — secondary row: quieter, text-weight only. */
 export function AppPageTabs({
   module,
   activePage,
@@ -36,7 +36,7 @@ export function AppPageTabs({
     <nav
       aria-label={t('nav.pagesAria')}
       className={cn(
-        'border-border -mx-4 flex gap-0 overflow-x-auto border-t px-2 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden',
+        'border-border/80 -mx-4 flex overflow-x-auto border-t px-2 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden',
         className
       )}
     >
@@ -51,10 +51,10 @@ export function AppPageTabs({
             type="button"
             aria-current={isActive ? 'page' : undefined}
             className={cn(
-              'relative shrink-0 cursor-pointer px-3 pt-2.5 pb-2.5 text-sm transition-colors',
+              'relative shrink-0 cursor-pointer px-3 py-2.5 text-sm tracking-wide uppercase transition-colors',
               isActive
-                ? 'text-foreground font-bold'
-                : 'text-muted-foreground hover:text-foreground/80 font-medium'
+                ? 'text-foreground font-semibold'
+                : 'text-muted-foreground/80 hover:text-muted-foreground font-medium'
             )}
             onClick={() => {
               void navigate(href);
@@ -64,7 +64,7 @@ export function AppPageTabs({
             <span
               aria-hidden
               className={cn(
-                'absolute inset-x-2 bottom-0 h-0.5 rounded-full bg-sky-500 transition-opacity',
+                'bg-foreground/70 absolute inset-x-3 bottom-0 h-px transition-opacity',
                 isActive ? 'opacity-100' : 'opacity-0'
               )}
             />
