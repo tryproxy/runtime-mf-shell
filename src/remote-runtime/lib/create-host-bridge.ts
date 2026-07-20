@@ -7,11 +7,22 @@ import { createNoopTelemetry } from './create-noop-telemetry';
 
 type Listener = () => void;
 
+const ACCESS_TOKEN_KEY = 'rmf-access-token';
+const AUTH_EMAIL_KEY = 'rmf-auth-email';
+
 function subscribe(set: Set<Listener>, listener: Listener): () => void {
   set.add(listener);
   return () => {
     set.delete(listener);
   };
+}
+
+function readAccessToken(): string | null {
+  return window.localStorage.getItem(ACCESS_TOKEN_KEY);
+}
+
+function readAuthEmail(): string | null {
+  return window.localStorage.getItem(AUTH_EMAIL_KEY);
 }
 
 export function createHostBridge(
@@ -50,8 +61,8 @@ export function createHostBridge(
 
     auth: {
       getSnapshot: () => {
-        const token = window.localStorage.getItem('rmf-access-token');
-        const email = window.localStorage.getItem('rmf-auth-email');
+        const token = readAccessToken();
+        const email = readAuthEmail();
 
         if (!token) {
           return null;
@@ -64,6 +75,10 @@ export function createHostBridge(
         };
       },
       subscribe: (listener) => subscribe(authListeners, listener),
+      http: {
+        mode: 'bearer',
+        getAccessToken: async () => readAccessToken(),
+      },
     },
 
     navigation: {
