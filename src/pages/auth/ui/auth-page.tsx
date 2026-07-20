@@ -4,7 +4,6 @@ import {
   Button,
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
@@ -16,7 +15,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/shared/ui/shadcn';
-import { MoonIcon, SunIcon } from 'lucide-react';
+import { EyeIcon, EyeOffIcon, MoonIcon, SunIcon } from 'lucide-react';
 import { type FormEvent, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -120,6 +119,7 @@ export function AuthPage({
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [username, setUsername] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
 
@@ -208,18 +208,31 @@ export function AuthPage({
       </header>
 
       <main className="flex flex-1 items-center justify-center px-4 py-8">
-        <Card className="w-full max-w-md">
+        <Card className="w-full max-w-[22.4rem]">
           <CardHeader>
             <CardTitle>
               {isLogin ? t('auth.loginTitle') : t('auth.registerTitle')}
             </CardTitle>
-            <CardDescription>
+            <button
+              type="button"
+              className="text-foreground mt-3 h-12 w-full cursor-pointer rounded-md border border-dashed bg-transparent px-4 text-sm font-medium underline-offset-4 hover:underline disabled:cursor-not-allowed disabled:opacity-50"
+              disabled={pending}
+              onClick={() => void loginAsTestUser()}
+            >
+              {t('auth.testUserLogin')}
+            </button>
+          </CardHeader>
+          <CardContent>
+            <div className="text-muted-foreground mb-4 flex items-center gap-3 text-xs font-medium tracking-wide uppercase">
+              <span aria-hidden className="bg-border h-px flex-1" />
+              {t('auth.or')}
+              <span aria-hidden className="bg-border h-px flex-1" />
+            </div>
+            <p className="text-muted-foreground mb-4 text-sm">
               {isLogin
                 ? t('auth.loginDescription')
                 : t('auth.registerDescription')}
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
+            </p>
             <form noValidate className="space-y-4" onSubmit={onSubmit}>
               {!isLogin ? (
                 <div className="space-y-2">
@@ -231,6 +244,7 @@ export function AuthPage({
                     autoComplete="username"
                     value={username}
                     placeholder={t('auth.usernamePlaceholder')}
+                    className="h-11 px-3"
                     onChange={(event) => setUsername(event.target.value)}
                   />
                 </div>
@@ -246,22 +260,42 @@ export function AuthPage({
                   autoComplete="email"
                   value={email}
                   placeholder={t('auth.emailPlaceholder')}
+                  className="h-11 px-3"
                   onChange={(event) => setEmail(event.target.value)}
                 />
               </div>
 
               <div className="space-y-2">
                 <Label htmlFor="auth-password">{t('auth.password')}</Label>
-                <Input
-                  required
-                  id="auth-password"
-                  name="password"
-                  type="password"
-                  autoComplete={isLogin ? 'current-password' : 'new-password'}
-                  value={password}
-                  placeholder={t('auth.passwordPlaceholder')}
-                  onChange={(event) => setPassword(event.target.value)}
-                />
+                <div className="relative">
+                  <Input
+                    required
+                    id="auth-password"
+                    name="password"
+                    type={showPassword ? 'text' : 'password'}
+                    autoComplete={isLogin ? 'current-password' : 'new-password'}
+                    value={password}
+                    placeholder={t('auth.passwordPlaceholder')}
+                    className="h-11 px-3 pr-11 [&::-ms-clear]:hidden [&::-ms-reveal]:hidden"
+                    onChange={(event) => setPassword(event.target.value)}
+                  />
+                  <button
+                    type="button"
+                    className="text-foreground hover:bg-muted absolute top-1/2 right-1.5 flex size-8 -translate-y-1/2 cursor-pointer items-center justify-center rounded-md"
+                    aria-label={
+                      showPassword
+                        ? t('auth.hidePassword')
+                        : t('auth.showPassword')
+                    }
+                    onClick={() => setShowPassword((value) => !value)}
+                  >
+                    {showPassword ? (
+                      <EyeOffIcon className="size-4" />
+                    ) : (
+                      <EyeIcon className="size-4" />
+                    )}
+                  </button>
+                </div>
                 {!isLogin ? (
                   <p className="text-muted-foreground text-xs">
                     {t('auth.passwordHint')}
@@ -273,25 +307,13 @@ export function AuthPage({
                 <p className="text-destructive text-sm break-all">{error}</p>
               ) : null}
 
-              <Button type="submit" className="w-full" disabled={pending}>
+              <Button type="submit" className="h-11 w-full" disabled={pending}>
                 {pending
                   ? t('auth.pending')
                   : isLogin
                     ? t('auth.loginSubmit')
                     : t('auth.registerSubmit')}
               </Button>
-
-              {isLogin ? (
-                <Button
-                  type="button"
-                  variant="outline"
-                  className="w-full"
-                  disabled={pending}
-                  onClick={() => void loginAsTestUser()}
-                >
-                  {t('auth.testUserLogin')}
-                </Button>
-              ) : null}
             </form>
           </CardContent>
           <CardFooter className="justify-center">

@@ -68,6 +68,8 @@ export const ru = {
     passwordPlaceholder: '1Qwe-rty',
     passwordHint:
       'Минимум 8 символов: заглавная, строчная, цифра и символ (например 1Qwe-rty).',
+    showPassword: 'Показать пароль',
+    hidePassword: 'Скрыть пароль',
     username: 'Имя пользователя',
     usernamePlaceholder: 'необязательно',
     loginSubmit: 'Войти',
@@ -83,5 +85,6 @@ export const ru = {
     goLoginPage: 'Войти',
     goRegisterPage: 'Регистрация',
     testUserLogin: 'Войти как тестовый пользователь',
+    or: 'или',
   },
 } as const;

@@ -68,6 +68,8 @@ export const en = {
     passwordPlaceholder: '1Qwe-rty',
     passwordHint:
       'Min 8 chars, with upper, lower, number, and symbol (e.g. 1Qwe-rty).',
+    showPassword: 'Show password',
+    hidePassword: 'Hide password',
     username: 'Username',
     usernamePlaceholder: 'optional',
     loginSubmit: 'Sign in',
@@ -83,5 +85,6 @@ export const en = {
     goLoginPage: 'Sign in',
     goRegisterPage: 'Register',
     testUserLogin: 'Log in as test user',
+    or: 'or',
   },
 } as const;
