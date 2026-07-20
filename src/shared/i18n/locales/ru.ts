@@ -7,6 +7,13 @@ export const ru = {
     themeLight: 'Светлая',
     themeDark: 'Тёмная',
     language: 'Язык',
+    mobileBarAria: 'Мобильная панель',
+    mobileHome: 'Главная',
+    mobileSearch: 'Поиск',
+    mobileMessages: 'Сообщения',
+    mobileNotifications: 'Уведомления',
+    mobileAccount: 'Аккаунт',
+    mobileSettings: 'Настройки',
   },
   nav: {
     groupModules: 'Модули',

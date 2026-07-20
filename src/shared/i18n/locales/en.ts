@@ -7,6 +7,13 @@ export const en = {
     themeLight: 'Light',
     themeDark: 'Dark',
     language: 'Language',
+    mobileBarAria: 'Mobile bar',
+    mobileHome: 'Home',
+    mobileSearch: 'Search',
+    mobileMessages: 'Messages',
+    mobileNotifications: 'Notifications',
+    mobileAccount: 'Account',
+    mobileSettings: 'Settings',
   },
   nav: {
     groupModules: 'Modules',

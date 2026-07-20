@@ -7,9 +7,11 @@ import {
   type NavPage,
 } from '@/app/model/nav-config';
 import { useActiveNav } from '@/app/model/use-active-nav';
+import { useShellAccount } from '@/app/model/use-shell-account';
 import { AppNavSwitcher } from '@/app/ui/app-nav-switcher';
 import { AppPageTabs } from '@/app/ui/app-page-tabs';
 import { ShellAccountFooter } from '@/app/ui/shell-account-footer';
+import { ShellMobileBar } from '@/app/ui/shell-mobile-bar';
 import { logoutSession } from '@/pages/auth';
 import { APP_LOCALES, type AppLocale } from '@/shared/i18n';
 import { cn } from '@/shared/lib';
@@ -57,6 +59,7 @@ export function AppShell({
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { module: activeModule, page: activePage } = useActiveNav();
+  const account = useShellAccount();
   const isDark = theme === 'dark';
 
   const [navLayer, setNavLayer] = useState<NavLayer>(() =>
@@ -92,7 +95,7 @@ export function AppShell({
   };
 
   return (
-    <div className="bg-background text-foreground grid h-svh grid-cols-1 grid-rows-[auto_minmax(0,1fr)] overflow-hidden md:grid-cols-[15rem_minmax(0,1fr)]">
+    <div className="bg-background text-foreground grid h-svh grid-cols-1 grid-rows-[auto_minmax(0,1fr)_auto] overflow-hidden md:grid-cols-[15rem_minmax(0,1fr)] md:grid-rows-[auto_minmax(0,1fr)]">
       <div className="bg-sidebar text-sidebar-foreground border-sidebar-border hidden border-r border-b px-5 py-5 md:flex md:flex-col md:justify-center">
         <p className="text-muted-foreground text-xs font-semibold tracking-wide uppercase">
           {t('shell.brand')}
@@ -209,12 +212,14 @@ export function AppShell({
             )}
           </div>
         </ScrollArea>
-        <ShellAccountFooter />
+        <ShellAccountFooter account={account} />
       </aside>
 
       <main className="bg-background wideMobile:p-6 min-h-0 min-w-0 overflow-x-auto overflow-y-auto p-4 md:col-start-2 md:row-start-2">
         {children}
       </main>
+
+      <ShellMobileBar />
     </div>
   );
 }
