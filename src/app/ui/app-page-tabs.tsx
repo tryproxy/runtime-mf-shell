@@ -54,7 +54,7 @@ export function AppPageTabs({
               'relative shrink-0 cursor-pointer px-3 pt-2.5 pb-2.5 text-sm transition-colors',
               isActive
                 ? 'text-foreground font-bold'
-                : 'text-muted-foreground font-medium hover:text-foreground/80'
+                : 'text-muted-foreground hover:text-foreground/80 font-medium'
             )}
             onClick={() => {
               void navigate(href);

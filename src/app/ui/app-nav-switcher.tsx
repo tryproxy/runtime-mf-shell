@@ -1,7 +1,4 @@
-import {
-  moduleHref,
-  type NavModule,
-} from '@/app/model/nav-config';
+import { moduleHref, type NavModule } from '@/app/model/nav-config';
 import { cn } from '@/shared/lib';
 import {
   Button,
@@ -57,10 +54,7 @@ export function AppNavSwitcher({
           return (
             <DropdownMenuItem
               key={module.id}
-              className={cn(
-                'cursor-pointer',
-                isActiveModule && 'bg-accent/60'
-              )}
+              className={cn('cursor-pointer', isActiveModule && 'bg-accent/60')}
               onClick={() => onNavigate(moduleHref(module))}
             >
               <CheckIcon
