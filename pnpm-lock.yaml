@@ -10,6 +10,9 @@ importers:
       '@fontsource-variable/geist':
         specifier: ^5.3.0
         version: 5.3.0
+      '@platform/runtime-mf-contract':
+        specifier: github:tryproxy/runtime-mf-contract
+        version: https://codeload.github.com/tryproxy/runtime-mf-contract/tar.gz/46612295d46781fb6c2352c8c4a1128e28d5e9a8
       '@types/node':
         specifier: ^26.1.1
         version: 26.1.1
@@ -993,6 +996,13 @@ packages:
         integrity: sha512-QNqXyfVS2wm9hweSYD2O7F0G06uurj9kZ96TRQE5Y9hU7+tgdZwIkbAKc5Ocy1HxEY2kuDQa6cQ1WRs/O5LFKA==,
       }
     engines: { node: ^12.20.0 || ^14.18.0 || >=16.0.0 }
+
+  '@platform/runtime-mf-contract@https://codeload.github.com/tryproxy/runtime-mf-contract/tar.gz/46612295d46781fb6c2352c8c4a1128e28d5e9a8':
+    resolution:
+      {
+        tarball: https://codeload.github.com/tryproxy/runtime-mf-contract/tar.gz/46612295d46781fb6c2352c8c4a1128e28d5e9a8,
+      }
+    version: 0.0.2
 
   '@radix-ui/number@1.1.2':
     resolution:
@@ -6905,6 +6915,9 @@ snapshots:
       magic-string: 0.27.0
 
   '@pkgr/core@0.2.9': {}
+
+  '@platform/runtime-mf-contract@https://codeload.github.com/tryproxy/runtime-mf-contract/tar.gz/46612295d46781fb6c2352c8c4a1128e28d5e9a8':
+    {}
 
   '@radix-ui/number@1.1.2': {}
 
