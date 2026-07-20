@@ -1,8 +1,4 @@
-import {
-  getAccessToken,
-  getAuthEmail,
-  logoutFromApi,
-} from '@/pages/auth';
+import { getAccessToken, getAuthEmail, logoutFromApi } from '@/pages/auth';
 import { Panel } from '@/shared/ui/panel';
 import {
   Button,
