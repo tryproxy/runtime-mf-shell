@@ -3,6 +3,7 @@ import { buildModuleRoutes } from '@/app/model/build-module-routes';
 import { defaultModuleHref } from '@/app/model/nav-config';
 import { AppShell } from '@/app/ui/app-shell';
 import { RequireAuth } from '@/app/ui/require-auth';
+import { ShellRouteError } from '@/app/ui/shell-route-error';
 import { AuthPage, getAccessToken } from '@/pages/auth';
 import { HostPage } from '@/pages/host';
 import { RemotePage } from '@/pages/remote';
@@ -36,7 +37,7 @@ function AppRoot() {
   const [theme, setTheme] = useState<ShellTheme>(() => {
     const storedTheme = window.localStorage.getItem('shell-theme');
 
-    return storedTheme === 'dark' ? 'dark' : 'light';
+    return storedTheme === 'light' ? 'light' : 'dark';
   });
   const [locale, setLocale] = useState<AppLocale>(() => readStoredLocale());
 
@@ -111,15 +112,18 @@ const router = createBrowserRouter([
   {
     path: '/',
     element: <AppRoot />,
+    errorElement: <ShellRouteError />,
     children: [
       { index: true, element: <Navigate replace to={defaultModuleHref} /> },
       { path: 'login', element: <AuthRoute mode="login" /> },
       { path: 'register', element: <AuthRoute mode="register" /> },
       {
         element: <RequireAuth />,
+        errorElement: <ShellRouteError />,
         children: [
           {
             element: <ShellLayout />,
+            errorElement: <ShellRouteError />,
             children: buildModuleRoutes({
               host: <HostPage />,
               remote: <RemoteRoute />,

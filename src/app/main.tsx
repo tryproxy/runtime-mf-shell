@@ -7,7 +7,7 @@ import App from './app';
 import { ShellErrorBoundary } from './ui/shell-error-boundary';
 
 const storedTheme = window.localStorage.getItem('shell-theme');
-applyShellTheme(storedTheme === 'dark' ? 'dark' : 'light');
+applyShellTheme(storedTheme === 'light' ? 'light' : 'dark');
 
 createRoot(document.getElementById('root') as HTMLElement).render(
   <StrictMode>

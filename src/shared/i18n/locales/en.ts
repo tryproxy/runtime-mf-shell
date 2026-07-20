@@ -23,7 +23,7 @@ export const en = {
     pageOverview: 'Overview',
     pageDetails: 'Details',
     pageAbout: 'About',
-    pageForm: 'Form lab',
+    pageForm: 'Form',
     pageCrash: 'Crash test',
     switcherAria: 'Switch module or page',
   },
