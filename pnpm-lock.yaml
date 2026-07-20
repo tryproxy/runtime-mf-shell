@@ -12,7 +12,7 @@ importers:
         version: 5.3.0
       '@platform/runtime-mf-contract':
         specifier: github:tryproxy/runtime-mf-contract
-        version: https://codeload.github.com/tryproxy/runtime-mf-contract/tar.gz/46612295d46781fb6c2352c8c4a1128e28d5e9a8
+        version: https://codeload.github.com/tryproxy/runtime-mf-contract/tar.gz/749f6862ee7038203c67634f828ded1163bdf70a
       '@types/node':
         specifier: ^26.1.1
         version: 26.1.1
@@ -997,12 +997,12 @@ packages:
       }
     engines: { node: ^12.20.0 || ^14.18.0 || >=16.0.0 }
 
-  '@platform/runtime-mf-contract@https://codeload.github.com/tryproxy/runtime-mf-contract/tar.gz/46612295d46781fb6c2352c8c4a1128e28d5e9a8':
+  '@platform/runtime-mf-contract@https://codeload.github.com/tryproxy/runtime-mf-contract/tar.gz/749f6862ee7038203c67634f828ded1163bdf70a':
     resolution:
       {
-        tarball: https://codeload.github.com/tryproxy/runtime-mf-contract/tar.gz/46612295d46781fb6c2352c8c4a1128e28d5e9a8,
+        tarball: https://codeload.github.com/tryproxy/runtime-mf-contract/tar.gz/749f6862ee7038203c67634f828ded1163bdf70a,
       }
-    version: 0.0.2
+    version: 0.1.0
 
   '@radix-ui/number@1.1.2':
     resolution:
@@ -6916,7 +6916,7 @@ snapshots:
 
   '@pkgr/core@0.2.9': {}
 
-  '@platform/runtime-mf-contract@https://codeload.github.com/tryproxy/runtime-mf-contract/tar.gz/46612295d46781fb6c2352c8c4a1128e28d5e9a8':
+  '@platform/runtime-mf-contract@https://codeload.github.com/tryproxy/runtime-mf-contract/tar.gz/749f6862ee7038203c67634f828ded1163bdf70a':
     {}
 
   '@radix-ui/number@1.1.2': {}
