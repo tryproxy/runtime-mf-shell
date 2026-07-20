@@ -10,6 +10,7 @@ import {
   useLocationPathname,
 } from '@/app/model/routing';
 import { AppNavSwitcher } from '@/app/ui/app-nav-switcher';
+import { getAccessToken, logoutFromApi } from '@/pages/auth';
 import { APP_LOCALES, type AppLocale } from '@/shared/i18n';
 import { cn } from '@/shared/lib';
 import {
@@ -200,6 +201,18 @@ export function AppShell({
                   {isDark ? t('shell.themeDark') : t('shell.themeLight')}
                 </span>
               </Button>
+              {getAccessToken() ? (
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={() => {
+                    void logoutFromApi().then(() => navigateTo('/login'));
+                  }}
+                >
+                  {t('auth.logout')}
+                </Button>
+              ) : null}
             </div>
           </div>
         </header>

@@ -45,3 +45,5 @@ export {
   SelectValue,
 } from './select';
 export { Separator } from './separator';
+export { Input } from './input';
+export { Label } from './label';

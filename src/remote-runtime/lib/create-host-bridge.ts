@@ -49,11 +49,20 @@ export function createHostBridge(
     },
 
     auth: {
-      getSnapshot: () => ({
-        userId: 'dev-user',
-        displayName: 'Dev User',
-        roles: ['admin'],
-      }),
+      getSnapshot: () => {
+        const token = window.localStorage.getItem('rmf-access-token');
+        const email = window.localStorage.getItem('rmf-auth-email');
+
+        if (!token) {
+          return null;
+        }
+
+        return {
+          userId: email ?? 'user',
+          displayName: email ?? undefined,
+          roles: [],
+        };
+      },
       subscribe: (listener) => subscribe(authListeners, listener),
     },
 

@@ -1,5 +1,10 @@
-import { type ModuleKey, useActivePage } from '@/app/model/routing';
+import {
+  type ModuleKey,
+  useActivePage,
+  useLocationPathname,
+} from '@/app/model/routing';
 import { AppShell } from '@/app/ui/app-shell';
+import { AuthPage, type AuthMode } from '@/pages/auth';
 import { HostPage } from '@/pages/host';
 import { RemotePage } from '@/pages/remote';
 import { RemoteAngularPage } from '@/pages/remote-angular';
@@ -13,7 +18,21 @@ import { applyShellTheme } from '@/shared/lib/apply-shell-theme';
 import type { ShellTheme } from '@/shared/model';
 import { useEffect, useState } from 'react';
 
+function getAuthMode(pathname: string): AuthMode | null {
+  if (pathname === '/login' || pathname.startsWith('/login/')) {
+    return 'login';
+  }
+
+  if (pathname === '/register' || pathname.startsWith('/register/')) {
+    return 'register';
+  }
+
+  return null;
+}
+
 function App() {
+  const pathname = useLocationPathname();
+  const authMode = getAuthMode(pathname);
   const activeModule = useActivePage();
   const [theme, setTheme] = useState<ShellTheme>(() => {
     const storedTheme = window.localStorage.getItem('shell-theme');
@@ -32,15 +51,26 @@ function App() {
     void i18n.changeLanguage(locale);
   }, [locale]);
 
+  const onThemeToggle = () =>
+    setTheme((currentTheme) => (currentTheme === 'light' ? 'dark' : 'light'));
+
+  if (authMode) {
+    return (
+      <AuthPage
+        mode={authMode}
+        theme={theme}
+        locale={locale}
+        onThemeToggle={onThemeToggle}
+        onLocaleChange={setLocale}
+      />
+    );
+  }
+
   return (
     <AppShell
       theme={theme}
       locale={locale}
-      onThemeToggle={() =>
-        setTheme((currentTheme) =>
-          currentTheme === 'light' ? 'dark' : 'light'
-        )
-      }
+      onThemeToggle={onThemeToggle}
       onLocaleChange={setLocale}
     >
       <PageContent activeModule={activeModule} theme={theme} locale={locale} />
