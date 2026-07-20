@@ -82,5 +82,6 @@ export const en = {
     signedInAs: 'Signed in as',
     goLoginPage: 'Sign in',
     goRegisterPage: 'Register',
+    testUserLogin: 'Log in as test user',
   },
 } as const;

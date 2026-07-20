@@ -1,4 +1,4 @@
-import { getAccessToken, getAuthEmail, logoutFromApi } from '@/pages/auth';
+import { getAccessToken, getAuthEmail, logoutSession } from '@/pages/auth';
 import { Panel } from '@/shared/ui/panel';
 import {
   Button,
@@ -52,7 +52,7 @@ export function HostPage() {
               type="button"
               variant="outline"
               onClick={() => {
-                void logoutFromApi().then(() => {
+                void logoutSession().then(() => {
                   setEmail(null);
                   navigateTo('/login');
                 });

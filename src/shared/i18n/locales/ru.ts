@@ -82,5 +82,6 @@ export const ru = {
     signedInAs: 'Вы вошли как',
     goLoginPage: 'Войти',
     goRegisterPage: 'Регистрация',
+    testUserLogin: 'Войти как тестовый пользователь',
   },
 } as const;

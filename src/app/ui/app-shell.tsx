@@ -10,7 +10,7 @@ import {
   useLocationPathname,
 } from '@/app/model/routing';
 import { AppNavSwitcher } from '@/app/ui/app-nav-switcher';
-import { getAccessToken, logoutFromApi } from '@/pages/auth';
+import { logoutSession } from '@/pages/auth';
 import { APP_LOCALES, type AppLocale } from '@/shared/i18n';
 import { cn } from '@/shared/lib';
 import {
@@ -126,16 +126,16 @@ export function AppShell({
               <ModulesLayer
                 modules={modules}
                 activeModuleKey={activeModuleKey}
-                onOpenModule={openModule}
                 t={t}
+                onOpenModule={openModule}
               />
             ) : (
               <PagesLayer
                 module={layerModule}
                 activePageKey={activePage.key}
+                t={t}
                 onBack={backToModules}
                 onNavigate={handleNavigate}
-                t={t}
               />
             )}
           </div>
@@ -201,18 +201,16 @@ export function AppShell({
                   {isDark ? t('shell.themeDark') : t('shell.themeLight')}
                 </span>
               </Button>
-              {getAccessToken() ? (
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  onClick={() => {
-                    void logoutFromApi().then(() => navigateTo('/login'));
-                  }}
-                >
-                  {t('auth.logout')}
-                </Button>
-              ) : null}
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={() => {
+                  void logoutSession().then(() => navigateTo('/login'));
+                }}
+              >
+                {t('auth.logout')}
+              </Button>
             </div>
           </div>
         </header>
@@ -253,13 +251,13 @@ function ModulesLayer({
           <button
             key={module.key}
             type="button"
-            onClick={() => onOpenModule(module)}
             className={cn(
               'flex w-full min-w-0 cursor-pointer items-center gap-2 rounded-lg px-3 py-2.5 text-left transition-colors',
               isActive
                 ? 'bg-sidebar-accent text-sidebar-accent-foreground'
                 : 'text-sidebar-foreground/80 hover:bg-sidebar-accent/70 hover:text-sidebar-accent-foreground'
             )}
+            onClick={() => onOpenModule(module)}
           >
             <span className="min-w-0 flex-1 overflow-hidden">
               <span className="block truncate text-sm font-medium">
@@ -301,8 +299,8 @@ function PagesLayer({
     <nav className="flex flex-col gap-1" aria-label={t('nav.pagesAria')}>
       <button
         type="button"
-        onClick={onBack}
         className="text-sidebar-foreground/90 hover:bg-sidebar-accent/70 hover:text-sidebar-accent-foreground mb-2 flex w-full cursor-pointer items-center gap-1.5 rounded-lg px-2 py-2 text-left transition-colors"
+        onClick={onBack}
       >
         <ChevronLeftIcon className="text-muted-foreground size-4 shrink-0" />
         <span className="min-w-0 truncate text-sm font-semibold">
@@ -319,13 +317,13 @@ function PagesLayer({
           <a
             key={page.key}
             href={page.href}
-            onClick={onNavigate(page.href)}
             className={cn(
               'cursor-pointer truncate rounded-lg px-3 py-2 text-sm font-medium transition-colors',
               isActive
                 ? 'bg-sidebar-accent text-sidebar-accent-foreground'
                 : 'text-sidebar-foreground/80 hover:bg-sidebar-accent/70 hover:text-sidebar-accent-foreground'
             )}
+            onClick={onNavigate(page.href)}
           >
             {t(page.labelKey)}
           </a>

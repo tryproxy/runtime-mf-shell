@@ -26,6 +26,12 @@ const API_BASE =
   import.meta.env.VITE_API_BASE_URL?.replace(/\/+$/, '') ||
   'http://localhost:3000';
 
+/** PoC one-click login. */
+const TEST_USER = {
+  email: 'user@mail.com',
+  password: '1Qwe-rty',
+} as const;
+
 export const RMF_ACCESS_TOKEN_KEY = 'rmf-access-token';
 export const RMF_AUTH_EMAIL_KEY = 'rmf-auth-email';
 
@@ -90,6 +96,16 @@ export async function logoutFromApi(): Promise<void> {
   }
 }
 
+/** Clear session; call API only when a LS token exists. */
+export async function logoutSession(): Promise<void> {
+  if (!getAccessToken()) {
+    clearSession();
+    return;
+  }
+
+  await logoutFromApi();
+}
+
 export function AuthPage({
   mode,
   theme,
@@ -122,6 +138,26 @@ export function AuthPage({
           });
 
       persistSession(accessToken, email);
+      navigateTo('/host');
+    } catch (err) {
+      setError(err instanceof Error ? err.message : t('auth.errorGeneric'));
+    } finally {
+      setPending(false);
+    }
+  }
+
+  async function loginAsTestUser() {
+    setEmail(TEST_USER.email);
+    setPassword(TEST_USER.password);
+    setError(null);
+    setPending(true);
+
+    try {
+      const { accessToken } = await postAuth('/v1/auth/login', {
+        email: TEST_USER.email,
+        password: TEST_USER.password,
+      });
+      persistSession(accessToken, TEST_USER.email);
       navigateTo('/host');
     } catch (err) {
       setError(err instanceof Error ? err.message : t('auth.errorGeneric'));
@@ -163,8 +199,8 @@ export function AuthPage({
             type="button"
             variant="outline"
             size="icon"
-            onClick={onThemeToggle}
             aria-label={isDark ? t('shell.themeLight') : t('shell.themeDark')}
+            onClick={onThemeToggle}
           >
             {isDark ? <SunIcon /> : <MoonIcon />}
           </Button>
@@ -184,7 +220,7 @@ export function AuthPage({
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <form className="space-y-4" onSubmit={onSubmit} noValidate>
+            <form noValidate className="space-y-4" onSubmit={onSubmit}>
               {!isLogin ? (
                 <div className="space-y-2">
                   <Label htmlFor="auth-username">{t('auth.username')}</Label>
@@ -194,8 +230,8 @@ export function AuthPage({
                     type="text"
                     autoComplete="username"
                     value={username}
-                    onChange={(event) => setUsername(event.target.value)}
                     placeholder={t('auth.usernamePlaceholder')}
+                    onChange={(event) => setUsername(event.target.value)}
                   />
                 </div>
               ) : null}
@@ -203,28 +239,28 @@ export function AuthPage({
               <div className="space-y-2">
                 <Label htmlFor="auth-email">{t('auth.email')}</Label>
                 <Input
+                  required
                   id="auth-email"
                   name="email"
                   type="email"
                   autoComplete="email"
                   value={email}
-                  onChange={(event) => setEmail(event.target.value)}
                   placeholder={t('auth.emailPlaceholder')}
-                  required
+                  onChange={(event) => setEmail(event.target.value)}
                 />
               </div>
 
               <div className="space-y-2">
                 <Label htmlFor="auth-password">{t('auth.password')}</Label>
                 <Input
+                  required
                   id="auth-password"
                   name="password"
                   type="password"
                   autoComplete={isLogin ? 'current-password' : 'new-password'}
                   value={password}
-                  onChange={(event) => setPassword(event.target.value)}
                   placeholder={t('auth.passwordPlaceholder')}
-                  required
+                  onChange={(event) => setPassword(event.target.value)}
                 />
                 {!isLogin ? (
                   <p className="text-muted-foreground text-xs">
@@ -244,6 +280,18 @@ export function AuthPage({
                     ? t('auth.loginSubmit')
                     : t('auth.registerSubmit')}
               </Button>
+
+              {isLogin ? (
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="w-full"
+                  disabled={pending}
+                  onClick={() => void loginAsTestUser()}
+                >
+                  {t('auth.testUserLogin')}
+                </Button>
+              ) : null}
             </form>
           </CardContent>
           <CardFooter className="justify-center">
