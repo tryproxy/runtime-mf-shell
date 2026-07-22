@@ -25,7 +25,7 @@ const REMOTE_SOURCES = [
 
 /**
  * Loads remote `nav.json` manifests at shell startup.
- * Stage 04: store only — chrome still uses hardcoded pages until stage 05.
+ * Chrome reads pages via `useNavModules` (soft-fail → empty pages).
  */
 export function RemoteNavManifestsProvider({ children }: PropsWithChildren) {
   const [state, setState] = useState<RemoteNavManifestsState>({
@@ -67,9 +67,6 @@ export function RemoteNavManifestsProvider({ children }: PropsWithChildren) {
           byModuleId[entry.moduleId] = entry.manifest;
         }
       }
-
-      // Stage 04 debug: visible in DevTools console / React context.
-      console.info('[nav-manifest] loaded', byModuleId);
 
       setState({ status: 'ready', byModuleId });
     })();

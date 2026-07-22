@@ -1,12 +1,13 @@
 import {
   moduleHasPages,
   moduleHref,
-  navModules,
   pageHref,
+  resolvePageLabel,
   type NavModule,
   type NavPage,
 } from '@/app/model/nav-config';
 import { useActiveNav } from '@/app/model/use-active-nav';
+import { useNavModules } from '@/app/model/use-nav-modules';
 import { useShellAccount } from '@/app/model/use-shell-account';
 import { AppNavSwitcher } from '@/app/ui/app-nav-switcher';
 import { AppPageTabs } from '@/app/ui/app-page-tabs';
@@ -59,6 +60,7 @@ export function AppShell({
 }: AppShellProps) {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const navModules = useNavModules();
   const { module: activeModule, page: activePage } = useActiveNav();
   const account = useShellAccount();
   const isDark = theme === 'dark';
@@ -123,7 +125,7 @@ export function AppShell({
               <span className="text-muted-foreground mx-1.5 font-normal">
                 /
               </span>
-              {t(activePage.labelKey)}
+              {resolvePageLabel(activePage, locale, t)}
             </h2>
           </div>
 
@@ -184,7 +186,11 @@ export function AppShell({
               void navigate(href);
             }}
           />
-          <AppPageTabs module={activeModule} activePage={activePage} />
+          <AppPageTabs
+            module={activeModule}
+            activePage={activePage}
+            locale={locale}
+          />
         </div>
       </header>
 
@@ -210,6 +216,7 @@ export function AppShell({
               <PagesLayer
                 module={layerModule}
                 activePageId={activePage.id}
+                locale={locale}
                 t={t}
                 onBack={() => setNavLayer('modules')}
                 onNavigate={handleNavigate}
@@ -287,12 +294,14 @@ function ModulesLayer({
 function PagesLayer({
   module,
   activePageId,
+  locale,
   onBack,
   onNavigate,
   t,
 }: {
   module: NavModule;
   activePageId: string;
+  locale: AppLocale;
   onBack: () => void;
   onNavigate: (href: string) => (event: MouseEvent<HTMLAnchorElement>) => void;
   t: Translate;
@@ -328,7 +337,7 @@ function PagesLayer({
             )}
             onClick={onNavigate(href)}
           >
-            {t(page.labelKey)}
+            {resolvePageLabel(page, locale, t)}
           </a>
         );
       })}

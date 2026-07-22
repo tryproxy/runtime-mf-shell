@@ -1,10 +1,20 @@
 /** Data-driven shell nav. Routes are built from this — no path regex matching. */
 
+import type { AppLocale } from '@/shared/i18n';
+
+export type NavPageLabel = {
+  en: string;
+  ru: string;
+};
+
 export type NavPage = {
   id: string;
   /** Path under the module (`''` = module index). */
   segment: string;
-  labelKey: string;
+  /** Shell-owned i18n key (host pages). */
+  labelKey?: string;
+  /** Labels from remote `nav.json` (resolved with locale at render). */
+  label?: NavPageLabel;
 };
 
 export type NavModule = {
@@ -16,6 +26,10 @@ export type NavModule = {
   pages: NavPage[];
 };
 
+/**
+ * Static module list. Remote `pages` stay empty and are filled at runtime
+ * from fetched `nav.json` (see `useNavModules`).
+ */
 export const navModules: NavModule[] = [
   {
     id: 'host',
@@ -29,24 +43,14 @@ export const navModules: NavModule[] = [
     path: 'remote',
     labelKey: 'nav.remoteModule',
     descriptionKey: 'nav.remoteModuleDesc',
-    pages: [
-      { id: 'overview', segment: '', labelKey: 'nav.pageOverview' },
-      { id: 'details', segment: 'details', labelKey: 'nav.pageDetails' },
-      { id: 'about', segment: 'about', labelKey: 'nav.pageAbout' },
-      { id: 'form', segment: 'form', labelKey: 'nav.pageForm' },
-      { id: 'crash', segment: 'crash', labelKey: 'nav.pageCrash' },
-    ],
+    pages: [],
   },
   {
     id: 'remoteAngular',
     path: 'remote-angular',
     labelKey: 'nav.remoteAngular',
     descriptionKey: 'nav.remoteAngularDesc',
-    // Temporary hardcode until stage 05 wires fetched nav.json (Overview + About).
-    pages: [
-      { id: 'overview', segment: '', labelKey: 'nav.pageOverview' },
-      { id: 'about', segment: 'about', labelKey: 'nav.pageAbout' },
-    ],
+    pages: [],
   },
 ];
 
@@ -60,6 +64,22 @@ export function pageHref(module: NavModule, page: NavPage): string {
 
 export function moduleHasPages(module: NavModule): boolean {
   return module.pages.length > 1;
+}
+
+export function resolvePageLabel(
+  page: NavPage,
+  locale: AppLocale,
+  t: (key: string) => string
+): string {
+  if (page.label) {
+    return page.label[locale] ?? page.label.en;
+  }
+
+  if (page.labelKey) {
+    return t(page.labelKey);
+  }
+
+  return page.id;
 }
 
 export const defaultModuleHref = moduleHref(navModules[0]);

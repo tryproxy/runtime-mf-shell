@@ -1,4 +1,10 @@
-import { pageHref, type NavModule, type NavPage } from '@/app/model/nav-config';
+import {
+  pageHref,
+  resolvePageLabel,
+  type NavModule,
+  type NavPage,
+} from '@/app/model/nav-config';
+import type { AppLocale } from '@/shared/i18n';
 import { cn } from '@/shared/lib';
 import { useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -7,6 +13,7 @@ import { useNavigate } from 'react-router-dom';
 type AppPageTabsProps = {
   module: NavModule;
   activePage: NavPage;
+  locale: AppLocale;
   className?: string;
 };
 
@@ -14,6 +21,7 @@ type AppPageTabsProps = {
 export function AppPageTabs({
   module,
   activePage,
+  locale,
   className,
 }: AppPageTabsProps) {
   const { t } = useTranslation();
@@ -60,7 +68,7 @@ export function AppPageTabs({
               void navigate(href);
             }}
           >
-            {t(page.labelKey)}
+            {resolvePageLabel(page, locale, t)}
             <span
               aria-hidden
               className={cn(

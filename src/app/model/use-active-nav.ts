@@ -5,13 +5,15 @@ import {
   type NavPage,
 } from '@/app/model/nav-config';
 import { isModuleHandle } from '@/app/model/route-handle';
+import { useNavModules } from '@/app/model/use-nav-modules';
 import { useLocation, useMatches } from 'react-router-dom';
 
-/** Active module from route `handle`; page from nav config + location. */
+/** Active module from route `handle`; page from live nav modules + location. */
 export function useActiveNav(): {
   module: NavModule;
   page: NavPage;
 } {
+  const modules = useNavModules();
   const matches = useMatches();
   const { pathname } = useLocation();
   const moduleHandle = [...matches]
@@ -19,7 +21,9 @@ export function useActiveNav(): {
     .map((match) => match.handle)
     .find(isModuleHandle);
 
-  const module = moduleHandle?.module ?? navModules[0];
+  const baseModule = moduleHandle?.module ?? navModules[0];
+  const module =
+    modules.find((entry) => entry.id === baseModule.id) ?? baseModule;
 
   return {
     module,

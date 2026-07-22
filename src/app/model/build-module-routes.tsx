@@ -39,7 +39,14 @@ export function resolvePageFromPathname(
     return exact;
   }
 
-  return module.pages[0];
+  // Soft-fail when remote pages are still loading / fetch failed.
+  return (
+    module.pages[0] ?? {
+      id: 'index',
+      segment: '',
+      labelKey: module.labelKey,
+    }
+  );
 }
 
 export { navModules };
