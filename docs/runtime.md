@@ -63,6 +63,6 @@ Remotes must **not** read tokens from localStorage; use `bridge.auth.http.getAcc
 ## Further reading
 
 - [POC-STATUS.md](./reserach.local/POC-STATUS.md) — what is ready
-- [directory-map.md](./reserach.local/directory-map.md) — FSD layout
-- [draft-contract.md](./reserach.local/draft-contract.md) — contract surface
+- [repository-map.md](./reserach.local/reference/repository-map.md) — FSD layout
+- [runtime-contract.md](./reserach.local/architecture/runtime-contract.md) — contract surface
 - [TODO.md](./reserach.local/TODO.md) — production backlog

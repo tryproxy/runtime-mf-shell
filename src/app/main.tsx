@@ -1,5 +1,6 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
+import { RemoteNavManifestsProvider } from '@/app/model/remote-nav-manifests';
 import '@/shared/i18n';
 import { applyShellTheme } from '@/shared/lib/apply-shell-theme';
 import './index.css';
@@ -12,7 +13,9 @@ applyShellTheme(storedTheme === 'light' ? 'light' : 'dark');
 createRoot(document.getElementById('root') as HTMLElement).render(
   <StrictMode>
     <ShellErrorBoundary>
-      <App />
+      <RemoteNavManifestsProvider>
+        <App />
+      </RemoteNavManifestsProvider>
     </ShellErrorBoundary>
   </StrictMode>
 );

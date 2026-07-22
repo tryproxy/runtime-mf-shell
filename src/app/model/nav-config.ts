@@ -42,7 +42,11 @@ export const navModules: NavModule[] = [
     path: 'remote-angular',
     labelKey: 'nav.remoteAngular',
     descriptionKey: 'nav.remoteAngularDesc',
-    pages: [{ id: 'overview', segment: '', labelKey: 'nav.pageOverview' }],
+    // Temporary hardcode until stage 05 wires fetched nav.json (Overview + About).
+    pages: [
+      { id: 'overview', segment: '', labelKey: 'nav.pageOverview' },
+      { id: 'about', segment: 'about', labelKey: 'nav.pageAbout' },
+    ],
   },
 ];
 
