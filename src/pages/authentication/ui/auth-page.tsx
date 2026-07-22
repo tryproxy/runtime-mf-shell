@@ -1,0 +1,313 @@
+import { submitAuth } from '../api/submit-auth';
+import { persistSession } from '@/shared/auth';
+import type { ShellTheme } from '@/shared/config';
+import { APP_LOCALES, type AppLocale } from '@/shared/i18n';
+import {
+  Button,
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+  Input,
+  Label,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/shared/ui/shadcn';
+import { EyeIcon, EyeOffIcon, MoonIcon, SunIcon } from 'lucide-react';
+import { type FormEvent, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useLocation, useNavigate } from 'react-router-dom';
+
+export type AuthMode = 'login' | 'register';
+
+/** PoC-only one-click login credentials. */
+const TEST_USER = {
+  email: 'user@mail.com',
+  password: '1Qwe-rty',
+} as const;
+
+type AuthPageProps = {
+  mode: AuthMode;
+  theme: ShellTheme;
+  locale: AppLocale;
+  onThemeToggle(): void;
+  onLocaleChange(locale: AppLocale): void;
+};
+
+function resolvePostAuthPath(state: unknown): string {
+  if (
+    typeof state === 'object' &&
+    state !== null &&
+    'from' in state &&
+    typeof (state as { from: unknown }).from === 'string'
+  ) {
+    const from = (state as { from: string }).from;
+
+    if (from.startsWith('/') && !from.startsWith('//')) {
+      return from;
+    }
+  }
+
+  return '/host';
+}
+
+export function AuthPage({
+  mode,
+  theme,
+  locale,
+  onThemeToggle,
+  onLocaleChange,
+}: AuthPageProps) {
+  const { t } = useTranslation();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const isLogin = mode === 'login';
+  const isDark = theme === 'dark';
+  const redirectTo = resolvePostAuthPath(location.state);
+
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [username, setUsername] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [pending, setPending] = useState(false);
+
+  async function onSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setError(null);
+    setPending(true);
+
+    try {
+      const { accessToken } = isLogin
+        ? await submitAuth('/v1/auth/login', { email, password })
+        : await submitAuth('/v1/auth/register', {
+            email,
+            password,
+            ...(username.trim() ? { username: username.trim() } : {}),
+          });
+
+      persistSession(accessToken, email);
+      void navigate(redirectTo, { replace: true });
+    } catch (err) {
+      setError(err instanceof Error ? err.message : t('auth.errorGeneric'));
+    } finally {
+      setPending(false);
+    }
+  }
+
+  async function loginAsTestUser() {
+    setEmail(TEST_USER.email);
+    setPassword(TEST_USER.password);
+    setError(null);
+    setPending(true);
+
+    try {
+      const { accessToken } = await submitAuth('/v1/auth/login', {
+        email: TEST_USER.email,
+        password: TEST_USER.password,
+      });
+      persistSession(accessToken, TEST_USER.email);
+      void navigate(redirectTo, { replace: true });
+    } catch (err) {
+      setError(err instanceof Error ? err.message : t('auth.errorGeneric'));
+    } finally {
+      setPending(false);
+    }
+  }
+
+  return (
+    <div className="bg-background text-foreground flex min-h-svh flex-col">
+      <header className="flex items-center justify-between gap-3 px-4 py-3">
+        <p className="text-sm font-semibold tracking-tight">
+          {t('shell.brand')}
+        </p>
+        <div className="flex items-center gap-2">
+          <Select
+            value={locale}
+            onValueChange={(value) => {
+              if (value === 'en' || value === 'ru') {
+                onLocaleChange(value);
+              }
+            }}
+          >
+            <SelectTrigger
+              className="w-[7.5rem]"
+              aria-label={t('shell.language')}
+            >
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {APP_LOCALES.map((item) => (
+                <SelectItem key={item} value={item}>
+                  {item.toUpperCase()}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          <Button
+            type="button"
+            variant="outline"
+            size="icon"
+            aria-label={isDark ? t('shell.themeLight') : t('shell.themeDark')}
+            onClick={onThemeToggle}
+          >
+            {isDark ? <SunIcon /> : <MoonIcon />}
+          </Button>
+        </div>
+      </header>
+
+      <main className="flex flex-1 items-center justify-center px-4 py-8">
+        <Card className="w-full max-w-[22.4rem]">
+          <CardHeader>
+            <CardTitle>
+              {isLogin ? t('auth.loginTitle') : t('auth.registerTitle')}
+            </CardTitle>
+            <button
+              type="button"
+              className="text-foreground mt-3 h-12 w-full cursor-pointer rounded-md border border-dashed bg-transparent px-4 text-sm font-medium underline-offset-4 hover:underline disabled:cursor-not-allowed disabled:opacity-50"
+              disabled={pending}
+              onClick={() => void loginAsTestUser()}
+            >
+              {t('auth.testUserLogin')}
+            </button>
+          </CardHeader>
+          <CardContent>
+            <div className="text-muted-foreground mb-4 flex items-center gap-3 text-xs font-medium tracking-wide uppercase">
+              <span aria-hidden className="bg-border h-px flex-1" />
+              {t('auth.or')}
+              <span aria-hidden className="bg-border h-px flex-1" />
+            </div>
+            <p className="text-muted-foreground mb-4 text-sm">
+              {isLogin
+                ? t('auth.loginDescription')
+                : t('auth.registerDescription')}
+            </p>
+            <form noValidate className="space-y-4" onSubmit={onSubmit}>
+              {!isLogin ? (
+                <div className="space-y-2">
+                  <Label htmlFor="auth-username">{t('auth.username')}</Label>
+                  <Input
+                    id="auth-username"
+                    name="username"
+                    type="text"
+                    autoComplete="username"
+                    value={username}
+                    placeholder={t('auth.usernamePlaceholder')}
+                    className="h-11 px-3"
+                    onChange={(event) => setUsername(event.target.value)}
+                  />
+                </div>
+              ) : null}
+
+              <div className="space-y-2">
+                <Label htmlFor="auth-email">{t('auth.email')}</Label>
+                <Input
+                  required
+                  id="auth-email"
+                  name="email"
+                  type="email"
+                  autoComplete="email"
+                  value={email}
+                  placeholder={t('auth.emailPlaceholder')}
+                  className="h-11 px-3"
+                  onChange={(event) => setEmail(event.target.value)}
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="auth-password">{t('auth.password')}</Label>
+                <div className="relative">
+                  <Input
+                    required
+                    id="auth-password"
+                    name="password"
+                    type={showPassword ? 'text' : 'password'}
+                    autoComplete={isLogin ? 'current-password' : 'new-password'}
+                    value={password}
+                    placeholder={t('auth.passwordPlaceholder')}
+                    className="h-11 px-3 pr-11 [&::-ms-clear]:hidden [&::-ms-reveal]:hidden"
+                    onChange={(event) => setPassword(event.target.value)}
+                  />
+                  <button
+                    type="button"
+                    className="text-foreground hover:bg-muted absolute top-1/2 right-1.5 flex size-8 -translate-y-1/2 cursor-pointer items-center justify-center rounded-md"
+                    aria-label={
+                      showPassword
+                        ? t('auth.hidePassword')
+                        : t('auth.showPassword')
+                    }
+                    onClick={() => setShowPassword((value) => !value)}
+                  >
+                    {showPassword ? (
+                      <EyeOffIcon className="size-4" />
+                    ) : (
+                      <EyeIcon className="size-4" />
+                    )}
+                  </button>
+                </div>
+                {!isLogin ? (
+                  <p className="text-muted-foreground text-xs">
+                    {t('auth.passwordHint')}
+                  </p>
+                ) : null}
+              </div>
+
+              {error ? (
+                <p className="text-destructive pt-2 text-sm break-all">
+                  {error}
+                </p>
+              ) : null}
+
+              <div className="pt-4">
+                <Button
+                  type="submit"
+                  className="h-11 w-full"
+                  disabled={pending}
+                >
+                  {pending
+                    ? t('auth.pending')
+                    : isLogin
+                      ? t('auth.loginSubmit')
+                      : t('auth.registerSubmit')}
+                </Button>
+              </div>
+            </form>
+          </CardContent>
+          <CardFooter className="justify-center">
+            {isLogin ? (
+              <p className="text-muted-foreground text-sm">
+                {t('auth.noAccount')}{' '}
+                <button
+                  type="button"
+                  className="text-foreground font-medium underline-offset-4 hover:underline"
+                  onClick={() => {
+                    void navigate('/register');
+                  }}
+                >
+                  {t('auth.goRegister')}
+                </button>
+              </p>
+            ) : (
+              <p className="text-muted-foreground text-sm">
+                {t('auth.hasAccount')}{' '}
+                <button
+                  type="button"
+                  className="text-foreground font-medium underline-offset-4 hover:underline"
+                  onClick={() => {
+                    void navigate('/login');
+                  }}
+                >
+                  {t('auth.goLogin')}
+                </button>
+              </p>
+            )}
+          </CardFooter>
+        </Card>
+      </main>
+    </div>
+  );
+}

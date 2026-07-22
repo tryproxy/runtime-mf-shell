@@ -1,21 +1,26 @@
-import { useEffect, useRef, useState } from 'react';
 import type {
   AppLocale,
   HostBridge,
+  MountRemoteApp,
   RemoteAppInstance,
   ThemeMode,
-} from 'demo_remote/mount';
+} from '@platform/runtime-mf-contract';
+import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { createHostBridge } from '../lib/create-host-bridge';
+import { useRemoteRuntime } from '../model/use-remote-runtime';
 import { RemoteErrorBoundary } from './remote-error-boundary';
 import { RemoteErrorFallback } from './remote-error-fallback';
 
 type RemoteModule = {
-  mount(params: {
-    container: HTMLElement;
-    bridge: HostBridge;
-    basename: string;
-  }): RemoteAppInstance;
+  mount: (
+    ...params: Parameters<MountRemoteApp>
+  ) => RemoteAppInstanceWithReadiness;
+};
+
+type RemoteAppInstanceWithReadiness = RemoteAppInstance & {
+  /** Optional asynchronous bootstrap signal used by framework adapters. */
+  ready?: Promise<void>;
 };
 
 type RemoteModuleLoaderResult =
@@ -62,8 +67,15 @@ export function RemoteSlot({
   locale,
 }: RemoteSlotProps) {
   const { t } = useTranslation();
+  const adapters = useRemoteRuntime();
   const containerRef = useRef<HTMLDivElement | null>(null);
-  const hostBridgeRef = useRef(createHostBridge(theme, locale));
+  const [hostBridge] = useState(() =>
+    createHostBridge({
+      initialTheme: theme,
+      initialLocale: locale,
+      adapters,
+    })
+  );
   const loaderRef = useRef(loader);
   const [status, setStatus] = useState<'loading' | 'ready' | 'error'>(
     'loading'
@@ -72,8 +84,6 @@ export function RemoteSlot({
   const [retryCount, setRetryCount] = useState(0);
 
   loaderRef.current = loader;
-
-  const hostBridge = hostBridgeRef.current;
   const bridge: HostBridge = hostBridge.bridge;
 
   useEffect(() => {
@@ -86,7 +96,7 @@ export function RemoteSlot({
 
   // Mount once per basename (+ explicit retry). Not on theme/locale.
   useEffect(() => {
-    let instance: RemoteAppInstance | null = null;
+    let instance: RemoteAppInstanceWithReadiness | null = null;
     let cancelled = false;
 
     async function run() {
@@ -109,6 +119,15 @@ export function RemoteSlot({
           bridge,
           basename,
         });
+
+        if (instance.ready) {
+          await instance.ready;
+        }
+
+        if (cancelled) {
+          instance.unmount();
+          return;
+        }
 
         setStatus('ready');
       } catch (error) {

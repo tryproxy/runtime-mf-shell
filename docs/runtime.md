@@ -22,15 +22,15 @@ Install contract: `pnpm add github:tryproxy/runtime-mf-contract` (refresh with `
 
 ## Important shell paths
 
-| Concern                  | Path                                                     |
-| ------------------------ | -------------------------------------------------------- |
-| App composition / router | `src/app/app.tsx`, `src/app/main.tsx`                    |
-| Nav data → routes        | `src/app/model/nav-config.ts`, `build-module-routes.tsx` |
-| Auth guard               | `src/app/ui/require-auth.tsx`                            |
-| Chrome                   | `src/app/ui/app-shell.tsx`                               |
-| HostBridge               | `src/remote-runtime/lib/create-host-bridge.ts`           |
-| Mount slot               | `src/remote-runtime/ui/remote-slot.tsx`                  |
-| Federation config        | `vite.config.ts`                                         |
+| Concern                  | Path                                                                                 |
+| ------------------------ | ------------------------------------------------------------------------------------ |
+| App composition / router | `src/app/app.tsx`, `src/app/main.tsx`                                                |
+| Nav data → routes        | `src/app/remote-navigation/nav-config.ts`, `src/app/routing/build-module-routes.tsx` |
+| Auth guard               | `src/app/routing/require-auth.tsx`                                                   |
+| Chrome                   | `src/app/shell/app-shell.tsx`                                                        |
+| HostBridge               | `src/remote-runtime/lib/create-host-bridge.ts`                                       |
+| Mount slot               | `src/remote-runtime/ui/remote-slot.tsx`                                              |
+| Federation config        | `vite.config.ts`                                                                     |
 
 ## Important remote paths
 

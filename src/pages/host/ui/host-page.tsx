@@ -1,4 +1,4 @@
-import { getAccessToken, getAuthEmail, logoutSession } from '@/pages/auth';
+import { getAccessToken, getAuthEmail, logoutSession } from '@/shared/auth';
 import { Panel } from '@/shared/ui/panel';
 import {
   Button,

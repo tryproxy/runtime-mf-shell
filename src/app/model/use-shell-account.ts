@@ -1,4 +1,5 @@
-import { getAccessToken, getAuthEmail } from '@/pages/auth';
+import { getAccessToken, getAuthEmail } from '@/shared/auth';
+import { API_BASE_URL } from '@/shared/config';
 import { useEffect, useState } from 'react';
 
 export type AccountMe = {
@@ -19,10 +20,6 @@ export type UseShellAccountResult = {
   secondary: string | null;
   fallbackEmail: string | null;
 };
-
-const API_BASE =
-  import.meta.env.VITE_API_BASE_URL?.replace(/\/+$/, '') ||
-  'http://localhost:3000';
 
 export function initialFrom(label: string): string {
   const trimmed = label.trim();
@@ -49,7 +46,7 @@ export function useShellAccount(): UseShellAccountResult {
     void (async () => {
       setLoading(true);
       try {
-        const response = await fetch(`${API_BASE}/v1/account/me`, {
+        const response = await fetch(`${API_BASE_URL}/v1/account/me`, {
           method: 'GET',
           headers: { Authorization: `Bearer ${token}` },
         });

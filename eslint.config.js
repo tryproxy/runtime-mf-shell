@@ -30,7 +30,10 @@ export default tseslint.config(
       ...reactHooks.configs.recommended.rules,
       'react-refresh/only-export-components': [
         'warn',
-        { allowConstantExport: true },
+        {
+          allowConstantExport: true,
+          allowExportNames: ['badgeVariants', 'buttonVariants'],
+        },
       ],
       'react-compiler/react-compiler': 'error',
       ...react.configs.recommended.rules,
@@ -54,6 +57,40 @@ export default tseslint.config(
       react: {
         version: 'detect',
       },
+    },
+  },
+  {
+    files: ['src/remote-runtime/**/*.{ts,tsx}'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: [
+            {
+              group: ['@/app/**', '@/pages/**'],
+              message:
+                'remote-runtime is a lower platform module; inject App/Page capabilities instead.',
+            },
+          ],
+        },
+      ],
+    },
+  },
+  {
+    files: ['src/app/**/*.{ts,tsx}', 'src/pages/**/*.{ts,tsx}'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: [
+            {
+              group: ['@/remote-runtime/*', '@/remote-runtime/**'],
+              message:
+                'Consume the remote-runtime platform module through @/remote-runtime.',
+            },
+          ],
+        },
+      ],
     },
   }
 );

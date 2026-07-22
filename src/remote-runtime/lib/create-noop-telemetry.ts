@@ -1,4 +1,4 @@
-import type { HostTelemetry } from 'demo_remote/mount';
+import type { HostTelemetry } from '@platform/runtime-mf-contract';
 
 /** Stub sink — contract surface only until Sentry/analytics are wired. */
 export function createNoopTelemetry(): HostTelemetry {

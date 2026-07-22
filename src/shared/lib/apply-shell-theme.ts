@@ -1,4 +1,4 @@
-import type { ShellTheme } from '@/shared/model';
+import type { ShellTheme } from '@/shared/config';
 
 /** Keep shadcn `.dark` and MF `data-rmf-theme` in sync. */
 export function applyShellTheme(theme: ShellTheme): void {

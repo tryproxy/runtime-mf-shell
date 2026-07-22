@@ -1,6 +1,6 @@
 import { RemoteSlot } from '@/remote-runtime';
+import type { ShellTheme } from '@/shared/config';
 import type { AppLocale } from '@/shared/i18n';
-import type { ShellTheme } from '@/shared/model';
 
 type RemotePageProps = {
   theme: ShellTheme;
