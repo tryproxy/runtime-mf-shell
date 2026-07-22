@@ -8,14 +8,14 @@ For a longer operator guide see [`docs/runtime.md`](./docs/runtime.md). Research
 
 ## What the shell provides
 
-| Capability | Notes |
-| --- | --- |
-| Top-level routes | Owns namespaces (`/host`, `/remote`, `/remote-angular`, …) |
-| Chrome | Sidebar, tabs, chevrons, header — from modules + fetched remote `nav.json` |
-| Auth UX | Login / register + `RequireAuth` (UX only; API enforces real authz) |
-| HostBridge | Theme, locale, session, navigation, telemetry for remotes |
-| Remote Runtime | `RemoteSlot` loads federation `./mount`, mounts into a DOM node, cleans up |
-| Theme / i18n | Dark/light + `en`/`ru`, pushed to remotes via the bridge |
+| Capability       | Notes                                                                      |
+| ---------------- | -------------------------------------------------------------------------- |
+| Top-level routes | Owns namespaces (`/host`, `/remote`, `/remote-angular`, …)                 |
+| Chrome           | Sidebar, tabs, chevrons, header — from modules + fetched remote `nav.json` |
+| Auth UX          | Login / register + `RequireAuth` (UX only; API enforces real authz)        |
+| HostBridge       | Theme, locale, session, navigation, telemetry for remotes                  |
+| Remote Runtime   | `RemoteSlot` loads federation `./mount`, mounts into a DOM node, cleans up |
+| Theme / i18n     | Dark/light + `en`/`ru`, pushed to remotes via the bridge                   |
 
 ## What a remote must provide
 
@@ -44,20 +44,20 @@ Page → RemoteSlot → import(remoteEntry ./mount)
 
 ## Key files
 
-| Path | Why it matters |
-| --- | --- |
-| `src/app/main.tsx` / `src/app/app.tsx` | Boot + app composition |
-| `src/app/routing/app-router.tsx` | React Router tree |
-| `src/app/routing/build-module-routes.tsx` | Module splat routes from nav config |
-| `src/app/routing/require-auth.tsx` | Auth guard for module areas |
-| `src/app/remote-navigation/nav-config.ts` | Static modules; remote **pages** come from `nav.json` |
-| `src/app/remote-navigation/*` | Fetch / validate / store remote nav manifests |
-| `src/app/shell/app-shell.tsx` | Shell chrome (sidebar, tabs, header) |
-| `src/remote-runtime/ui/remote-slot.tsx` | Mount lifecycle UI adapter |
-| `src/remote-runtime/lib/create-host-bridge.ts` | HostBridge + history sync for embedded remotes |
-| `src/pages/remote/` / `src/pages/remote-angular/` | Thin pages that render `RemoteSlot` + federation loader |
-| `vite.config.ts` | Federation remotes (`demo_remote`, `angular_remote`) |
-| `env.example` | `VITE_*` URLs (API, remoteEntry; PoC derives `nav.json` from remote origin) |
+| Path                                              | Why it matters                                                              |
+| ------------------------------------------------- | --------------------------------------------------------------------------- |
+| `src/app/main.tsx` / `src/app/app.tsx`            | Boot + app composition                                                      |
+| `src/app/routing/app-router.tsx`                  | React Router tree                                                           |
+| `src/app/routing/build-module-routes.tsx`         | Module splat routes from nav config                                         |
+| `src/app/routing/require-auth.tsx`                | Auth guard for module areas                                                 |
+| `src/app/remote-navigation/nav-config.ts`         | Static modules; remote **pages** come from `nav.json`                       |
+| `src/app/remote-navigation/*`                     | Fetch / validate / store remote nav manifests                               |
+| `src/app/shell/app-shell.tsx`                     | Shell chrome (sidebar, tabs, header)                                        |
+| `src/remote-runtime/ui/remote-slot.tsx`           | Mount lifecycle UI adapter                                                  |
+| `src/remote-runtime/lib/create-host-bridge.ts`    | HostBridge + history sync for embedded remotes                              |
+| `src/pages/remote/` / `src/pages/remote-angular/` | Thin pages that render `RemoteSlot` + federation loader                     |
+| `vite.config.ts`                                  | Federation remotes (`demo_remote`, `angular_remote`)                        |
+| `env.example`                                     | `VITE_*` URLs (API, remoteEntry; PoC derives `nav.json` from remote origin) |
 
 ---
 
