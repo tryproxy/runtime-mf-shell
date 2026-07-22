@@ -24,8 +24,8 @@ const REMOTE_SOURCES = [
 ] as const;
 
 /**
- * Loads remote `nav.json` manifests at shell startup.
- * Chrome reads pages via `useNavModules` (soft-fail → empty pages).
+ * Loads remote `nav.json` manifests independently.
+ * One soft-fail / hung remote must not clear or delay another remote's pages.
  */
 export function RemoteNavManifestsProvider({ children }: PropsWithChildren) {
   const [state, setState] = useState<RemoteNavManifestsState>({
@@ -35,41 +35,40 @@ export function RemoteNavManifestsProvider({ children }: PropsWithChildren) {
 
   useEffect(() => {
     const controller = new AbortController();
+    let pending = REMOTE_SOURCES.length;
 
-    void (async () => {
-      const results = await Promise.all(
-        REMOTE_SOURCES.map(async (source) => {
-          const result = await fetchNavManifest({
-            remoteEntryUrl: source.remoteEntryUrl,
-            expectedModuleId: source.moduleId,
-            signal: controller.signal,
-          });
+    for (const source of REMOTE_SOURCES) {
+      void (async () => {
+        const result = await fetchNavManifest({
+          remoteEntryUrl: source.remoteEntryUrl,
+          expectedModuleId: source.moduleId,
+          signal: controller.signal,
+        });
 
-          if (!result.ok) {
-            console.warn(
-              `[nav-manifest] ${source.moduleId} soft-fail (${result.url}): ${result.reason}`
-            );
-            return null;
-          }
-
-          return { moduleId: source.moduleId, manifest: result.manifest };
-        })
-      );
-
-      if (controller.signal.aborted) {
-        return;
-      }
-
-      const byModuleId: RemoteNavManifestsState['byModuleId'] = {};
-
-      for (const entry of results) {
-        if (entry) {
-          byModuleId[entry.moduleId] = entry.manifest;
+        if (controller.signal.aborted) {
+          return;
         }
-      }
 
-      setState({ status: 'ready', byModuleId });
-    })();
+        if (result.ok) {
+          setState((prev) => ({
+            ...prev,
+            byModuleId: {
+              ...prev.byModuleId,
+              [source.moduleId]: result.manifest,
+            },
+          }));
+        } else if (result.reason !== 'aborted') {
+          console.warn(
+            `[nav-manifest] ${source.moduleId} soft-fail (${result.url}): ${result.reason}`
+          );
+        }
+
+        pending -= 1;
+        if (pending === 0) {
+          setState((prev) => ({ ...prev, status: 'ready' }));
+        }
+      })();
+    }
 
     return () => controller.abort();
   }, []);

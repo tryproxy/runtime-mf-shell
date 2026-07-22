@@ -31,6 +31,30 @@ type RemoteSlotProps = {
   locale: AppLocale;
 };
 
+/** Dead remotes often hang on `import(remoteEntry)` instead of rejecting. */
+const REMOTE_LOAD_TIMEOUT_MS = 8_000;
+
+function withTimeout<T>(promise: Promise<T>, timeoutMs: number): Promise<T> {
+  return new Promise<T>((resolve, reject) => {
+    const timeoutId = window.setTimeout(() => {
+      reject(
+        new Error(`Remote load timed out after ${timeoutMs}ms (is it running?)`)
+      );
+    }, timeoutMs);
+
+    promise.then(
+      (value) => {
+        window.clearTimeout(timeoutId);
+        resolve(value);
+      },
+      (error: unknown) => {
+        window.clearTimeout(timeoutId);
+        reject(error);
+      }
+    );
+  });
+}
+
 export function RemoteSlot({
   basename,
   loader,
@@ -70,7 +94,10 @@ export function RemoteSlot({
         setStatus('loading');
         setErrorMessage(null);
 
-        const remote = await loaderRef.current();
+        const remote = await withTimeout(
+          loaderRef.current(),
+          REMOTE_LOAD_TIMEOUT_MS
+        );
         const resolvedRemote = 'default' in remote ? remote.default : remote;
 
         if (cancelled || !containerRef.current) {
@@ -85,6 +112,9 @@ export function RemoteSlot({
 
         setStatus('ready');
       } catch (error) {
+        if (cancelled) {
+          return;
+        }
         console.error('[RemoteSlot] Failed to load remote:', error);
         setStatus('error');
         setErrorMessage(
