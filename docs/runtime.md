@@ -4,19 +4,19 @@ Brief operator guide for the current PoC. Deeper research lives in [`docs/resera
 
 ## Repositories
 
-| Repo                        | Role                                                    |
-| --------------------------- | ------------------------------------------------------- |
-| `runtime-mf-shell`          | React host (layout, React Router, auth, Remote Runtime) |
-| `runtime-mf-module`         | React remote (`demo_remote`, port 5001)                 |
-| `runtime-mf-module-angular` | Angular remote (`angular_remote`, port 5002)            |
-| `runtime-mf-contract`       | `@platform/runtime-mf-contract` — types + mock          |
+| Repo                        | Role                                                                            |
+| --------------------------- | ------------------------------------------------------------------------------- |
+| `runtime-mf-shell`          | React host (layout, React Router, auth, Remote Runtime)                         |
+| `runtime-mf-module`         | React remote (`runtime_mf_module`, alias `demo_remote`, port 5001)              |
+| `runtime-mf-module-angular` | Angular remote (`runtime_mf_module_angular`, alias `angular_remote`, port 5002) |
+| `runtime-mf-contract`       | `@platform/runtime-mf-contract` — types + mock                                  |
 
 Install contract: `pnpm add github:tryproxy/runtime-mf-contract` (refresh with `pnpm update @platform/runtime-mf-contract`).
 
 ## How it works
 
-1. Shell loads each remote’s `remoteEntry.js` via Module Federation.
-2. Shell imports exposed `./mount` (`demo_remote/mount` / `angular_remote/mount`).
+1. Shell creates a pure `@module-federation/enhanced` runtime instance.
+2. Runtime reads each remote's `mf-manifest.json`, resolves `remoteEntry.js`, and loads exposed `./mount` (`demo_remote/mount` / `angular_remote/mount`).
 3. Shell calls `mount({ container, bridge, basename })`.
 4. Remote creates its own root (React or Angular), follows HostBridge for theme/locale/auth/nav, and returns `unmount()`.
 
@@ -30,7 +30,7 @@ Install contract: `pnpm add github:tryproxy/runtime-mf-contract` (refresh with `
 | Chrome                   | `src/app/shell/app-shell.tsx`                                                        |
 | HostBridge               | `src/remote-runtime/lib/create-host-bridge.ts`                                       |
 | Mount slot               | `src/remote-runtime/ui/remote-slot.tsx`                                              |
-| Federation config        | `vite.config.ts`                                                                     |
+| Federation delivery      | `src/app/remote-runtime/remote-runtime-adapters.ts`                                  |
 
 ## Important remote paths
 

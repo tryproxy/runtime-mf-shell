@@ -5,21 +5,21 @@ import {
 } from '@/app/remote-navigation/remote-nav-manifests-context';
 import { useEffect, useState, type PropsWithChildren } from 'react';
 
-const DEFAULT_REMOTE_ENTRY_URL = 'http://localhost:5001/assets/remoteEntry.js';
-const DEFAULT_ANGULAR_REMOTE_ENTRY_URL =
-  'http://localhost:5002/assets/remoteEntry.js';
+const DEFAULT_REMOTE_MANIFEST_URL = 'http://localhost:5001/mf-manifest.json';
+const DEFAULT_ANGULAR_REMOTE_MANIFEST_URL =
+  'http://localhost:5002/mf-manifest.json';
 
 const REMOTE_SOURCES = [
   {
     moduleId: 'remote',
-    remoteEntryUrl:
-      import.meta.env.VITE_REMOTE_ENTRY_URL || DEFAULT_REMOTE_ENTRY_URL,
+    federationEntryUrl:
+      import.meta.env.VITE_REMOTE_MANIFEST_URL || DEFAULT_REMOTE_MANIFEST_URL,
   },
   {
     moduleId: 'remoteAngular',
-    remoteEntryUrl:
-      import.meta.env.VITE_ANGULAR_REMOTE_ENTRY_URL ||
-      DEFAULT_ANGULAR_REMOTE_ENTRY_URL,
+    federationEntryUrl:
+      import.meta.env.VITE_ANGULAR_REMOTE_MANIFEST_URL ||
+      DEFAULT_ANGULAR_REMOTE_MANIFEST_URL,
   },
 ] as const;
 
@@ -40,7 +40,7 @@ export function RemoteNavManifestsProvider({ children }: PropsWithChildren) {
     for (const source of REMOTE_SOURCES) {
       void (async () => {
         const result = await fetchNavManifest({
-          remoteEntryUrl: source.remoteEntryUrl,
+          federationEntryUrl: source.federationEntryUrl,
           expectedModuleId: source.moduleId,
           signal: controller.signal,
         });

@@ -1,9 +1,11 @@
 /**
- * PoC-only: derive `nav.json` from the remote entry URL origin.
+ * PoC-only: derive `nav.json` from the federation entry/manifest URL origin.
  * Production must not rely on this — use an explicit manifest URL
- * (registry / Catalog / env) instead of string-deriving from `remoteEntry.js`.
+ * (registry / Catalog / env) instead of string-deriving from federation delivery.
  */
-export function navManifestUrlFromRemoteEntry(remoteEntryUrl: string): string {
-  const url = new URL(remoteEntryUrl);
+export function navManifestUrlFromFederationEntry(
+  federationEntryUrl: string
+): string {
+  const url = new URL(federationEntryUrl);
   return `${url.origin}/nav.json`;
 }

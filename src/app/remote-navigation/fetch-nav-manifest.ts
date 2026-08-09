@@ -1,5 +1,5 @@
 import type { NavManifest } from '@platform/runtime-mf-contract';
-import { navManifestUrlFromRemoteEntry } from '@/app/remote-navigation/nav-manifest-url';
+import { navManifestUrlFromFederationEntry } from '@/app/remote-navigation/nav-manifest-url';
 import { validateNavManifest } from '@/app/remote-navigation/validate-nav-manifest';
 
 export type FetchNavManifestResult =
@@ -43,7 +43,7 @@ function mergeAbortSignals(
  * Independent per remote — a dead peer must not block others.
  */
 export async function fetchNavManifest(options: {
-  remoteEntryUrl: string;
+  federationEntryUrl: string;
   expectedModuleId: string;
   signal?: AbortSignal;
   /** Fail soft if the remote never answers (default 3s). */
@@ -52,12 +52,12 @@ export async function fetchNavManifest(options: {
   let url: string;
 
   try {
-    url = navManifestUrlFromRemoteEntry(options.remoteEntryUrl);
+    url = navManifestUrlFromFederationEntry(options.federationEntryUrl);
   } catch {
     return {
       ok: false,
-      url: options.remoteEntryUrl,
-      reason: 'invalid remoteEntry URL',
+      url: options.federationEntryUrl,
+      reason: 'invalid federation entry URL',
     };
   }
 

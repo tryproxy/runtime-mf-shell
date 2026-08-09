@@ -1,4 +1,5 @@
 import type { HostBridge } from '@platform/runtime-mf-contract';
+import { createInstance } from '@module-federation/enhanced/runtime';
 import type { RemoteRuntimeAdapters } from '@/remote-runtime';
 import { getAccessToken, getAuthEmail, subscribeSession } from '@/shared/auth';
 import { appRouter } from '@/app/routing/app-router';
@@ -26,22 +27,42 @@ const auth: HostBridge['auth'] = {
   },
 };
 
-const remoteLoaders: Record<string, () => Promise<unknown>> = {
-  remote: () => import('demo_remote/mount'),
-  remoteAngular: () => import('angular_remote/mount'),
+const remoteRequests: Record<string, string> = {
+  remote: 'demo_remote/mount',
+  remoteAngular: 'angular_remote/mount',
 };
+
+const federationRuntime = createInstance({
+  name: 'runtime_mf_shell',
+  remotes: [
+    {
+      name: 'runtime_mf_module',
+      alias: 'demo_remote',
+      entry:
+        import.meta.env.VITE_REMOTE_MANIFEST_URL ||
+        'http://localhost:5001/mf-manifest.json',
+    },
+    {
+      name: 'runtime_mf_module_angular',
+      alias: 'angular_remote',
+      entry:
+        import.meta.env.VITE_ANGULAR_REMOTE_MANIFEST_URL ||
+        'http://localhost:5002/mf-manifest.json',
+    },
+  ],
+});
 
 export const remoteRuntimeAdapters = {
   loadRemote(remoteId: string) {
-    const loader = remoteLoaders[remoteId];
+    const request = remoteRequests[remoteId];
 
-    if (!loader) {
+    if (!request) {
       return Promise.reject(
-        new Error(`No remote loader is configured for ${remoteId}.`)
+        new Error(`No federation request is configured for ${remoteId}.`)
       );
     }
 
-    return loader();
+    return federationRuntime.loadRemote(request);
   },
   auth,
   navigation: createRouterNavigation(appRouter),

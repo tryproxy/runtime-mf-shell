@@ -32,7 +32,7 @@ Contract package: `github:tryproxy/runtime-mf-contract` (`pnpm update @platform/
 ## How mount works (short)
 
 ```text
-Page → RemoteSlot → import(remoteEntry ./mount)
+Page → RemoteSlot → Remote Runtime → federation manifest → ./mount
                  → createHostBridge(theme, locale)
                  → mount({ container, bridge, basename })
                  → await ready? → show remote / error UI
@@ -44,20 +44,20 @@ Page → RemoteSlot → import(remoteEntry ./mount)
 
 ## Key files
 
-| Path                                              | Why it matters                                                              |
-| ------------------------------------------------- | --------------------------------------------------------------------------- |
-| `src/app/main.tsx` / `src/app/app.tsx`            | Boot + app composition                                                      |
-| `src/app/routing/app-router.tsx`                  | React Router tree                                                           |
-| `src/app/routing/build-module-routes.tsx`         | Module splat routes from nav config                                         |
-| `src/app/routing/require-auth.tsx`                | Auth guard for module areas                                                 |
-| `src/app/remote-navigation/nav-config.ts`         | Static modules; remote **pages** come from `nav.json`                       |
-| `src/app/remote-navigation/*`                     | Fetch / validate / store remote nav manifests                               |
-| `src/app/shell/app-shell.tsx`                     | Shell chrome (sidebar, tabs, header)                                        |
-| `src/remote-runtime/ui/remote-slot.tsx`           | Mount lifecycle UI adapter                                                  |
-| `src/remote-runtime/lib/create-host-bridge.ts`    | HostBridge + history sync for embedded remotes                              |
-| `src/pages/remote/` / `src/pages/remote-angular/` | Thin pages that render `RemoteSlot` + federation loader                     |
-| `vite.config.ts`                                  | Federation remotes (`demo_remote`, `angular_remote`)                        |
-| `env.example`                                     | `VITE_*` URLs (API, remoteEntry; PoC derives `nav.json` from remote origin) |
+| Path                                                | Why it matters                                                         |
+| --------------------------------------------------- | ---------------------------------------------------------------------- |
+| `src/app/main.tsx` / `src/app/app.tsx`              | Boot + app composition                                                 |
+| `src/app/routing/app-router.tsx`                    | React Router tree                                                      |
+| `src/app/routing/build-module-routes.tsx`           | Module splat routes from nav config                                    |
+| `src/app/routing/require-auth.tsx`                  | Auth guard for module areas                                            |
+| `src/app/remote-navigation/nav-config.ts`           | Static modules; remote **pages** come from `nav.json`                  |
+| `src/app/remote-navigation/*`                       | Fetch / validate / store remote nav manifests                          |
+| `src/app/shell/app-shell.tsx`                       | Shell chrome (sidebar, tabs, header)                                   |
+| `src/remote-runtime/ui/remote-slot.tsx`             | Mount lifecycle UI adapter                                             |
+| `src/remote-runtime/lib/create-host-bridge.ts`      | HostBridge + history sync for embedded remotes                         |
+| `src/pages/remote/` / `src/pages/remote-angular/`   | Thin pages that identify the remote rendered by `RemoteSlot`           |
+| `src/app/remote-runtime/remote-runtime-adapters.ts` | Pure Module Federation runtime instance and static Phase 1 descriptors |
+| `env.example`                                       | `VITE_*` URLs (API and federation manifests)                           |
 
 ---
 
