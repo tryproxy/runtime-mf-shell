@@ -1,4 +1,8 @@
-import type { RemoteAppInstance } from '@platform/runtime-mf-contract';
+import {
+  parseRemoteAppInstance,
+  parseRemoteModule,
+  type RemoteAppInstance,
+} from '@platform/runtime-mf-contract';
 import {
   type RemoteFailureStage,
   type RemoteRuntime,
@@ -10,11 +14,6 @@ import {
 } from '../model/remote-runtime';
 import { createHostBridge } from './create-host-bridge';
 import { createNoopTelemetry } from './create-noop-telemetry';
-import {
-  cleanupInvalidRemoteInstance,
-  normalizeRemoteAppInstance,
-  normalizeRemoteModule,
-} from './normalize-remote-module';
 
 const DEFAULT_LOAD_TIMEOUT_MS = 8_000;
 const DEFAULT_READINESS_TIMEOUT_MS = 8_000;
@@ -39,6 +38,18 @@ function errorMessage(error: unknown): string {
   return error instanceof Error
     ? error.message
     : 'Unknown remote runtime error.';
+}
+
+function cleanupInvalidRemoteInstance(value: unknown): void {
+  if (typeof value !== 'object' || value === null) {
+    return;
+  }
+
+  const unmount = Reflect.get(value, 'unmount');
+
+  if (typeof unmount === 'function') {
+    Reflect.apply(unmount, value, []);
+  }
 }
 
 function createSession(options: {
@@ -208,7 +219,7 @@ function createSession(options: {
     let remoteModule;
 
     try {
-      remoteModule = normalizeRemoteModule(loaded);
+      remoteModule = parseRemoteModule(loaded);
     } catch (error) {
       fail('validate', error);
       return;
@@ -234,7 +245,7 @@ function createSession(options: {
     }
 
     try {
-      instance = normalizeRemoteAppInstance(mounted);
+      instance = parseRemoteAppInstance(mounted);
     } catch (error) {
       try {
         cleanupInvalidRemoteInstance(mounted);

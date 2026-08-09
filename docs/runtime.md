@@ -9,9 +9,9 @@ Brief operator guide for the current PoC. Deeper research lives in [`docs/resera
 | `runtime-mf-shell`          | React host (layout, React Router, auth, Remote Runtime)                         |
 | `runtime-mf-module`         | React remote (`runtime_mf_module`, alias `demo_remote`, port 5001)              |
 | `runtime-mf-module-angular` | Angular remote (`runtime_mf_module_angular`, alias `angular_remote`, port 5002) |
-| `runtime-mf-contract`       | `@platform/runtime-mf-contract` — types + mock                                  |
+| `runtime-mf-contract`       | `@platform/runtime-mf-contract` — types, runtime parsers and mock bridge        |
 
-Install contract: `pnpm add github:tryproxy/runtime-mf-contract` (refresh with `pnpm update @platform/runtime-mf-contract`).
+Install contract: `pnpm add 'github:tryproxy/runtime-mf-contract#v0.4.0'`. All current consumers use this immutable release tag.
 
 ## How it works
 
@@ -51,7 +51,7 @@ Remotes must **not** read tokens from localStorage; use `bridge.auth.http.getAcc
 ## Local run (typical)
 
 - Nest API ~`:3000` — set `VITE_API_BASE_URL` to the API host (not the shell).
-- Shell ~`:5000`, React remote ~`:5001`, Angular remote build+preview ~`:5002` (`pnpm build && pnpm preview` for Angular federation).
+- Shell ~`:5000`, React remote ~`:5001`, Angular remote ~`:5002`; run `pnpm dev` in each frontend repository.
 - Shell CORS origin must match without trailing slash.
 
 ## Auth (shell)

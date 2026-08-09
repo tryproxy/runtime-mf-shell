@@ -25,7 +25,7 @@ For a longer operator guide see [`docs/runtime.md`](./docs/runtime.md). Research
 4. **Stay under basename** — interpret paths only under the shell-assigned prefix (e.g. `/remote/*`). Do not own top-level history when embedded.
 5. **Optional `nav.json`** — pre-mount page list at `{origin}/nav.json` so the shell can render chrome without loading remote JS.
 
-Contract package: `github:tryproxy/runtime-mf-contract` (`pnpm update @platform/runtime-mf-contract` to refresh).
+Contract package: `github:tryproxy/runtime-mf-contract#v0.4.0`. The shell uses its runtime parsers before invoking independently deployed code.
 
 ---
 
@@ -68,4 +68,4 @@ pnpm install
 pnpm dev          # shell → :5000
 ```
 
-Typical companions: Nest API ~`:3000`, React remote ~`:5001`, Angular remote ~`:5002` (`pnpm build && pnpm preview` for Angular federation). Copy `env.example` → `.env` as needed (`VITE_API_BASE_URL` must be the API host, not the shell).
+Typical companions: Nest API ~`:3000`, React remote ~`:5001`, Angular remote ~`:5002`; all three frontend repositories use `pnpm dev` locally. Copy `env.example` → `.env` as needed (`VITE_API_BASE_URL` must be the API host, not the shell).

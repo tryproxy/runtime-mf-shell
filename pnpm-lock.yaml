@@ -14,8 +14,8 @@ importers:
         specifier: ^2.8.2
         version: 2.8.2(@rspack/core@2.1.8(@module-federation/runtime-tools@2.8.2))(typescript@5.8.3)
       '@platform/runtime-mf-contract':
-        specifier: github:tryproxy/runtime-mf-contract
-        version: https://codeload.github.com/tryproxy/runtime-mf-contract/tar.gz/60620741d5464defe3f0b8ebff35e5654a53f5b1
+        specifier: github:tryproxy/runtime-mf-contract#v0.4.0
+        version: https://codeload.github.com/tryproxy/runtime-mf-contract/tar.gz/a5f5ad49a5c1aca157dea98ec4e04cb16a6c607d
       '@types/node':
         specifier: ^26.1.1
         version: 26.1.1
@@ -1171,12 +1171,12 @@ packages:
       }
     engines: { node: ^12.20.0 || ^14.18.0 || >=16.0.0 }
 
-  '@platform/runtime-mf-contract@https://codeload.github.com/tryproxy/runtime-mf-contract/tar.gz/60620741d5464defe3f0b8ebff35e5654a53f5b1':
+  '@platform/runtime-mf-contract@https://codeload.github.com/tryproxy/runtime-mf-contract/tar.gz/a5f5ad49a5c1aca157dea98ec4e04cb16a6c607d':
     resolution:
       {
-        tarball: https://codeload.github.com/tryproxy/runtime-mf-contract/tar.gz/60620741d5464defe3f0b8ebff35e5654a53f5b1,
+        tarball: https://codeload.github.com/tryproxy/runtime-mf-contract/tar.gz/a5f5ad49a5c1aca157dea98ec4e04cb16a6c607d,
       }
-    version: 0.3.1
+    version: 0.4.0
 
   '@radix-ui/number@1.1.2':
     resolution:
@@ -7642,7 +7642,7 @@ snapshots:
 
   '@pkgr/core@0.2.9': {}
 
-  '@platform/runtime-mf-contract@https://codeload.github.com/tryproxy/runtime-mf-contract/tar.gz/60620741d5464defe3f0b8ebff35e5654a53f5b1':
+  '@platform/runtime-mf-contract@https://codeload.github.com/tryproxy/runtime-mf-contract/tar.gz/a5f5ad49a5c1aca157dea98ec4e04cb16a6c607d':
     {}
 
   '@radix-ui/number@1.1.2': {}

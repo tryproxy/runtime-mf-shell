@@ -32,6 +32,14 @@ const remoteRequests: Record<string, string> = {
   remoteAngular: 'angular_remote/mount',
 };
 
+function unwrapFederationModule(value: unknown): unknown {
+  if (typeof value !== 'object' || value === null || 'mount' in value) {
+    return value;
+  }
+
+  return 'default' in value ? Reflect.get(value, 'default') : value;
+}
+
 const federationRuntime = createInstance({
   name: 'runtime_mf_shell',
   remotes: [
@@ -62,7 +70,7 @@ export const remoteRuntimeAdapters = {
       );
     }
 
-    return federationRuntime.loadRemote(request);
+    return federationRuntime.loadRemote(request).then(unwrapFederationModule);
   },
   auth,
   navigation: createRouterNavigation(appRouter),
