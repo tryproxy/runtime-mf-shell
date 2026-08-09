@@ -7,15 +7,11 @@ type RemoteAngularPageProps = {
   locale: AppLocale;
 };
 
-function loadAngularRemote() {
-  return import('angular_remote/mount');
-}
-
 export function RemoteAngularPage({ theme, locale }: RemoteAngularPageProps) {
   return (
     <RemoteSlot
       basename="/remote-angular"
-      loader={loadAngularRemote}
+      remoteId="remoteAngular"
       theme={theme}
       locale={locale}
     />

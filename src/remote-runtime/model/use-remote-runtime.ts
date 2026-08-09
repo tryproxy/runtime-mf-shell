@@ -2,11 +2,11 @@ import { useContext } from 'react';
 import { RemoteRuntimeContext } from './remote-runtime-context';
 
 export function useRemoteRuntime() {
-  const adapters = useContext(RemoteRuntimeContext);
+  const runtime = useContext(RemoteRuntimeContext);
 
-  if (!adapters) {
+  if (!runtime) {
     throw new Error('RemoteSlot must be rendered inside RemoteRuntimeProvider');
   }
 
-  return adapters;
+  return runtime;
 }

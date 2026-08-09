@@ -7,15 +7,11 @@ type RemotePageProps = {
   locale: AppLocale;
 };
 
-function loadDemoRemote() {
-  return import('demo_remote/mount');
-}
-
 export function RemotePage({ theme, locale }: RemotePageProps) {
   return (
     <RemoteSlot
       basename="/remote"
-      loader={loadDemoRemote}
+      remoteId="remote"
       theme={theme}
       locale={locale}
     />

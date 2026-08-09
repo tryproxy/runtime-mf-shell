@@ -26,7 +26,23 @@ const auth: HostBridge['auth'] = {
   },
 };
 
+const remoteLoaders: Record<string, () => Promise<unknown>> = {
+  remote: () => import('demo_remote/mount'),
+  remoteAngular: () => import('angular_remote/mount'),
+};
+
 export const remoteRuntimeAdapters = {
+  loadRemote(remoteId: string) {
+    const loader = remoteLoaders[remoteId];
+
+    if (!loader) {
+      return Promise.reject(
+        new Error(`No remote loader is configured for ${remoteId}.`)
+      );
+    }
+
+    return loader();
+  },
   auth,
   navigation: createRouterNavigation(appRouter),
 } satisfies RemoteRuntimeAdapters;
