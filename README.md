@@ -68,4 +68,7 @@ pnpm install
 pnpm dev          # shell → :5000
 ```
 
-Typical companions: Nest API ~`:3000`, React remote ~`:5001`, Angular remote ~`:5002`; all three frontend repositories use `pnpm dev` locally. Copy `env.example` → `.env` as needed (`VITE_API_BASE_URL` must be the API host, not the shell).
+Nest API ~`:3000`
+React remote ~`:5001`
+Angular remote ~`:5002`
+All three frontend repositories use `pnpm dev` locally. Copy `env.example` → `.env` as needed (`VITE_API_BASE_URL` must be the API host, not the shell).
