@@ -1,6 +1,6 @@
 /** Data-driven shell navigation; routes are built without path regexes. */
 
-import type { AppLocale } from '@/shared/i18n';
+import { toRemoteLocale, type AppLocale } from '@/shared/i18n';
 
 export type NavPageLabel = {
   en: string;
@@ -79,7 +79,7 @@ export function resolvePageLabel(
   t: (key: string) => string
 ): string {
   if (page.label) {
-    return page.label[locale === 'es' ? 'en' : locale] ?? page.label.en;
+    return page.label[toRemoteLocale(locale)] ?? page.label.en;
   }
 
   if (page.labelKey) {

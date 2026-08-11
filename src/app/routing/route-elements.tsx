@@ -87,7 +87,12 @@ function resolveAsoReturnTo(value: string | null): string {
       url.origin === window.location.origin &&
       (url.pathname === '/aso' || url.pathname.startsWith('/aso/'));
 
-    return isAsoPath ? `${url.pathname}${url.search}${url.hash}` : '/aso';
+    if (!isAsoPath || url.pathname === '/aso/login') {
+      return '/aso';
+    }
+
+    url.searchParams.delete('access_token');
+    return `${url.pathname}${url.search}${url.hash}`;
   } catch {
     return '/aso';
   }
