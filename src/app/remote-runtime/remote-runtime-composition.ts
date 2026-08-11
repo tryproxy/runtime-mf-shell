@@ -60,7 +60,7 @@ const federationRuntime = createInstance({
   ],
 });
 
-export const remoteRuntimeAdapters = {
+export const shellRemoteRuntimeAdapters = {
   loadRemote(remoteId: string) {
     const request = remoteRequests[remoteId];
 
