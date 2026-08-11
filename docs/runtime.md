@@ -12,12 +12,11 @@ Brief operator guide for the current PoC. Deeper research lives in [`docs/resera
 | `runtime-mf-contract`       | `@platform/runtime-mf-contract` — types, runtime parsers and mock bridge        |
 | `runtime-mf-adapters`       | `@platform/runtime-mf-adapters` — React and Angular lifecycle implementations   |
 
-Install contract: `pnpm add 'github:tryproxy/runtime-mf-contract#v0.4.0'` for
-the current demo stack. Contract `v0.5.0` adds the shell-owned
-`bridge.auth.signOut()` capability and is used by the shell and the first
-embedded product integration; it must be adopted by both sides together.
+Install contract: `pnpm add 'github:tryproxy/runtime-mf-contract#v0.5.1'`.
+The shell and all current remotes pin this release, including its shell-owned
+`bridge.auth.signOut()` capability.
 
-Install framework adapters: `pnpm add 'github:tryproxy/runtime-mf-adapters#v0.1.0'`. React and Angular remotes pin this release; each still supplies its own framework runtime.
+Install framework adapters: `pnpm add 'github:tryproxy/runtime-mf-adapters#v0.1.2'`. React and Angular remotes pin this release; each still supplies its own framework runtime.
 
 ## Current delivery state
 
@@ -25,9 +24,10 @@ The lifecycle foundation, Module Federation migration, and static production del
 
 The deployed shell now loads production-hosted React and Angular artifacts through those static descriptors. Direct deep links and contained remote failure have been manually verified.
 
-A representative standalone product SPA has completed its application and
-embedded-bridge adaptation, including shell-owned `v0.5.0` sign-out. Its next
-work is visual containment and federation registration.
+A representative standalone product SPA has completed its application,
+embedded-bridge adaptation, and federation producer configuration. Its next
+proof is loading the preview artifact through the deployed shell; visual
+containment follows only from observed browser conflicts.
 
 ## How it works
 

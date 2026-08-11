@@ -10,21 +10,43 @@ import {
 import { appRouter } from '@/app/routing/app-router';
 import { createRouterNavigation } from '@/app/routing/router-navigation';
 
+type HostSession = NonNullable<ReturnType<HostBridge['auth']['getSnapshot']>>;
+
+let authSnapshot: HostSession | null = null;
+let authSnapshotAccessToken: string | null = null;
+let authSnapshotEmail: string | null = null;
+
+function getAuthSnapshot(): HostSession | null {
+  const accessToken = getAccessToken();
+  const email = getAuthEmail();
+
+  if (!accessToken) {
+    authSnapshot = null;
+    authSnapshotAccessToken = null;
+    authSnapshotEmail = null;
+    return authSnapshot;
+  }
+
+  if (
+    authSnapshot &&
+    authSnapshotAccessToken === accessToken &&
+    authSnapshotEmail === email
+  ) {
+    return authSnapshot;
+  }
+
+  authSnapshotAccessToken = accessToken;
+  authSnapshotEmail = email;
+  authSnapshot = {
+    userId: email ?? 'user',
+    displayName: email ?? undefined,
+    roles: [],
+  };
+  return authSnapshot;
+}
+
 const auth: HostBridge['auth'] = {
-  getSnapshot: () => {
-    const accessToken = getAccessToken();
-    const email = getAuthEmail();
-
-    if (!accessToken) {
-      return null;
-    }
-
-    return {
-      userId: email ?? 'user',
-      displayName: email ?? undefined,
-      roles: [],
-    };
-  },
+  getSnapshot: getAuthSnapshot,
   subscribe: subscribeSession,
   async signOut() {
     await logoutSession();

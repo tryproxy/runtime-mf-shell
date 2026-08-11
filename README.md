@@ -25,7 +25,7 @@ For a longer operator guide see [`docs/runtime.md`](./docs/runtime.md). Research
 4. **Stay under basename** — interpret paths only under the shell-assigned prefix (e.g. `/remote/*`). Do not own top-level history when embedded.
 5. **Optional `nav.json`** — pre-mount page list at `{origin}/nav.json` so the shell can render chrome without loading remote JS.
 
-Contract package: `github:tryproxy/runtime-mf-contract#v0.4.0`. The shell uses its runtime parsers before invoking independently deployed code.
+Contract package: `github:tryproxy/runtime-mf-contract#v0.5.1`. The shell uses its runtime parsers before invoking independently deployed code.
 
 ---
 
@@ -44,20 +44,20 @@ Page → RemoteSlot → Remote Runtime → federation manifest → ./mount
 
 ## Key files
 
-| Path                                                | Why it matters                                                         |
-| --------------------------------------------------- | ---------------------------------------------------------------------- |
-| `src/app/main.tsx` / `src/app/app.tsx`              | Boot + app composition                                                 |
-| `src/app/routing/app-router.tsx`                    | React Router tree                                                      |
-| `src/app/routing/build-module-routes.tsx`           | Module splat routes from nav config                                    |
-| `src/app/routing/require-auth.tsx`                  | Auth guard for module areas                                            |
-| `src/app/remote-navigation/nav-config.ts`           | Static modules; remote **pages** come from `nav.json`                  |
-| `src/app/remote-navigation/*`                       | Fetch / validate / store remote nav manifests                          |
-| `src/app/shell/app-shell.tsx`                       | Shell chrome (sidebar, tabs, header)                                   |
-| `src/remote-runtime/ui/remote-slot.tsx`             | Mount lifecycle UI adapter                                             |
-| `src/remote-runtime/lib/create-host-bridge.ts`      | HostBridge + history sync for embedded remotes                         |
-| `src/pages/remote/` / `src/pages/remote-angular/`   | Thin pages that identify the remote rendered by `RemoteSlot`           |
-| `src/app/remote-runtime/remote-runtime-adapters.ts` | Pure Module Federation runtime instance and static Phase 1 descriptors |
-| `env.example`                                       | `VITE_*` URLs (API and federation manifests)                           |
+| Path                                                   | Why it matters                                                 |
+| ------------------------------------------------------ | -------------------------------------------------------------- |
+| `src/app/main.tsx` / `src/app/app.tsx`                 | Boot + app composition                                         |
+| `src/app/routing/app-router.tsx`                       | React Router tree                                              |
+| `src/app/routing/build-module-routes.tsx`              | Module splat routes from nav config                            |
+| `src/app/routing/require-auth.tsx`                     | Auth guard for module areas                                    |
+| `src/app/remote-navigation/nav-config.ts`              | Static modules; remote **pages** come from `nav.json`          |
+| `src/app/remote-navigation/*`                          | Fetch / validate / store remote nav manifests                  |
+| `src/app/shell/app-shell.tsx`                          | Shell chrome (sidebar, tabs, header)                           |
+| `src/remote-runtime/ui/remote-slot.tsx`                | Mount lifecycle UI adapter                                     |
+| `src/remote-runtime/lib/create-host-bridge.ts`         | HostBridge + history sync for embedded remotes                 |
+| `src/pages/remote/` / `src/pages/remote-angular/`      | Thin pages that identify the remote rendered by `RemoteSlot`   |
+| `src/app/remote-runtime/remote-runtime-composition.ts` | Pure Module Federation runtime instance and static descriptors |
+| `env.example`                                          | `VITE_*` URLs (API and federation manifests)                   |
 
 ---
 
