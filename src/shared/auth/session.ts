@@ -15,6 +15,16 @@ export function persistSession(accessToken: string, email: string): void {
   notifySessionChanged();
 }
 
+/**
+ * Stores a bearer token received by a shell-owned URL bootstrap route.
+ * No display identity is inferred from an unverified token.
+ */
+export function persistAccessToken(accessToken: string): void {
+  window.localStorage.setItem(ACCESS_TOKEN_KEY, accessToken);
+  window.localStorage.removeItem(AUTH_EMAIL_KEY);
+  notifySessionChanged();
+}
+
 export function clearSession(): void {
   window.localStorage.removeItem(ACCESS_TOKEN_KEY);
   window.localStorage.removeItem(AUTH_EMAIL_KEY);

@@ -1,9 +1,10 @@
 import { defaultModuleHref } from '@/app/remote-navigation/nav-config';
 import { AppShell } from '@/app/shell/app-shell';
 import { AuthPage } from '@/pages/authentication';
+import { AsoPage } from '@/pages/aso';
 import { RemotePage } from '@/pages/remote';
 import { RemoteAngularPage } from '@/pages/remote-angular';
-import { getAccessToken } from '@/shared/auth';
+import { getAccessToken, persistAccessToken } from '@/shared/auth';
 import type { ShellTheme } from '@/shared/config';
 import {
   type AppLocale,
@@ -13,7 +14,12 @@ import {
 } from '@/shared/i18n';
 import { applyShellTheme } from '@/shared/lib';
 import { useEffect, useState } from 'react';
-import { Navigate, Outlet, useOutletContext } from 'react-router-dom';
+import {
+  Navigate,
+  Outlet,
+  useLocation,
+  useOutletContext,
+} from 'react-router-dom';
 
 export type ShellOutletContext = {
   theme: ShellTheme;
@@ -70,6 +76,47 @@ export function AuthRoute({ mode }: { mode: 'login' | 'register' }) {
   );
 }
 
+function resolveAsoReturnTo(value: string | null): string {
+  if (!value) {
+    return '/aso';
+  }
+
+  try {
+    const url = new URL(value, window.location.origin);
+    const isAsoPath =
+      url.origin === window.location.origin &&
+      (url.pathname === '/aso' || url.pathname.startsWith('/aso/'));
+
+    return isAsoPath ? `${url.pathname}${url.search}${url.hash}` : '/aso';
+  } catch {
+    return '/aso';
+  }
+}
+
+/**
+ * Shell-owned token handoff for an ASO deep link. The token is removed from
+ * browser-visible URL state before the authenticated route mounts.
+ */
+export function AsoAccessTokenRoute() {
+  const location = useLocation();
+  const [target, setTarget] = useState<string | null>(null);
+  const query = new URLSearchParams(location.search);
+  const accessToken = query.get('access_token')?.trim();
+  const returnTo = query.get('returnTo');
+
+  useEffect(() => {
+    if (!accessToken) {
+      setTarget('/login');
+      return;
+    }
+
+    persistAccessToken(accessToken);
+    setTarget(resolveAsoReturnTo(returnTo));
+  }, [accessToken, returnTo]);
+
+  return target ? <Navigate replace to={target} /> : null;
+}
+
 export function ShellLayout() {
   const context = useOutletContext<ShellOutletContext>();
 
@@ -95,4 +142,10 @@ export function RemoteAngularRoute() {
   const { theme, locale } = useOutletContext<ShellOutletContext>();
 
   return <RemoteAngularPage theme={theme} locale={locale} />;
+}
+
+export function AsoRoute() {
+  const { theme, locale } = useOutletContext<ShellOutletContext>();
+
+  return <AsoPage theme={theme} locale={locale} />;
 }

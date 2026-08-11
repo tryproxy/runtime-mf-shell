@@ -26,6 +26,8 @@ export const en = {
     remoteModuleDesc: 'Mounts the React remote module.',
     remoteAngular: '(Angular) Remote module',
     remoteAngularDesc: 'Mounts the Angular remote module.',
+    aso: 'ASO Admin',
+    asoDesc: 'Mounts the ASO Admin remote module.',
     pageHome: 'Home',
     pageOverview: 'Overview',
     pageDetails: 'Details',

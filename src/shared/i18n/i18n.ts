@@ -20,6 +20,7 @@ void i18n.use(initReactI18next).init({
   resources: {
     en: { translation: en },
     ru: { translation: ru },
+    es: { translation: en },
   },
   lng: typeof window === 'undefined' ? 'en' : readStoredLocale(),
   fallbackLng: 'en',

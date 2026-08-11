@@ -26,6 +26,8 @@ export const ru = {
     remoteModuleDesc: 'Монтирует React remote-модуль.',
     remoteAngular: '(Angular) Удалённый модуль',
     remoteAngularDesc: 'Монтирует Angular remote-модуль.',
+    aso: 'ASO Admin',
+    asoDesc: 'Монтирует ASO Admin remote-модуль.',
     pageHome: 'Главная',
     pageOverview: 'Обзор',
     pageDetails: 'Детали',

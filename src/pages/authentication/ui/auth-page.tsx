@@ -1,7 +1,7 @@
 import { submitAuth } from '../api/submit-auth';
 import { persistSession } from '@/shared/auth';
 import type { ShellTheme } from '@/shared/config';
-import { APP_LOCALES, type AppLocale } from '@/shared/i18n';
+import { APP_LOCALES, isAppLocale, type AppLocale } from '@/shared/i18n';
 import {
   Button,
   Card,
@@ -129,7 +129,7 @@ export function AuthPage({
           <Select
             value={locale}
             onValueChange={(value) => {
-              if (value === 'en' || value === 'ru') {
+              if (isAppLocale(value)) {
                 onLocaleChange(value);
               }
             }}

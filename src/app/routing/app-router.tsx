@@ -2,6 +2,8 @@ import { defaultModuleHref } from '@/app/remote-navigation/nav-config';
 import { buildModuleRoutes } from '@/app/routing/build-module-routes';
 import {
   AppRoot,
+  AsoAccessTokenRoute,
+  AsoRoute,
   AuthRoute,
   RemoteAngularRoute,
   RemoteRoute,
@@ -22,6 +24,8 @@ export const appRouter = createBrowserRouter([
       { index: true, element: <Navigate replace to={defaultModuleHref} /> },
       { path: 'login', element: <AuthRoute mode="login" /> },
       { path: 'register', element: <AuthRoute mode="register" /> },
+      { path: 'auth/callback', element: <AsoAccessTokenRoute /> },
+      { path: 'aso/login', element: <AsoAccessTokenRoute /> },
       {
         element: <RequireAuth />,
         errorElement: <ShellRouteError />,
@@ -33,6 +37,7 @@ export const appRouter = createBrowserRouter([
               host: <HostPage />,
               remote: <RemoteRoute />,
               remoteAngular: <RemoteAngularRoute />,
+              aso: <AsoRoute />,
             }),
           },
         ],

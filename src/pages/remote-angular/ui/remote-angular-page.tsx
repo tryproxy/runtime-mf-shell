@@ -1,6 +1,6 @@
 import { RemoteSlot } from '@/remote-runtime';
 import type { ShellTheme } from '@/shared/config';
-import type { AppLocale } from '@/shared/i18n';
+import { toRemoteLocale, type AppLocale } from '@/shared/i18n';
 
 type RemoteAngularPageProps = {
   theme: ShellTheme;
@@ -13,7 +13,7 @@ export function RemoteAngularPage({ theme, locale }: RemoteAngularPageProps) {
       basename="/remote-angular"
       remoteId="remoteAngular"
       theme={theme}
-      locale={locale}
+      locale={toRemoteLocale(locale)}
     />
   );
 }

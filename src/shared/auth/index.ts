@@ -2,6 +2,7 @@ export {
   clearSession,
   getAccessToken,
   getAuthEmail,
+  persistAccessToken,
   persistSession,
   subscribeSession,
 } from './session';

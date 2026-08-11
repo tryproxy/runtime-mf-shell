@@ -52,6 +52,13 @@ export const navModules: NavModule[] = [
     descriptionKey: 'nav.remoteAngularDesc',
     pages: [],
   },
+  {
+    id: 'aso',
+    path: 'aso',
+    labelKey: 'nav.aso',
+    descriptionKey: 'nav.asoDesc',
+    pages: [],
+  },
 ];
 
 export function moduleHref(module: NavModule): string {
@@ -72,7 +79,7 @@ export function resolvePageLabel(
   t: (key: string) => string
 ): string {
   if (page.label) {
-    return page.label[locale] ?? page.label.en;
+    return page.label[locale === 'es' ? 'en' : locale] ?? page.label.en;
   }
 
   if (page.labelKey) {
