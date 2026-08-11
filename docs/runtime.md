@@ -99,6 +99,8 @@ The shell currently derives `nav.json` from each federation-manifest origin. Thi
 
 ## Further reading
 
+- [react-remote-quick-start.md](./react-remote-quick-start.md) — minimal React remote onboarding checklist
+- [adding-a-new-remote.md](./adding-a-new-remote.md) — create, deploy, and statically register a new remote project
 - [POC-STATUS.md](./reserach.local/POC-STATUS.md) — what is ready
 - [phases.md](./reserach.local/phases.md) — active delivery sequence
 - [repository-map.md](./reserach.local/reference/repository-map.md) — FSD layout
