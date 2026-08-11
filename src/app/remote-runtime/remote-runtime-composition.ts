@@ -1,7 +1,12 @@
 import type { HostBridge } from '@platform/runtime-mf-contract';
 import { createInstance } from '@module-federation/enhanced/runtime';
 import type { RemoteRuntimeAdapters } from '@/remote-runtime';
-import { getAccessToken, getAuthEmail, subscribeSession } from '@/shared/auth';
+import {
+  getAccessToken,
+  getAuthEmail,
+  logoutSession,
+  subscribeSession,
+} from '@/shared/auth';
 import { appRouter } from '@/app/routing/app-router';
 import { createRouterNavigation } from '@/app/routing/router-navigation';
 
@@ -21,6 +26,10 @@ const auth: HostBridge['auth'] = {
     };
   },
   subscribe: subscribeSession,
+  async signOut() {
+    await logoutSession();
+    await appRouter.navigate('/login', { replace: true });
+  },
   http: {
     mode: 'bearer',
     getAccessToken: async () => getAccessToken(),

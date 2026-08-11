@@ -12,17 +12,22 @@ Brief operator guide for the current PoC. Deeper research lives in [`docs/resera
 | `runtime-mf-contract`       | `@platform/runtime-mf-contract` — types, runtime parsers and mock bridge        |
 | `runtime-mf-adapters`       | `@platform/runtime-mf-adapters` — React and Angular lifecycle implementations   |
 
-Install contract: `pnpm add 'github:tryproxy/runtime-mf-contract#v0.4.0'`. All current consumers use this immutable release tag.
+Install contract: `pnpm add 'github:tryproxy/runtime-mf-contract#v0.4.0'` for
+the current demo stack. Contract `v0.5.0` adds the shell-owned
+`bridge.auth.signOut()` capability and is used by the shell and the first
+embedded product integration; it must be adopted by both sides together.
 
 Install framework adapters: `pnpm add 'github:tryproxy/runtime-mf-adapters#v0.1.0'`. React and Angular remotes pin this release; each still supplies its own framework runtime.
 
 ## Current delivery state
 
-The lifecycle foundation and Module Federation migration are complete. The shell still registers known remotes statically; runtime discovery and the Composition Catalog are deferred until runtime onboarding is needed.
+The lifecycle foundation, Module Federation migration, and static production delivery proof are complete. The shell still registers known remotes statically; runtime discovery and the Composition Catalog are deferred until runtime onboarding is needed.
 
-The next delivery proof is a deployed shell loading production-hosted React and Angular artifacts through those static descriptors.
+The deployed shell now loads production-hosted React and Angular artifacts through those static descriptors. Direct deep links and contained remote failure have been manually verified.
 
-A representative standalone product SPA has been assessed as the first real integration candidate. Its embedded adaptation has not started.
+A representative standalone product SPA has completed its application and
+embedded-bridge adaptation, including shell-owned `v0.5.0` sign-out. Its next
+work is visual containment and federation registration.
 
 ## How it works
 
@@ -58,9 +63,12 @@ A representative standalone product SPA has been assessed as the first real inte
 
 Design C — every host store is `getSnapshot` + `subscribe`:
 
-- `theme`, `i18n`, `auth` (+ `auth.http` bearer/`getAccessToken`), `navigation` (`navigate` / `replace`), `telemetry` (no-op)
+- `theme`, `i18n`, `auth` (`auth.http` plus, in contract `v0.5.0`, `signOut()`), `navigation` (`navigate` / `replace`), `telemetry` (no-op)
 
 Remotes must **not** read tokens from localStorage; use `bridge.auth.http.getAccessToken()`.
+
+`bridge.auth.signOut()` is the remote request for shell sign-out. The shell,
+not the remote, clears its session and redirects to `/login`.
 
 ## Local run (typical)
 
