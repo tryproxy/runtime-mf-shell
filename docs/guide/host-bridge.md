@@ -10,22 +10,22 @@ Contract pin: `github:tryproxy/runtime-mf-contract#v0.5.2`.
 mount({ container, bridge, basename }) → { unmount(), ready? }
 ```
 
-| Input | Meaning |
-| ----- | ------- |
-| `container` | DOM node owned by the shell slot |
-| `basename` | Module namespace, e.g. `/store` |
-| `bridge` | Theme, locale, auth, navigation, telemetry |
+| Input       | Meaning                                    |
+| ----------- | ------------------------------------------ |
+| `container` | DOM node owned by the shell slot           |
+| `basename`  | Module namespace, e.g. `/store`            |
+| `bridge`    | Theme, locale, auth, navigation, telemetry |
 
 ## Do / don’t
 
-| Do | Don’t |
-| -- | ----- |
-| Read theme / locale / session / location from `bridge` | Own shell chrome or top-level history |
-| `await bridge.auth.http.getAccessToken()` per API call | Read/write shell token in `localStorage` |
-| `bridge.auth.signOut()` for logout | Clear shell storage yourself |
-| Stay under `basename` | Register SW / web-push while embedded |
-| Scope CSS + portals to the mount root | Put product permission DTOs on the bridge |
-| Hide product sidebar/header when embedded | Transplant Google/Telegram login into the shell |
+| Do                                                     | Don’t                                           |
+| ------------------------------------------------------ | ----------------------------------------------- |
+| Read theme / locale / session / location from `bridge` | Own shell chrome or top-level history           |
+| `await bridge.auth.http.getAccessToken()` per API call | Read/write shell token in `localStorage`        |
+| `bridge.auth.signOut()` for logout                     | Clear shell storage yourself                    |
+| Stay under `basename`                                  | Register SW / web-push while embedded           |
+| Scope CSS + portals to the mount root                  | Put product permission DTOs on the bridge       |
+| Hide product sidebar/header when embedded              | Transplant Google/Telegram login into the shell |
 
 ## Auth
 

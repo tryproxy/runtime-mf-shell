@@ -13,10 +13,10 @@ More detail (same folder): [Embedded entry](./embedded-entry.md) ·
 
 ### Reference repositories
 
-| Role | Repo |
-| ---- | ---- |
-| Shell | [tryproxy/runtime-mf-shell](https://github.com/tryproxy/runtime-mf-shell) (`dev`) |
-| React demo remote | [tryproxy/runtime-mf-module](https://github.com/tryproxy/runtime-mf-module) (`dev`) |
+| Role                 | Repo                                                                                                 |
+| -------------------- | ---------------------------------------------------------------------------------------------------- |
+| Shell                | [tryproxy/runtime-mf-shell](https://github.com/tryproxy/runtime-mf-shell) (`dev`)                    |
+| React demo remote    | [tryproxy/runtime-mf-module](https://github.com/tryproxy/runtime-mf-module) (`dev`)                  |
 | Product remote (ASO) | [asmarketr/aso-market-admin](https://github.com/asmarketr/aso-market-admin) (`mf-remote-integraion`) |
 
 ## TL;DR — how it works
@@ -35,24 +35,24 @@ More detail (same folder): [Embedded entry](./embedded-entry.md) ·
 
 ### From the remote
 
-| Deliverable | Role |
-| ----------- | ---- |
-| `./mount` | `mount({ container, bridge, basename })` → `{ unmount(), ready? }` |
-| `mf-manifest.json` / `remoteEntry.js` / chunks / CSS | Federation artifact |
-| `nav.json` | Child pages for shell chrome (same origin as manifest) |
-| Standalone `main` | App still runs alone |
+| Deliverable                                          | Role                                                               |
+| ---------------------------------------------------- | ------------------------------------------------------------------ |
+| `./mount`                                            | `mount({ container, bridge, basename })` → `{ unmount(), ready? }` |
+| `mf-manifest.json` / `remoteEntry.js` / chunks / CSS | Federation artifact                                                |
+| `nav.json`                                           | Child pages for shell chrome (same origin as manifest)             |
+| Standalone `main`                                    | App still runs alone                                               |
 
 ### Coordinates (pick once)
 
-| Purpose | Example |
-| ------- | ------- |
-| Shell module id | `store` |
-| Basename | `/store` |
-| Federation name | `store_admin` |
-| Shell alias | `store_remote` |
-| Load request | `store_remote/mount` |
-| Local origin | `http://localhost:5003` |
-| Shell env | `VITE_STORE_REMOTE_MANIFEST_URL` |
+| Purpose         | Example                          |
+| --------------- | -------------------------------- |
+| Shell module id | `store`                          |
+| Basename        | `/store`                         |
+| Federation name | `store_admin`                    |
+| Shell alias     | `store_remote`                   |
+| Load request    | `store_remote/mount`             |
+| Local origin    | `http://localhost:5003`          |
+| Shell env       | `VITE_STORE_REMOTE_MANIFEST_URL` |
 
 `moduleId`, federation `name`, and alias are **different**.
 `nav.json.moduleId` must match the shell module id.
@@ -119,7 +119,7 @@ export const mount: MountRemoteApp = (params) => {
   const mountReact = createReactRemoteMount(
     ({ container, bridge, basename }) => (
       <RemoteApp bridge={bridge} basename={basename} mountRoot={container} />
-    ),
+    )
   );
 
   const instance = mountReact(params);
@@ -189,7 +189,7 @@ function omitUnavailableSsrEntry(stats: Record<string, unknown>) {
   return {
     ...stats,
     metaData: Object.fromEntries(
-      Object.entries(metaData).filter(([key]) => key !== 'ssrRemoteEntry'),
+      Object.entries(metaData).filter(([key]) => key !== 'ssrRemoteEntry')
     ),
   };
 }
@@ -270,12 +270,12 @@ Prefer **Tailwind `^3.4`** for product PostCSS apps. Full write-up:
 
 ## 7. HostBridge
 
-| Do | Don’t |
-| -- | ----- |
-| Theme/locale/session from `bridge` | Own shell chrome / top-level history |
-| `bridge.auth.http.getAccessToken()` | Token in remote `localStorage` |
-| `bridge.auth.signOut()` | Clear shell storage yourself |
-| Stay under `basename` | SW / web-push while embedded |
+| Do                                  | Don’t                                |
+| ----------------------------------- | ------------------------------------ |
+| Theme/locale/session from `bridge`  | Own shell chrome / top-level history |
+| `bridge.auth.http.getAccessToken()` | Token in remote `localStorage`       |
+| `bridge.auth.signOut()`             | Clear shell storage yourself         |
+| Stay under `basename`               | SW / web-push while embedded         |
 
 Detail: [HostBridge](./host-bridge.md).
 

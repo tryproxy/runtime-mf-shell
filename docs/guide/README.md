@@ -5,16 +5,16 @@ Practical docs for connecting remotes to `runtime-mf-shell`.
 **Start here:** [React remote](./react-remote.md) — the full step-by-step path.
 The other files zoom in on one step; they are not a second checklist.
 
-| Doc | What it is |
-| --- | ---------- |
-| [React remote](./react-remote.md) | Main walkthrough: keep standalone app, add `./mount`, wire shell. Example module: **Store** (rename as needed). |
-| [Embedded entry](./embedded-entry.md) | Dual mode: `main.tsx` vs `./mount`, lifecycle, hide product chrome when embedded. |
-| [CSS and tokens](./css-and-tokens.md) | Shell `--rmf-*` tokens, embedded CSS, PostCSS scope, Tailwind notes. |
-| [Vite federation](./vite-federation.md) | Federation producer config, port/CORS, checking `/mf-manifest.json`. |
-| [nav.json](./nav-json.md) | Child tabs for shell chrome: TS source, emit plugin, hosting. |
-| [HostBridge](./host-bridge.md) | Theme, locale, auth token, and what the remote must not own. |
-| [Shell registration](./shell-registration.md) | Static shell files, env var, `RemoteSlot`, redeploy. |
-| [Deploy and host](./deploy-hosting.md) | What to publish, CORS/cache/SPA traps, pointing the shell at the artifact. |
+| Doc                                           | What it is                                                                                                      |
+| --------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
+| [React remote](./react-remote.md)             | Main walkthrough: keep standalone app, add `./mount`, wire shell. Example module: **Store** (rename as needed). |
+| [Embedded entry](./embedded-entry.md)         | Dual mode: `main.tsx` vs `./mount`, lifecycle, hide product chrome when embedded.                               |
+| [CSS and tokens](./css-and-tokens.md)         | Shell `--rmf-*` tokens, embedded CSS, PostCSS scope, Tailwind notes.                                            |
+| [Vite federation](./vite-federation.md)       | Federation producer config, port/CORS, checking `/mf-manifest.json`.                                            |
+| [nav.json](./nav-json.md)                     | Child tabs for shell chrome: TS source, emit plugin, hosting.                                                   |
+| [HostBridge](./host-bridge.md)                | Theme, locale, auth token, and what the remote must not own.                                                    |
+| [Shell registration](./shell-registration.md) | Static shell files, env var, `RemoteSlot`, redeploy.                                                            |
+| [Deploy and host](./deploy-hosting.md)        | What to publish, CORS/cache/SPA traps, pointing the shell at the artifact.                                      |
 
 Reference repos:
 

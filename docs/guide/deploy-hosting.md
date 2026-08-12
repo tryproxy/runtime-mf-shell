@@ -48,10 +48,10 @@ single `Access-Control-Allow-Origin`.
 
 ## Caching
 
-| File | Policy |
-| ---- | ------ |
+| File                                             | Policy                                  |
+| ------------------------------------------------ | --------------------------------------- |
 | `mf-manifest.json`, `remoteEntry.js`, `nav.json` | Revalidate or `no-cache` (stable names) |
-| Hashed chunks / CSS / fonts / images | Long-lived immutable |
+| Hashed chunks / CSS / fonts / images             | Long-lived immutable                    |
 
 ## Shell env after deploy
 

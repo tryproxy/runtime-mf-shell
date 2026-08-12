@@ -12,16 +12,16 @@ Shell repo: [tryproxy/runtime-mf-shell](https://github.com/tryproxy/runtime-mf-s
 
 ## Files to touch
 
-| File | Add |
-| ---- | --- |
-| `src/shared/env.d.ts` | `VITE_STORE_REMOTE_MANIFEST_URL?` |
-| `env.example` | Local / documented manifest URL |
-| `src/app/remote-runtime/remote-runtime-composition.ts` | Manifest URL, alias, load request |
-| `src/app/remote-navigation/nav-config.ts` | Module with `pages: []` |
-| `src/shared/i18n/locales/en.ts` (+ `ru.ts` / `es.ts`) | Module label keys |
-| `src/pages/store/` | Thin `RemoteSlot` page |
-| `src/app/routing/route-elements.tsx` | Route composition export |
-| `src/app/routing/app-router.tsx` | Wire into `buildModuleRoutes({ … })` |
+| File                                                          | Add                                            |
+| ------------------------------------------------------------- | ---------------------------------------------- |
+| `src/shared/env.d.ts`                                         | `VITE_STORE_REMOTE_MANIFEST_URL?`              |
+| `env.example`                                                 | Local / documented manifest URL                |
+| `src/app/remote-runtime/remote-runtime-composition.ts`        | Manifest URL, alias, load request              |
+| `src/app/remote-navigation/nav-config.ts`                     | Module with `pages: []`                        |
+| `src/shared/i18n/locales/en.ts` (+ `ru.ts` / `es.ts`)         | Module label keys                              |
+| `src/pages/store/`                                            | Thin `RemoteSlot` page                         |
+| `src/app/routing/route-elements.tsx`                          | Route composition export                       |
+| `src/app/routing/app-router.tsx`                              | Wire into `buildModuleRoutes({ … })`           |
 | `src/app/remote-navigation/remote-nav-manifests-provider.tsx` | Conditional `{ moduleId, federationEntryUrl }` |
 
 ## Env

@@ -5,10 +5,10 @@ Detail for the federation `./mount` path. Summary:
 
 One product app, two entries:
 
-| Entry | When | Owns |
-| ----- | ---- | ---- |
-| `src/main.tsx` (or equivalent) | Standalone SPA | Product chrome, own auth bootstrap, PWA/SW, document analytics |
-| `src/app/entry` → `./mount` | Loaded by the shell | Thin bootstrap only: adapters, providers, router under `basename` |
+| Entry                          | When                | Owns                                                              |
+| ------------------------------ | ------------------- | ----------------------------------------------------------------- |
+| `src/main.tsx` (or equivalent) | Standalone SPA      | Product chrome, own auth bootstrap, PWA/SW, document analytics    |
+| `src/app/entry` → `./mount`    | Loaded by the shell | Thin bootstrap only: adapters, providers, router under `basename` |
 
 Do **not** fork product pages into a second app. Importing `./mount` must not
 run `main.tsx`, register a service worker, write credentials, or create a

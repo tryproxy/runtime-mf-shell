@@ -18,7 +18,7 @@ Research / backlog: [`docs/reserach.local/`](./docs/reserach.local/).
 | Auth UX          | Login / register + `RequireAuth` (UX only; API enforces real authz)        |
 | HostBridge       | Theme, locale, session, navigation, telemetry for remotes                  |
 | Remote Runtime   | `RemoteSlot` loads federation `./mount`, mounts into a DOM node, cleans up |
-| Theme / i18n     | Dark/light + `en`/`ru`/`es`, pushed to remotes via the bridge          |
+| Theme / i18n     | Dark/light + `en`/`ru`/`es`, pushed to remotes via the bridge              |
 
 ## What a remote must provide
 

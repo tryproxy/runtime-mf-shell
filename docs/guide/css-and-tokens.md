@@ -21,16 +21,16 @@ Source of truth:
 
 ## Tokens (PoC)
 
-| Token | Meaning |
-| ----- | ------- |
-| `--rmf-color-page` | Page / canvas background |
-| `--rmf-color-surface` | Card / panel surface |
-| `--rmf-color-fg` | Primary text |
-| `--rmf-color-muted` | Secondary text |
-| `--rmf-color-subtle` | Tertiary / label text |
-| `--rmf-color-border` | Borders |
-| `--rmf-radius-md` | Medium radius |
-| `--rmf-shadow-sm` | Light elevation |
+| Token                 | Meaning                  |
+| --------------------- | ------------------------ |
+| `--rmf-color-page`    | Page / canvas background |
+| `--rmf-color-surface` | Card / panel surface     |
+| `--rmf-color-fg`      | Primary text             |
+| `--rmf-color-muted`   | Secondary text           |
+| `--rmf-color-subtle`  | Tertiary / label text    |
+| `--rmf-color-border`  | Borders                  |
+| `--rmf-radius-md`     | Medium radius            |
+| `--rmf-shadow-sm`     | Light elevation          |
 
 Names are a PoC convention, not a frozen public API yet.
 
@@ -89,10 +89,10 @@ worker from the embedded entry; hide product sidebar/header when embedded.
 
 ## Tailwind version
 
-| Path | Version |
-| ---- | ------- |
-| Product remotes (PostCSS + classic Tailwind), e.g. ASO | **`^3.4`** — preferred |
-| Demo React remote / shell (`@tailwindcss/vite`) | **v4** — greenfield demos |
+| Path                                                   | Version                   |
+| ------------------------------------------------------ | ------------------------- |
+| Product remotes (PostCSS + classic Tailwind), e.g. ASO | **`^3.4`** — preferred    |
+| Demo React remote / shell (`@tailwindcss/vite`)        | **v4** — greenfield demos |
 
 Do not mix v3 PostCSS assumptions with v4’s Vite plugin casually.
 
@@ -105,13 +105,13 @@ scoping on a product stylesheet with preflight.
 
 ## Breakpoints (shell)
 
-| Name | Min | Notes |
-| ---- | --: | ----- |
-| compact | 500px | `--breakpoint-compact` |
-| comfortable | 560px | `--breakpoint-comfortable` |
-| sm | 640px | Tailwind default |
-| wideMobile | 740px | `--breakpoint-wideMobile` |
-| md / lg / xl | 768 / 1024 / 1280 | Tailwind defaults |
+| Name         |               Min | Notes                      |
+| ------------ | ----------------: | -------------------------- |
+| compact      |             500px | `--breakpoint-compact`     |
+| comfortable  |             560px | `--breakpoint-comfortable` |
+| sm           |             640px | Tailwind default           |
+| wideMobile   |             740px | `--breakpoint-wideMobile`  |
+| md / lg / xl | 768 / 1024 / 1280 | Tailwind defaults          |
 
 Defined in shell
 [`breakpoints.ts`](https://github.com/tryproxy/runtime-mf-shell/blob/dev/src/shared/config/breakpoints.ts)

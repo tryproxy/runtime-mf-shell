@@ -43,7 +43,7 @@ function omitUnavailableSsrEntry(stats: Record<string, unknown>) {
   return {
     ...stats,
     metaData: Object.fromEntries(
-      Object.entries(metaData).filter(([key]) => key !== 'ssrRemoteEntry'),
+      Object.entries(metaData).filter(([key]) => key !== 'ssrRemoteEntry')
     ),
   };
 }
@@ -73,10 +73,10 @@ Use a free port (`5001` / `5002` are demo remotes). Shell must be allowed by COR
 
 ## Do / don’t
 
-| Do | Don’t |
-| -- | ----- |
-| Expose only `./mount` for the lifecycle | Import standalone `main.tsx` into the expose graph |
-| Import embedded CSS from mount only | Enable `bundleAllCSS` blindly |
+| Do                                            | Don’t                                                                       |
+| --------------------------------------------- | --------------------------------------------------------------------------- |
+| Expose only `./mount` for the lifecycle       | Import standalone `main.tsx` into the expose graph                          |
+| Import embedded CSS from mount only           | Enable `bundleAllCSS` blindly                                               |
 | Register `rmfNavJson()` so `/nav.json` exists | Rely on SPA fallback for `mf-manifest.json` / `remoteEntry.js` / `nav.json` |
 
 ## After build / before shell wiring
