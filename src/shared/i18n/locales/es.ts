@@ -97,10 +97,8 @@ export const es = {
     testUserLogin: 'Entrar como usuario de prueba',
     or: 'o',
     asoLoginDescription:
-      'Inicia sesión con el email y la contraseña de ASO Admin para abrir el remote del producto.',
+      'Introduce tu email y contraseña en ASO para acceder al producto.',
     asoLoginSubmit: 'Entrar en ASO',
-    asoNoShellRegister:
-      'Crea las cuentas en ASO Admin; este shell solo inicia sesión.',
     registerDisabledHint:
       'El registro del Nest demo API en el shell está temporalmente desactivado. Crea una cuenta en ASO Admin y luego inicia sesión aquí.',
     asoToken: 'ASO access token',

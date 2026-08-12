@@ -96,9 +96,8 @@ export const ru = {
     testUserLogin: 'Войти как тестовый пользователь',
     or: 'или',
     asoLoginDescription:
-      'Войдите с email и паролем ASO Admin, чтобы открыть продуктовый remote.',
+      'Введите email и пароль в ASO, чтобы получить доступ к продукту.',
     asoLoginSubmit: 'Войти в ASO',
-    asoNoShellRegister: 'Аккаунты создаются в ASO Admin; здесь только вход.',
     registerDisabledHint:
       'Регистрация Nest demo API в shell временно отключена. Создайте аккаунт в ASO Admin, затем войдите здесь.',
     asoToken: 'ASO access token',

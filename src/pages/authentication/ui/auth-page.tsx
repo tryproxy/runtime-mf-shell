@@ -457,12 +457,8 @@ export function AuthPage({
             </form>
             */}
           </CardContent>
-          <CardFooter className="justify-center">
-            {isLogin ? (
-              <p className="text-muted-foreground text-sm">
-                {t('auth.asoNoShellRegister')}
-              </p>
-            ) : (
+          {isLogin ? null : (
+            <CardFooter className="justify-center">
               <p className="text-muted-foreground text-sm">
                 {t('auth.hasAccount')}{' '}
                 <button
@@ -475,8 +471,8 @@ export function AuthPage({
                   {t('auth.goLogin')}
                 </button>
               </p>
-            )}
-          </CardFooter>
+            </CardFooter>
+          )}
         </Card>
       </main>
     </div>
