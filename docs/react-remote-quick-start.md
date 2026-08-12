@@ -29,7 +29,7 @@ different identifiers.
 ### 1. Install the platform packages
 
 ```bash
-pnpm add 'github:tryproxy/runtime-mf-contract#v0.5.1'
+pnpm add 'github:tryproxy/runtime-mf-contract#v0.5.2'
 pnpm add 'github:tryproxy/runtime-mf-adapters#v0.1.2'
 pnpm add -D '@module-federation/vite@^1.20.5'
 ```

@@ -98,7 +98,7 @@ independent repositories.
 With pnpm:
 
 ```bash
-pnpm add 'github:tryproxy/runtime-mf-contract#v0.5.1'
+pnpm add 'github:tryproxy/runtime-mf-contract#v0.5.2'
 pnpm add 'github:tryproxy/runtime-mf-adapters#v0.1.2'
 pnpm add -D '@module-federation/vite@^1.20.5'
 ```
@@ -106,7 +106,7 @@ pnpm add -D '@module-federation/vite@^1.20.5'
 With npm:
 
 ```bash
-npm install 'github:tryproxy/runtime-mf-contract#v0.5.1'
+npm install 'github:tryproxy/runtime-mf-contract#v0.5.2'
 npm install 'github:tryproxy/runtime-mf-adapters#v0.1.2'
 npm install --save-dev '@module-federation/vite@^1.20.5'
 ```

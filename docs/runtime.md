@@ -12,7 +12,7 @@ Brief operator guide for the current PoC. Deeper research lives in [`docs/resera
 | `runtime-mf-contract`       | `@platform/runtime-mf-contract` — types, runtime parsers and mock bridge        |
 | `runtime-mf-adapters`       | `@platform/runtime-mf-adapters` — React and Angular lifecycle implementations   |
 
-Install contract: `pnpm add 'github:tryproxy/runtime-mf-contract#v0.5.1'`.
+Install contract: `pnpm add 'github:tryproxy/runtime-mf-contract#v0.5.2'`.
 The shell and all current remotes pin this release, including its shell-owned
 `bridge.auth.signOut()` capability.
 
