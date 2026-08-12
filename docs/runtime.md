@@ -2,6 +2,9 @@
 
 Brief operator guide for the current PoC. Deeper research lives in [`docs/reserach.local/`](./reserach.local/) — start with [POC-STATUS.md](./reserach.local/POC-STATUS.md).
 
+**Connect a React product remote:** [guide/react-remote.md](./guide/react-remote.md)
+([guide index](./guide/README.md)).
+
 ## Repositories
 
 | Repo                        | Role                                                                            |
@@ -99,8 +102,7 @@ The shell currently derives `nav.json` from each federation-manifest origin. Thi
 
 ## Further reading
 
-- [react-remote-quick-start.md](./react-remote-quick-start.md) — minimal React remote onboarding checklist
-- [adding-a-new-remote.md](./adding-a-new-remote.md) — create, deploy, and statically register a new remote project
+- [guide/react-remote.md](./guide/react-remote.md) — connect a Vite + React product remote ([index](./guide/README.md))
 - [POC-STATUS.md](./reserach.local/POC-STATUS.md) — what is ready
 - [phases.md](./reserach.local/phases.md) — active delivery sequence
 - [repository-map.md](./reserach.local/reference/repository-map.md) — FSD layout
