@@ -139,7 +139,7 @@ export function AuthPage({
   }
 
   return (
-    <div className="bg-background text-foreground flex min-h-svh flex-col">
+    <div className="bg-background text-foreground flex h-full min-h-0 flex-col overflow-y-auto overscroll-contain">
       <header className="flex items-center justify-between gap-3 px-4 py-3">
         <p className="text-sm font-semibold tracking-tight">
           {t('shell.brand')}

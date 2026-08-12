@@ -234,7 +234,7 @@ export function AppShell({
         <ShellAccountFooter account={account} />
       </aside>
 
-      <main className="bg-background wideMobile:p-6 min-h-0 min-w-0 overflow-x-auto overflow-y-auto p-4 md:col-start-2 md:row-start-2">
+      <main className="bg-background wideMobile:p-6 min-h-0 min-w-0 overflow-x-auto overflow-y-auto overscroll-contain p-4 md:col-start-2 md:row-start-2">
         {children}
       </main>
 

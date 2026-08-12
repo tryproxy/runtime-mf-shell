@@ -185,6 +185,14 @@ html.dark [data-slot='radio-group-item'] {
     @apply border-border outline-ring/50;
   }
 
+  /* App shell owns vertical scroll inside layout panes — never the document. */
+  html,
+  body,
+  #root {
+    height: 100%;
+    overflow: hidden;
+  }
+
   body {
     @apply bg-background text-foreground m-0 min-w-80;
   }
