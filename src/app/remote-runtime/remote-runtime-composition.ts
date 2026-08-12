@@ -64,7 +64,9 @@ const remoteRequests: Record<string, string> = {
   aso: 'aso_remote/mount',
 };
 
-const asoRemoteManifestUrl = import.meta.env.VITE_ASO_REMOTE_MANIFEST_URL;
+const asoRemoteManifestUrl =
+  import.meta.env.VITE_ASO_REMOTE_MANIFEST_URL ||
+  'http://localhost:5003/mf-manifest.json';
 
 function unwrapFederationModule(value: unknown): unknown {
   if (typeof value !== 'object' || value === null || 'mount' in value) {
@@ -91,28 +93,16 @@ const federationRuntime = createInstance({
         import.meta.env.VITE_ANGULAR_REMOTE_MANIFEST_URL ||
         'http://localhost:5002/mf-manifest.json',
     },
-    ...(asoRemoteManifestUrl
-      ? [
-          {
-            name: 'aso_market_admin',
-            alias: 'aso_remote',
-            entry: asoRemoteManifestUrl,
-          },
-        ]
-      : []),
+    {
+      name: 'aso_market_admin',
+      alias: 'aso_remote',
+      entry: asoRemoteManifestUrl,
+    },
   ],
 });
 
 export const shellRemoteRuntimeAdapters = {
   loadRemote(remoteId: string) {
-    if (remoteId === 'aso' && !asoRemoteManifestUrl) {
-      return Promise.reject(
-        new Error(
-          'ASO remote is not configured. Set VITE_ASO_REMOTE_MANIFEST_URL to its deployed mf-manifest.json.'
-        )
-      );
-    }
-
     const request = remoteRequests[remoteId];
 
     if (!request) {

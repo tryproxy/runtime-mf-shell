@@ -95,6 +95,14 @@ export const ru = {
     goRegisterPage: 'Регистрация',
     testUserLogin: 'Войти как тестовый пользователь',
     or: 'или',
+    asoToken: 'ASO access token',
+    asoTokenExampleHint:
+      'Вставьте только значение токена — не JSON, не имя ключа, не “Bearer”.',
+    asoTokenExample:
+      'Пример: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkw.…',
+    asoTokenPlaceholder: 'Вставьте access token',
+    asoTokenRequired: 'Вставьте ASO access token, чтобы продолжить.',
+    asoTestUserLogin: 'Войти как ASO test user',
     accountLoading: 'Загрузка…',
     accountFallback: 'Аккаунт',
   },

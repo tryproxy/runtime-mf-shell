@@ -1,5 +1,5 @@
 import { submitAuth } from '../api/submit-auth';
-import { persistSession } from '@/shared/auth';
+import { persistAccessToken, persistSession } from '@/shared/auth';
 import type { ShellTheme } from '@/shared/config';
 import { APP_LOCALES, isAppLocale, type AppLocale } from '@/shared/i18n';
 import {
@@ -72,6 +72,7 @@ export function AuthPage({
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [username, setUsername] = useState('');
+  const [asoAccessToken, setAsoAccessToken] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
@@ -117,6 +118,24 @@ export function AuthPage({
     } finally {
       setPending(false);
     }
+  }
+
+  function loginAsAsoTestUser(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const accessToken = asoAccessToken.trim();
+
+    if (!accessToken) {
+      setError(t('auth.asoTokenRequired'));
+      return;
+    }
+
+    setError(null);
+    persistAccessToken(accessToken);
+    const asoTarget =
+      redirectTo === '/aso' || redirectTo.startsWith('/aso/')
+        ? redirectTo
+        : '/aso';
+    void navigate(asoTarget, { replace: true });
   }
 
   return (
@@ -276,6 +295,57 @@ export function AuthPage({
                 </Button>
               </div>
             </form>
+
+            {isLogin ? (
+              <>
+                <div className="text-muted-foreground my-4 flex items-center gap-3 text-xs font-medium tracking-wide uppercase">
+                  <span aria-hidden className="bg-border h-px flex-1" />
+                  {t('auth.or')}
+                  <span aria-hidden className="bg-border h-px flex-1" />
+                </div>
+                <form
+                  noValidate
+                  className="space-y-4"
+                  onSubmit={loginAsAsoTestUser}
+                >
+                  <div className="space-y-2">
+                    <Label htmlFor="auth-aso-token">{t('auth.asoToken')}</Label>
+                    <p className="text-muted-foreground text-xs leading-relaxed">
+                      {t('auth.asoTokenExampleHint')}
+                    </p>
+                    <p
+                      className="bg-muted/60 text-muted-foreground rounded-md px-3 py-2 font-mono text-[11px] leading-snug break-all"
+                      aria-hidden
+                    >
+                      {t('auth.asoTokenExample')}
+                    </p>
+                    <Input
+                      id="auth-aso-token"
+                      name="asoAccessToken"
+                      type="password"
+                      autoComplete="off"
+                      value={asoAccessToken}
+                      placeholder={t('auth.asoTokenPlaceholder')}
+                      className="h-11 px-3"
+                      onChange={(event) => {
+                        setAsoAccessToken(event.target.value);
+                        if (error) {
+                          setError(null);
+                        }
+                      }}
+                    />
+                  </div>
+                  <Button
+                    type="submit"
+                    variant="outline"
+                    className="h-11 w-full"
+                    disabled={pending}
+                  >
+                    {t('auth.asoTestUserLogin')}
+                  </Button>
+                </form>
+              </>
+            ) : null}
           </CardContent>
           <CardFooter className="justify-center">
             {isLogin ? (

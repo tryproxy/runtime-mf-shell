@@ -95,6 +95,14 @@ export const en = {
     goRegisterPage: 'Register',
     testUserLogin: 'Log in as test user',
     or: 'or',
+    asoToken: 'ASO access token',
+    asoTokenExampleHint:
+      'Paste only the token value — not JSON, not the key name, not “Bearer”.',
+    asoTokenExample:
+      'Example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkw.…',
+    asoTokenPlaceholder: 'Paste access token',
+    asoTokenRequired: 'Paste an ASO access token to continue.',
+    asoTestUserLogin: 'Sign in as ASO test user',
     accountLoading: 'Loading…',
     accountFallback: 'Account',
   },

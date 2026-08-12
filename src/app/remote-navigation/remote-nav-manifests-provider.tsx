@@ -8,7 +8,9 @@ import { useEffect, useState, type PropsWithChildren } from 'react';
 const DEFAULT_REMOTE_MANIFEST_URL = 'http://localhost:5001/mf-manifest.json';
 const DEFAULT_ANGULAR_REMOTE_MANIFEST_URL =
   'http://localhost:5002/mf-manifest.json';
-const asoRemoteManifestUrl = import.meta.env.VITE_ASO_REMOTE_MANIFEST_URL;
+const asoRemoteManifestUrl =
+  import.meta.env.VITE_ASO_REMOTE_MANIFEST_URL ||
+  'http://localhost:5003/mf-manifest.json';
 
 const REMOTE_SOURCES = [
   {
