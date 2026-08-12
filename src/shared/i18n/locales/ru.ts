@@ -95,6 +95,12 @@ export const ru = {
     goRegisterPage: 'Регистрация',
     testUserLogin: 'Войти как тестовый пользователь',
     or: 'или',
+    asoLoginDescription:
+      'Войдите с email и паролем ASO Admin, чтобы открыть продуктовый remote.',
+    asoLoginSubmit: 'Войти в ASO',
+    asoNoShellRegister: 'Аккаунты создаются в ASO Admin; здесь только вход.',
+    registerDisabledHint:
+      'Регистрация Nest demo API в shell временно отключена. Создайте аккаунт в ASO Admin, затем войдите здесь.',
     asoToken: 'ASO access token',
     asoTokenExampleHint:
       'Вставьте только значение токена — не JSON, не имя ключа, не “Bearer”.',
@@ -102,7 +108,7 @@ export const ru = {
       'Пример: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkw.…',
     asoTokenPlaceholder: 'Вставьте access token',
     asoTokenRequired: 'Вставьте ASO access token, чтобы продолжить.',
-    asoTestUserLogin: 'Войти как ASO test user',
+    asoTestUserLogin: 'Войти по access token',
     accountLoading: 'Загрузка…',
     accountFallback: 'Аккаунт',
   },

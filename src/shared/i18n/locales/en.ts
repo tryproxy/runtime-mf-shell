@@ -95,6 +95,13 @@ export const en = {
     goRegisterPage: 'Register',
     testUserLogin: 'Log in as test user',
     or: 'or',
+    asoLoginDescription:
+      'Sign in with your ASO Admin email and password to open the product remote.',
+    asoLoginSubmit: 'Sign in to ASO',
+    asoNoShellRegister:
+      'Create accounts in ASO Admin; this shell only signs in.',
+    registerDisabledHint:
+      'Shell registration for the Nest demo API is temporarily disabled. Use ASO Admin to create a product account, then sign in here.',
     asoToken: 'ASO access token',
     asoTokenExampleHint:
       'Paste only the token value — not JSON, not the key name, not “Bearer”.',
@@ -102,7 +109,7 @@ export const en = {
       'Example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkw.…',
     asoTokenPlaceholder: 'Paste access token',
     asoTokenRequired: 'Paste an ASO access token to continue.',
-    asoTestUserLogin: 'Sign in as ASO test user',
+    asoTestUserLogin: 'Sign in with access token',
     accountLoading: 'Loading…',
     accountFallback: 'Account',
   },
