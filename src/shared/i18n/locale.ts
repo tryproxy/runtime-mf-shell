@@ -12,5 +12,5 @@ export function isAppLocale(
 
 /** Spanish shell chrome uses English resources until translations are supplied. */
 export function toRemoteLocale(locale: AppLocale): RemoteAppLocale {
-  return locale === 'es' ? 'en' : locale;
+  return locale;
 }

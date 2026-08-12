@@ -147,7 +147,7 @@ export function AppShell({
               <SelectTrigger size="sm" aria-label={t('shell.language')}>
                 <SelectValue />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent align="end">
                 {APP_LOCALES.map((code) => (
                   <SelectItem key={code} value={code}>
                     {code.toUpperCase()}

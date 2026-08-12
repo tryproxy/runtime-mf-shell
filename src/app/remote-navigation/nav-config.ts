@@ -5,6 +5,7 @@ import { toRemoteLocale, type AppLocale } from '@/shared/i18n';
 export type NavPageLabel = {
   en: string;
   ru: string;
+  es?: string;
 };
 
 export type NavPage = {

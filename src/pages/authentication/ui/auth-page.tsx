@@ -184,7 +184,7 @@ export function AuthPage({
             >
               <SelectValue />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent align="end">
               {APP_LOCALES.map((item) => (
                 <SelectItem key={item} value={item}>
                   {item.toUpperCase()}
