@@ -72,9 +72,9 @@ export const ru = {
     registerTitle: 'Регистрация',
     registerDescription: 'Заполните форму, чтобы создать аккаунт.',
     email: 'Email',
-    emailPlaceholder: 'you@example.com',
+    emailPlaceholder: 'testabc5@test.ru',
     password: 'Пароль',
-    passwordPlaceholder: '1Qwe-rty',
+    passwordPlaceholder: 'testabc5',
     passwordHint:
       'Минимум 8 символов: заглавная, строчная, цифра и символ (например 1Qwe-rty).',
     showPassword: 'Показать пароль',

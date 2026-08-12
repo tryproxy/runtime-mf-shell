@@ -73,9 +73,9 @@ export const es = {
     registerTitle: 'Crear cuenta',
     registerDescription: 'Completa el formulario para registrarte.',
     email: 'Email',
-    emailPlaceholder: 'you@example.com',
+    emailPlaceholder: 'testabc5@test.ru',
     password: 'Contraseña',
-    passwordPlaceholder: '1Qwe-rty',
+    passwordPlaceholder: 'testabc5',
     passwordHint:
       'Mín. 8 caracteres, con mayúscula, minúscula, número y símbolo (p. ej. 1Qwe-rty).',
     showPassword: 'Mostrar contraseña',

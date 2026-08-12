@@ -72,9 +72,9 @@ export const en = {
     registerTitle: 'Create account',
     registerDescription: 'Fill in the form to register.',
     email: 'Email',
-    emailPlaceholder: 'you@example.com',
+    emailPlaceholder: 'testabc5@test.ru',
     password: 'Password',
-    passwordPlaceholder: '1Qwe-rty',
+    passwordPlaceholder: 'testabc5',
     passwordHint:
       'Min 8 chars, with upper, lower, number, and symbol (e.g. 1Qwe-rty).',
     showPassword: 'Show password',

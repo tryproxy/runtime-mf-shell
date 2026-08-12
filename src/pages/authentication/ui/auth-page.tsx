@@ -25,11 +25,11 @@ import { useLocation, useNavigate } from 'react-router-dom';
 
 export type AuthMode = 'login' | 'register';
 
-/** PoC-only one-click Nest login credentials (kept for restore). */
-// const TEST_USER = {
-//   email: 'user@mail.com',
-//   password: '1Qwe-rty',
-// } as const;
+/** PoC-only one-click ASO login credentials. */
+const TEST_USER = {
+  email: 'testabc5@test.ru',
+  password: 'testabc5',
+} as const;
 
 type AuthPageProps = {
   mode: AuthMode;
@@ -149,6 +149,26 @@ export function AuthPage({
     }
   }
 
+  async function loginAsAsoTestUser() {
+    setEmail(TEST_USER.email);
+    setPassword(TEST_USER.password);
+    setError(null);
+    setPending(true);
+
+    try {
+      const { accessToken } = await submitAsoLogin(
+        TEST_USER.email,
+        TEST_USER.password,
+      );
+      persistSession(accessToken, TEST_USER.email);
+      void navigate(resolveAsoPath(redirectTo), { replace: true });
+    } catch (err) {
+      setError(err instanceof Error ? err.message : t('auth.errorGeneric'));
+    } finally {
+      setPending(false);
+    }
+  }
+
   function loginAsAsoToken(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const accessToken = asoAccessToken.trim();
@@ -210,16 +230,16 @@ export function AuthPage({
             <CardTitle>
               {isLogin ? t('auth.loginTitle') : t('auth.registerTitle')}
             </CardTitle>
-            {/* Nest PoC one-click test user — restore with Nest form below.
-            <button
-              type="button"
-              className="text-foreground mt-3 h-12 w-full cursor-pointer rounded-md border border-dashed bg-transparent px-4 text-sm font-medium underline-offset-4 hover:underline disabled:cursor-not-allowed disabled:opacity-50"
-              disabled={pending}
-              onClick={() => void loginAsNestTestUser()}
-            >
-              {t('auth.testUserLogin')}
-            </button>
-            */}
+            {isLogin ? (
+              <button
+                type="button"
+                className="text-foreground mt-3 h-12 w-full cursor-pointer rounded-md border border-dashed bg-transparent px-4 text-sm font-medium underline-offset-4 hover:underline disabled:cursor-not-allowed disabled:opacity-50"
+                disabled={pending}
+                onClick={() => void loginAsAsoTestUser()}
+              >
+                {t('auth.testUserLogin')}
+              </button>
+            ) : null}
           </CardHeader>
           <CardContent>
             {isLogin ? (
