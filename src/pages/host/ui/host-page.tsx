@@ -24,7 +24,7 @@ export function HostPage() {
   }
 
   return (
-    <section className="wideMobile:p-6 space-y-6 p-4">
+    <section className="space-y-6">
       <div>
         <h3 className="text-lg font-semibold tracking-tight">
           {t('host.title')}

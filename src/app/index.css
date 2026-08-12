@@ -14,7 +14,8 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  --background: oklch(1 0 0);
+  /* Match ASO page canvas (hsl 0 0% 98%) so remote-slot padding blends. */
+  --background: hsl(0 0% 98%);
   --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.145 0 0);
@@ -92,7 +93,8 @@
 }
 
 .dark {
-  --background: oklch(0.145 0 0);
+  /* Match ASO page canvas (hsl 0 0% 9%) so remote-slot padding blends. */
+  --background: hsl(0 0% 9%);
   --foreground: oklch(0.985 0 0);
   --card: oklch(0.205 0 0);
   --card-foreground: oklch(0.985 0 0);
