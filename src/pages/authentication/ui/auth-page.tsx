@@ -158,7 +158,7 @@ export function AuthPage({
     try {
       const { accessToken } = await submitAsoLogin(
         TEST_USER.email,
-        TEST_USER.password,
+        TEST_USER.password
       );
       persistSession(accessToken, TEST_USER.email);
       void navigate(resolveAsoPath(redirectTo), { replace: true });
