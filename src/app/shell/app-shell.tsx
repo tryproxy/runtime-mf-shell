@@ -7,6 +7,7 @@ import {
   type NavPage,
 } from '@/app/remote-navigation/nav-config';
 import { useNavModules } from '@/app/remote-navigation/use-nav-modules';
+import { useRemoteNavManifests } from '@/app/remote-navigation/use-remote-nav-manifests';
 import { useActiveNav } from '@/app/routing/use-active-nav';
 import { useShellAccount } from '@/app/model/use-shell-account';
 import { AppNavSwitcher } from '@/app/shell/app-nav-switcher';
@@ -61,19 +62,25 @@ export function AppShell({
   const { t } = useTranslation();
   const navigate = useNavigate();
   const navModules = useNavModules();
+  const { ensureNav } = useRemoteNavManifests();
   const { module: activeModule, page: activePage } = useActiveNav();
   const account = useShellAccount();
   const isDark = theme === 'dark';
+  const activeHasPages = moduleHasPages(activeModule);
 
   const [navLayer, setNavLayer] = useState<NavLayer>(() =>
-    moduleHasPages(activeModule) ? 'pages' : 'modules'
+    activeHasPages ? 'pages' : 'modules'
   );
   const [browsedModuleId, setBrowsedModuleId] = useState(activeModule.id);
 
   useEffect(() => {
+    void ensureNav(activeModule.id);
+  }, [activeModule.id, ensureNav]);
+
+  useEffect(() => {
     setBrowsedModuleId(activeModule.id);
-    setNavLayer(moduleHasPages(activeModule) ? 'pages' : 'modules');
-  }, [activeModule]);
+    setNavLayer(activeHasPages ? 'pages' : 'modules');
+  }, [activeModule.id, activeHasPages]);
 
   const layerModule =
     navLayer === 'pages'
