@@ -7,13 +7,14 @@ Brief operator guide for the current PoC. Deeper research lives in [`docs/resera
 
 ## Repositories
 
-| Repo                        | Role                                                                            |
-| --------------------------- | ------------------------------------------------------------------------------- |
-| `runtime-mf-shell`          | React host (layout, React Router, auth, Remote Runtime)                         |
-| `runtime-mf-module`         | React remote (`runtime_mf_module`, alias `demo_remote`, port 5001)              |
-| `runtime-mf-module-angular` | Angular remote (`runtime_mf_module_angular`, alias `angular_remote`, port 5002) |
-| `runtime-mf-contract`       | `@platform/runtime-mf-contract` — types, runtime parsers and mock bridge        |
-| `runtime-mf-adapters`       | `@platform/runtime-mf-adapters` — React and Angular lifecycle implementations   |
+| Repo                              | Role                                                                                              |
+| --------------------------------- | ------------------------------------------------------------------------------------------------- |
+| `runtime-mf-shell`                | React host (layout, React Router, auth, Remote Runtime, host Playwright)                          |
+| `runtime-mf-module`               | React demo remote (`runtime_mf_module`, alias `demo_remote`, port 5001)                           |
+| `runtime-mf-module-angular`       | Angular remote (`runtime_mf_module_angular`, alias `angular_remote`, port 5002)                   |
+| `runtime-mf-react-remote-starter` | Neutralized React template copy (`starter`, port 5004). Not registered; not a published template. |
+| `runtime-mf-contract`             | `@platform/runtime-mf-contract` — types, runtime parsers and mock bridge                          |
+| `runtime-mf-adapters`             | `@platform/runtime-mf-adapters` — React and Angular lifecycle implementations                     |
 
 Install contract: `pnpm add 'github:tryproxy/runtime-mf-contract#v0.5.2'`.
 The shell and all current remotes pin this release, including its shell-owned
@@ -46,6 +47,7 @@ containment follows only from observed browser conflicts.
 | ------------------------ | ------------------------------------------------------------------------------------ |
 | App composition / router | `src/app/app.tsx`, `src/app/main.tsx`                                                |
 | Nav data → routes        | `src/app/remote-navigation/nav-config.ts`, `src/app/routing/build-module-routes.tsx` |
+| Nav.json sources         | `src/app/remote-navigation/remote-nav-sources.ts`                                    |
 | Auth guard               | `src/app/routing/require-auth.tsx`                                                   |
 | Chrome                   | `src/app/shell/app-shell.tsx`                                                        |
 | HostBridge               | `src/remote-runtime/lib/create-host-bridge.ts`                                       |
@@ -77,8 +79,11 @@ not the remote, clears its session and redirects to `/login`.
 ## Local run (typical)
 
 - Nest API ~`:3000` — set `VITE_API_BASE_URL` to the API host (not the shell).
-- Shell ~`:5000`, React remote ~`:5001`, Angular remote ~`:5002`; run `pnpm dev` in each frontend repository.
-- Shell CORS origin must match without trailing slash.
+- Shell ~`:5000`, React demo ~`:5001`, Angular ~`:5002`; ASO (if running) ~`:5003`.
+- React starter ~`:5004` when working on that repository. The shell does not
+  register it; do not expect `/starter` until a temporary onboarding change.
+- Run `pnpm dev` in each frontend repository you need. Shell CORS origin must
+  match without trailing slash.
 
 Running each remote with `pnpm dev` is sufficient for local shell development. A production or preview shell must instead point to deployed production artifacts; it must not depend on a remote development server.
 
@@ -102,14 +107,20 @@ see `auth.setup.ts`.
 
 ## Static remote configuration
 
-The current shell reads two build-time variables:
+The current shell reads build-time variables for each registered remote:
 
 ```dotenv
 VITE_REMOTE_MANIFEST_URL=https://runtime-mf-module.vercel.app/mf-manifest.json
 VITE_ANGULAR_REMOTE_MANIFEST_URL=https://runtime-mf-module-angular.vercel.app/mf-manifest.json
+# Unset falls back to http://localhost:5003/mf-manifest.json
+VITE_ASO_REMOTE_MANIFEST_URL=https://<aso-host>/mf-manifest.json
 ```
 
-Set them in the shell deployment environment and redeploy the shell. Each remote origin must serve `mf-manifest.json`, `remoteEntry.js`, referenced chunks, CSS, fonts, assets, and the current PoC `nav.json`, with the shell origin allowed by CORS.
+There is no `VITE_STARTER_REMOTE_MANIFEST_URL` until someone registers that
+remote. Set the variables that exist in the shell deployment environment and
+redeploy the shell. Each remote origin must serve `mf-manifest.json`,
+`remoteEntry.js`, referenced chunks, CSS, fonts, assets, and the current PoC
+`nav.json`, with the shell origin allowed by CORS.
 
 The shell currently derives `nav.json` from each federation-manifest origin. This is PoC behavior, not the future artifact/registry contract.
 
@@ -123,6 +134,7 @@ The shell currently derives `nav.json` from each federation-manifest origin. Thi
 
 - [guide/react-remote.md](./guide/react-remote.md) — connect a Vite + React product remote ([index](./guide/README.md))
 - [e2e/README.md](../e2e/README.md) — host Playwright suite
+- [React remote starter task](./reserach.local/tasks/react-remote-starter.md) — in-progress template
 - [POC-STATUS.md](./reserach.local/POC-STATUS.md) — what is ready
 - [phases.md](./reserach.local/phases.md) — active delivery sequence
 - [repository-map.md](./reserach.local/reference/repository-map.md) — FSD layout

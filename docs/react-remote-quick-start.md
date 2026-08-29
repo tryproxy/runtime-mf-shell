@@ -22,7 +22,9 @@ This guide uses a fictional Billing remote:
 | Shell env variable     | `VITE_BILLING_REMOTE_MANIFEST_URL` |
 
 Replace `billing` consistently. The module id, federation name, and alias are
-different identifiers.
+different identifiers. Local ports `5000`–`5004` are already used (shell, React
+demo, Angular, ASO, React starter). The `5003` values below are a fictional
+example — pick an unused port.
 
 ## React remote repository
 
@@ -164,18 +166,19 @@ Keep `shared: {}`. Do not enable `bundleAllCSS` by default.
 
 Current onboarding is static, so update every row below and redeploy the shell.
 
-| Shell file                                                    | Add                                                                          |
-| ------------------------------------------------------------- | ---------------------------------------------------------------------------- |
-| `src/shared/env.d.ts`                                         | Optional `VITE_BILLING_REMOTE_MANIFEST_URL`                                  |
-| `env.example`                                                 | Local manifest URL                                                           |
-| `src/app/remote-runtime/remote-runtime-composition.ts`        | Manifest variable, load request, federation descriptor, missing-config error |
-| `src/app/remote-navigation/nav-config.ts`                     | Top-level module with `pages: []`                                            |
-| `src/shared/i18n/locales/en.ts`                               | Module label and description                                                 |
-| `src/shared/i18n/locales/ru.ts`                               | Module label and description                                                 |
-| `src/pages/billing/`                                          | Thin `RemoteSlot` page and public export                                     |
-| `src/app/routing/route-elements.tsx`                          | `BillingRoute` composition                                                   |
-| `src/app/routing/app-router.tsx`                              | `billing: <BillingRoute />`                                                  |
-| `src/app/remote-navigation/remote-nav-manifests-provider.tsx` | Conditional `nav.json` source                                                |
+| Shell file                                             | Add                                                                          |
+| ------------------------------------------------------ | ---------------------------------------------------------------------------- |
+| `src/shared/env.d.ts`                                  | Optional `VITE_BILLING_REMOTE_MANIFEST_URL`                                  |
+| `env.example`                                          | Local manifest URL                                                           |
+| `src/app/remote-runtime/remote-runtime-composition.ts` | Manifest variable, load request, federation descriptor, missing-config error |
+| `src/app/remote-navigation/nav-config.ts`              | Top-level module with `pages: []`                                            |
+| `src/shared/i18n/locales/en.ts`                        | Module label and description                                                 |
+| `src/shared/i18n/locales/ru.ts`                        | Module label and description                                                 |
+| `src/shared/i18n/locales/es.ts`                        | Module label and description                                                 |
+| `src/pages/billing/`                                   | Thin `RemoteSlot` page and public export                                     |
+| `src/app/routing/route-elements.tsx`                   | `BillingRoute` composition                                                   |
+| `src/app/routing/app-router.tsx`                       | `billing: <BillingRoute />`                                                  |
+| `src/app/remote-navigation/remote-nav-sources.ts`      | Conditional `{ moduleId, federationEntryUrl }`                               |
 
 Environment declaration and local value:
 
@@ -230,7 +233,9 @@ Add its route element to `buildModuleRoutes()`:
 billing: <BillingRoute />,
 ```
 
-Add the conditional navigation source:
+Add the same module to `REMOTE_NAV_SOURCES` in
+`src/app/remote-navigation/remote-nav-sources.ts` (the provider only
+subscribes and calls `ensureNav`; it is not the source table):
 
 ```ts
 const billingManifestUrl = import.meta.env.VITE_BILLING_REMOTE_MANIFEST_URL;

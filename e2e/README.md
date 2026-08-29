@@ -38,6 +38,9 @@ pnpm test:e2e:ui
 pnpm test:e2e:report
 ```
 
+UI mode has two Playwright projects: `setup` (login) then `chromium` (the
+specs). Enable both in the Projects filter or you only see `auth.setup.ts`.
+
 Already running servers are reused outside CI. To point at deployed origins
 without starting Vite:
 
@@ -50,8 +53,10 @@ pnpm test:e2e
 
 ## Coordinates
 
-Defaults target the current React demo remote. Override them to reuse the
-suite against a temporarily registered starter later.
+Defaults target the registered React demo. The starter exists as a sibling
+repository on `:5004` but is **not** a shell module. Coordinate overrides
+only work after a temporary registration (and with `E2E_SKIP_WEBSERVER=1` as
+below).
 
 | Variable                     | Default                 |
 | ---------------------------- | ----------------------- |
@@ -70,6 +75,29 @@ suite against a temporarily registered starter later.
 
 Set `E2E_REMOTE_CRASH_PATH=` or `E2E_REMOTE_FORM_PATH=` (empty) to skip the
 demo-only crash or portal surfaces.
+
+`pnpm test:e2e` auto-starts the shell and, when
+`../runtime-mf-module/package.json` exists, that demo on **its** Vite port
+(`:5001`). `E2E_REMOTE_DEV_URL` only changes the URL Playwright waits on; it
+does not retarget the webServer cwd. To reuse the suite against a temporarily
+registered starter (`:5004`) or any other remote: start shell and that remote
+yourself, then set `E2E_SKIP_WEBSERVER=1` plus the coordinate overrides.
+
+The starter is not registered in the shell. Overriding paths without a
+temporary onboarding change will not open `/starter`.
+
+## Locators and probes
+
+Production UI does not depend on these. Tests do:
+
+| Seam                                     | Where                                       | Role                                        |
+| ---------------------------------------- | ------------------------------------------- | ------------------------------------------- |
+| `data-rmf-slot` / `data-rmf-slot-status` | `RemoteSlot`                                | Wait until that remote is `ready`           |
+| `data-rmf-shell="sidebar"` / `"header"`  | app chrome                                  | Chrome metric snapshots                     |
+| `window.__RMF_E2E__`                     | `src/remote-runtime/lib/e2e-observation.ts` | Count `RemoteRuntime.start()` per remote id |
+
+The observation helper is a no-op unless a test installed `__RMF_E2E__` before
+boot (the fixture does this and mirrors the count into `sessionStorage`).
 
 ## Gaps
 

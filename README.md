@@ -54,6 +54,7 @@ Page → RemoteSlot → Remote Runtime → federation manifest → ./mount
 | `src/app/routing/build-module-routes.tsx`              | Module splat routes from nav config                            |
 | `src/app/routing/require-auth.tsx`                     | Auth guard for module areas                                    |
 | `src/app/remote-navigation/nav-config.ts`              | Static modules; remote **pages** come from `nav.json`          |
+| `src/app/remote-navigation/remote-nav-sources.ts`      | Federation-origin list used to fetch each `nav.json`           |
 | `src/app/remote-navigation/*`                          | Fetch / validate / store remote nav manifests                  |
 | `src/app/shell/app-shell.tsx`                          | Shell chrome (sidebar, tabs, header)                           |
 | `src/remote-runtime/ui/remote-slot.tsx`                | Mount lifecycle UI adapter                                     |
@@ -73,9 +74,12 @@ pnpm dev          # shell → :5000
 ```
 
 Nest API ~`:3000`
-React remote ~`:5001`
+React demo ~`:5001`
 Angular remote ~`:5002`
-All three frontend repositories use `pnpm dev` locally. Copy `env.example` → `.env` as needed (`VITE_API_BASE_URL` must be the API host, not the shell).
+ASO (if running) ~`:5003`
+React starter ~`:5004` (not registered in this shell)
+
+Copy `env.example` → `.env` as needed (`VITE_API_BASE_URL` must be the API host, not the shell).
 
 ## Browser tests
 

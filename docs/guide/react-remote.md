@@ -13,11 +13,12 @@ More detail (same folder): [Embedded entry](./embedded-entry.md) ·
 
 ### Reference repositories
 
-| Role                 | Repo                                                                                                 |
-| -------------------- | ---------------------------------------------------------------------------------------------------- |
-| Shell                | [tryproxy/runtime-mf-shell](https://github.com/tryproxy/runtime-mf-shell) (`dev`)                    |
-| React demo remote    | [tryproxy/runtime-mf-module](https://github.com/tryproxy/runtime-mf-module) (`dev`)                  |
-| Product remote (ASO) | [asmarketr/aso-market-admin](https://github.com/asmarketr/aso-market-admin) (`mf-remote-integraion`) |
+| Role                 | Repo                                                                                                                                                    |
+| -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Shell                | [tryproxy/runtime-mf-shell](https://github.com/tryproxy/runtime-mf-shell) (`dev`)                                                                       |
+| React demo remote    | [tryproxy/runtime-mf-module](https://github.com/tryproxy/runtime-mf-module) (`dev`)                                                                     |
+| React starter        | [tryproxy/runtime-mf-react-remote-starter](https://github.com/tryproxy/runtime-mf-react-remote-starter) — neutralized copy, not the greenfield path yet |
+| Product remote (ASO) | [asmarketr/aso-market-admin](https://github.com/asmarketr/aso-market-admin) (`mf-remote-integraion`)                                                    |
 
 ## TL;DR — how it works
 
@@ -56,6 +57,9 @@ More detail (same folder): [Embedded entry](./embedded-entry.md) ·
 
 `moduleId`, federation `name`, and alias are **different**.
 `nav.json.moduleId` must match the shell module id.
+
+Ports `5000`–`5004` are taken locally (shell, React demo, Angular, ASO, React
+starter). The Store `:5003` example is fictional.
 
 ### From the shell
 

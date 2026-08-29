@@ -69,7 +69,8 @@ build: {
 },
 ```
 
-Use a free port (`5001` / `5002` are demo remotes). Shell must be allowed by CORS.
+Use a free port (`5001` React demo, `5002` Angular, `5003` ASO, `5004` starter
+are taken). Shell must be allowed by CORS.
 
 ## Do / don’t
 

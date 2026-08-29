@@ -58,7 +58,9 @@ Example for a fictional Billing remote:
 | Local port                 | `5003`                             | Any unused, stable development port          |
 
 Do not reuse an existing module id, route segment, federation name, alias, or
-development port.
+development port. Local ports already taken: `5000` shell, `5001` React demo,
+`5002` Angular, `5003` ASO, `5004` React starter. The Billing `5003` example
+below is fictional — pick an unused port.
 
 ## 2. Keep the application standalone
 
@@ -492,8 +494,10 @@ Add the top-level module to
 }
 ```
 
-Add the corresponding English and Russian shell-owned module label and
-description. Spanish currently reuses English shell resources.
+Add the corresponding English, Russian, and Spanish shell-owned module
+label and description (`en.ts` / `ru.ts` / `es.ts`). Remote `nav.json`
+labels may omit `es`; the shell then falls back to English for that
+metadata.
 
 Create a shell page that only supplies host state to `RemoteSlot`:
 
@@ -518,8 +522,10 @@ mounted while internal paths change.
 
 ### Register navigation loading
 
-Add the same module id and federation manifest URL to `REMOTE_SOURCES` in
-`src/app/remote-navigation/remote-nav-manifests-provider.tsx`.
+Add the same module id and federation manifest URL to `REMOTE_NAV_SOURCES`
+in `src/app/remote-navigation/remote-nav-sources.ts`. The provider
+(`remote-nav-manifests-provider.tsx`) owns boot `ensureNav` / retry
+subscription; it is not the static source table.
 
 The current PoC derives `/nav.json` from the origin of the federation manifest.
 The remote must therefore host both documents on the same origin. This
@@ -544,7 +550,8 @@ Before calling onboarding complete, manually confirm:
   remote route;
 - direct links, nested navigation, browser back/forward, and refresh remain
   below the assigned basename;
-- theme and locale changes propagate without remounting;
+- theme and locale changes apply without a new shell `RemoteRuntime.start()`
+  (inner React remount is a separate question);
 - authenticated requests obtain credentials through `bridge.auth.http`;
 - shell sign-out clears the shell session;
 - leaving the module unmounts it, and re-entering creates a clean session;
@@ -564,14 +571,19 @@ pnpm test:e2e             # from the shell repository
 ```
 
 That suite proves the currently registered React demo under `/remote`. For a
-newly registered remote, reuse it by overriding coordinates (`E2E_REMOTE_PATH`,
-child path, headings) as listed in [`e2e/README.md`](../e2e/README.md). It does
-not replace standalone remote checks or Angular-specific proof.
+newly registered remote, reuse it by overriding coordinates as listed in
+[`e2e/README.md`](../e2e/README.md). The Playwright webServer still starts
+sibling `runtime-mf-module`; for any other origin start that remote yourself
+and use `E2E_SKIP_WEBSERVER=1`. It does not replace standalone remote checks
+or Angular-specific proof.
 
 ## Reference implementations
 
 - `runtime-mf-module`: React remote, React Router basename, bridge hooks, and
   `nav.json` projection.
+- `runtime-mf-react-remote-starter`: neutralized copy of the React demo
+  (`starter`, port `5004`). Baseline only — not a published GitHub template
+  and not registered in the shell.
 - `runtime-mf-module-angular`: Angular remote, embedded navigation adaptation,
   DI bridge, and async lifecycle.
 - `runtime-mf-adapters`: framework root lifecycle and cleanup.

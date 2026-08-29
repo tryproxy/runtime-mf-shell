@@ -89,10 +89,11 @@ worker from the embedded entry; hide product sidebar/header when embedded.
 
 ## Tailwind version
 
-| Path                                                   | Version                   |
-| ------------------------------------------------------ | ------------------------- |
-| Product remotes (PostCSS + classic Tailwind), e.g. ASO | **`^3.4`** — preferred    |
-| Demo React remote / shell (`@tailwindcss/vite`)        | **v4** — greenfield demos |
+| Path                                                   | Version                                                                 |
+| ------------------------------------------------------ | ----------------------------------------------------------------------- |
+| Product remotes (PostCSS + classic Tailwind), e.g. ASO | **`^3.4`** — preferred                                                  |
+| Demo React remote / shell (`@tailwindcss/vite`)        | **v4**                                                                  |
+| React starter (copy of the demo, same Vite plugin)     | **v4** — not yet embedded-safe (mount graph still has document globals) |
 
 Do not mix v3 PostCSS assumptions with v4’s Vite plugin casually.
 
@@ -120,7 +121,7 @@ and mirrored in `tokens.css`. No shared released breakpoint package yet.
 ## Verify
 
 1. Build remote; load under shell.
-2. Toggle shell theme/locale without remounting.
+2. Toggle shell theme/locale without a new shell mount session.
 3. Shell chrome stays stable after remote CSS loads.
 4. Exercise portaled UI; leave/re-enter; no duplicate style links or stale
    document state.

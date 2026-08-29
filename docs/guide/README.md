@@ -21,4 +21,9 @@ Reference repos:
 
 - Shell: [tryproxy/runtime-mf-shell](https://github.com/tryproxy/runtime-mf-shell) (`dev`)
 - React demo remote: [tryproxy/runtime-mf-module](https://github.com/tryproxy/runtime-mf-module) (`dev`)
+- React starter (baseline copy, not a published template): [tryproxy/runtime-mf-react-remote-starter](https://github.com/tryproxy/runtime-mf-react-remote-starter)
 - Product remote (ASO): [asmarketr/aso-market-admin](https://github.com/asmarketr/aso-market-admin) (`mf-remote-integraion`)
+
+Greenfield onboarding still follows this guide (adapt an existing SPA or copy
+the demo). Do not treat the starter as **Use this template** until it drops
+demo pages and passes embedded CSS/portal proof.
