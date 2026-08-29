@@ -8,14 +8,22 @@ import eslintPluginPrettier from 'eslint-plugin-prettier/recommended';
 import reactCompiler from 'eslint-plugin-react-compiler';
 
 export default tseslint.config(
-  { ignores: ['dist', 'coverage'] },
+  {
+    ignores: [
+      'dist',
+      'coverage',
+      'playwright-report',
+      'test-results',
+      'playwright/.auth',
+    ],
+  },
   {
     extends: [
       js.configs.recommended,
       ...tseslint.configs.strict,
       eslintPluginPrettier,
     ],
-    files: ['**/*.{ts,tsx}'],
+    files: ['src/**/*.{ts,tsx}'],
     languageOptions: {
       ecmaVersion: 2020,
       globals: globals.browser,
@@ -57,6 +65,23 @@ export default tseslint.config(
       react: {
         version: 'detect',
       },
+    },
+  },
+  {
+    extends: [
+      js.configs.recommended,
+      ...tseslint.configs.strict,
+      eslintPluginPrettier,
+    ],
+    files: ['e2e/**/*.ts', 'playwright.config.ts'],
+    languageOptions: {
+      ecmaVersion: 2022,
+      globals: globals.node,
+    },
+    rules: {
+      // Playwright requires `async ({}, use)` when a fixture has no deps.
+      'no-empty-pattern': 'off',
+      '@typescript-eslint/no-empty-pattern': 'off',
     },
   },
   {

@@ -35,3 +35,13 @@ bundle.*
 
 # Accidental path from shadcn CLI when @/ is not resolved as src/
 /@
+
+# Accidental local pnpm store (project uses the user store)
+.pnpm-store/
+
+# Playwright
+playwright-report/
+test-results/
+blob-report/
+playwright/.auth/
+playwright/.cache/

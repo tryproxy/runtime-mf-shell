@@ -51,6 +51,7 @@ containment follows only from observed browser conflicts.
 | HostBridge               | `src/remote-runtime/lib/create-host-bridge.ts`                                       |
 | Mount slot               | `src/remote-runtime/ui/remote-slot.tsx`                                              |
 | Federation composition   | `src/app/remote-runtime/remote-runtime-composition.ts`                               |
+| Host Playwright suite    | `e2e/`, `playwright.config.ts` — see [`e2e/README.md`](../e2e/README.md)             |
 
 ## Important remote paths
 
@@ -81,6 +82,24 @@ not the remote, clears its session and redirects to `/login`.
 
 Running each remote with `pnpm dev` is sufficient for local shell development. A production or preview shell must instead point to deployed production artifacts; it must not depend on a remote development server.
 
+## Browser tests
+
+Host-level Runtime MF checks live in the shell only (`e2e/`). Do not add
+Playwright to remotes or the React starter. First time on a machine:
+
+```bash
+pnpm playwright:install
+pnpm test:e2e
+```
+
+The suite starts (or reuses) the shell on `:5000` and the React demo on
+`:5001`, signs in with a dummy UX-guard token, and exercises the registered
+`/remote` module. Operator detail: [`e2e/README.md`](../e2e/README.md).
+
+UI mode (`pnpm test:e2e:ui`) has two Playwright projects: `setup` (login) and
+`chromium` (the specs). Enable both in the Projects filter or you will only
+see `auth.setup.ts`.
+
 ## Static remote configuration
 
 The current shell reads two build-time variables:
@@ -103,6 +122,7 @@ The shell currently derives `nav.json` from each federation-manifest origin. Thi
 ## Further reading
 
 - [guide/react-remote.md](./guide/react-remote.md) — connect a Vite + React product remote ([index](./guide/README.md))
+- [e2e/README.md](../e2e/README.md) — host Playwright suite
 - [POC-STATUS.md](./reserach.local/POC-STATUS.md) — what is ready
 - [phases.md](./reserach.local/phases.md) — active delivery sequence
 - [repository-map.md](./reserach.local/reference/repository-map.md) — FSD layout

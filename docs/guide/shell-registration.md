@@ -81,3 +81,7 @@ ASO registration is the product template to mirror (env, composition, nav,
 pages, routes) inside the shell tree — search `aso` /
 `VITE_ASO_REMOTE_MANIFEST_URL` in
 [runtime-mf-shell](https://github.com/tryproxy/runtime-mf-shell).
+
+After the shell and React demo are running locally, host-level checks are
+`pnpm test:e2e` in this repository (Playwright is not installed in remotes).
+See [`e2e/README.md`](../../e2e/README.md).

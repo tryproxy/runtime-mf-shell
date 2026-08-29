@@ -115,7 +115,10 @@ export function AppShell({
         </h1>
       </div>
 
-      <header className="bg-card/80 supports-backdrop-filter:bg-card/60 wideMobile:px-6 z-10 flex flex-col justify-center border-b px-4 pt-3 backdrop-blur md:col-start-2 md:row-start-1 md:pb-3">
+      <header
+        className="bg-card/80 supports-backdrop-filter:bg-card/60 wideMobile:px-6 z-10 flex flex-col justify-center border-b px-4 pt-3 backdrop-blur md:col-start-2 md:row-start-1 md:pb-3"
+        data-rmf-shell="header"
+      >
         <div className="flex items-start justify-between gap-3 pb-3 md:pb-0">
           <ShellHeaderProfile
             account={account}
@@ -201,7 +204,10 @@ export function AppShell({
         </div>
       </header>
 
-      <aside className="bg-sidebar text-sidebar-foreground border-sidebar-border hidden min-h-0 flex-col border-r md:row-start-2 md:flex">
+      <aside
+        className="bg-sidebar text-sidebar-foreground border-sidebar-border hidden min-h-0 flex-col border-r md:row-start-2 md:flex"
+        data-rmf-shell="sidebar"
+      >
         <ScrollArea className="min-h-0 min-w-0 flex-1 px-3 py-4">
           <div
             key={navLayer}

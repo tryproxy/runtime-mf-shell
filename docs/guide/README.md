@@ -15,6 +15,7 @@ The other files zoom in on one step; they are not a second checklist.
 | [HostBridge](./host-bridge.md)                | Theme, locale, auth token, and what the remote must not own.                                                    |
 | [Shell registration](./shell-registration.md) | Static shell files, env var, `RemoteSlot`, redeploy.                                                            |
 | [Deploy and host](./deploy-hosting.md)        | What to publish, CORS/cache/SPA traps, pointing the shell at the artifact.                                      |
+| [Shell Playwright](../../e2e/README.md)       | Host-level e2e in the shell only. `pnpm test:e2e` against the registered React demo.                            |
 
 Reference repos:
 

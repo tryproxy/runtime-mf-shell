@@ -14,6 +14,7 @@ import {
 } from '../model/remote-runtime';
 import { createHostBridge } from './create-host-bridge';
 import { createNoopTelemetry } from './create-noop-telemetry';
+import { recordRemoteSessionStart } from './e2e-observation';
 
 const DEFAULT_LOAD_TIMEOUT_MS = 8_000;
 const DEFAULT_READINESS_TIMEOUT_MS = 8_000;
@@ -58,6 +59,8 @@ function createSession(options: {
   loadTimeoutMs: number;
   readinessTimeoutMs: number;
 }): RemoteSession {
+  recordRemoteSessionStart(options.start.remoteId);
+
   const telemetry = options.adapters.telemetry ?? createNoopTelemetry();
   const clock = options.adapters.clock ?? createBrowserClock();
   const bridgeController = createHostBridge({

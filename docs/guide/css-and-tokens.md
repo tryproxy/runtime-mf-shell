@@ -124,3 +124,7 @@ and mirrored in `tokens.css`. No shared released breakpoint package yet.
 3. Shell chrome stays stable after remote CSS loads.
 4. Exercise portaled UI; leave/re-enter; no duplicate style links or stale
    document state.
+
+For the registered React demo, the shell Playwright suite covers mount,
+theme/locale chrome survival, and a portaled Select open/close plus forced
+unmount (`pnpm test:e2e`). It does not replace product-remote scoping proof.

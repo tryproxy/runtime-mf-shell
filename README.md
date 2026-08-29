@@ -60,6 +60,7 @@ Page → RemoteSlot → Remote Runtime → federation manifest → ./mount
 | `src/remote-runtime/lib/create-host-bridge.ts`         | HostBridge + history sync for embedded remotes                 |
 | `src/pages/remote/` / `src/pages/remote-angular/`      | Thin pages that identify the remote rendered by `RemoteSlot`   |
 | `src/app/remote-runtime/remote-runtime-composition.ts` | Pure Module Federation runtime instance and static descriptors |
+| `e2e/` / `playwright.config.ts`                        | Host-level Playwright suite (Chromium)                         |
 | `env.example`                                          | `VITE_*` URLs (API and federation manifests)                   |
 
 ---
@@ -75,3 +76,13 @@ Nest API ~`:3000`
 React remote ~`:5001`
 Angular remote ~`:5002`
 All three frontend repositories use `pnpm dev` locally. Copy `env.example` → `.env` as needed (`VITE_API_BASE_URL` must be the API host, not the shell).
+
+## Browser tests
+
+Host-level Runtime MF checks live in `e2e/`. Playwright is a shell-only
+devDependency. See [`e2e/README.md`](./e2e/README.md).
+
+```bash
+pnpm playwright:install
+pnpm test:e2e
+```

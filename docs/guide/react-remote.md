@@ -309,6 +309,11 @@ VITE_STORE_REMOTE_MANIFEST_URL=http://localhost:5003/mf-manifest.json
 4. Sign in → `/store` → tabs, nested routes, leave/re-enter, no second header,
    shell owns scroll, standalone still works.
 
+Host-level Playwright is shell-owned (`pnpm test:e2e` in `runtime-mf-shell`).
+It currently targets the registered React demo (`/remote`), not this fictional
+Store example. Do not install Playwright in the remote. Operator notes:
+[e2e/README.md](../../e2e/README.md).
+
 ---
 
 ## 10. Deploy
@@ -336,3 +341,6 @@ on the **shell**, redeploy the shell. Preview vs prod, cache, and SPA traps:
 - [ ] Clean leave/re-enter
 - [ ] No second product chrome; shell owns page scroll
 - [ ] Remote failure does not take down shell chrome
+
+Host Playwright (`pnpm test:e2e` in the shell) covers the registered React
+demo. A new product remote still needs the manual checks above.

@@ -273,3 +273,7 @@ VITE_BILLING_REMOTE_MANIFEST_URL=https://billing.example.com/mf-manifest.json
 - Auth requests, theme, locale, and logout use the bridge.
 - Leaving and re-entering creates a clean mount session.
 - Remote CSS, portals, or failures do not break shell chrome.
+
+Host-level Playwright for the registered React demo lives in the shell
+(`pnpm test:e2e`). Do not add Playwright to the remote. Details:
+[e2e/README.md](../e2e/README.md).

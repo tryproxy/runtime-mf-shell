@@ -555,6 +555,19 @@ Before calling onboarding complete, manually confirm:
 Deploy the remote first, verify its public artifacts, then configure and deploy
 the shell. Do not point a production shell at a development server.
 
+Host-level browser checks live in `runtime-mf-shell` only. Do not install
+Playwright in the remote. After the React demo path is running locally:
+
+```bash
+pnpm playwright:install   # once per machine
+pnpm test:e2e             # from the shell repository
+```
+
+That suite proves the currently registered React demo under `/remote`. For a
+newly registered remote, reuse it by overriding coordinates (`E2E_REMOTE_PATH`,
+child path, headings) as listed in [`e2e/README.md`](../e2e/README.md). It does
+not replace standalone remote checks or Angular-specific proof.
+
 ## Reference implementations
 
 - `runtime-mf-module`: React remote, React Router basename, bridge hooks, and

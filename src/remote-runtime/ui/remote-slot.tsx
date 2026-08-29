@@ -80,7 +80,11 @@ export function RemoteSlot({
 
   return (
     <RemoteErrorBoundary resetKey={`${remoteId}:${basename}:${retryCount}`}>
-      <section className="min-h-0">
+      <section
+        className="min-h-0"
+        data-rmf-slot={remoteId}
+        data-rmf-slot-status={snapshot.status}
+      >
         {snapshot.status === 'loading' ? (
           <p className="text-muted-foreground text-sm">{t('remote.loading')}</p>
         ) : null}
@@ -91,7 +95,7 @@ export function RemoteSlot({
             onRetry={() => setRetryCount((count) => count + 1)}
           />
         ) : null}
-        <div ref={containerRef} className="min-h-0" />
+        <div ref={containerRef} className="min-h-0" data-rmf-slot-root="" />
       </section>
     </RemoteErrorBoundary>
   );
