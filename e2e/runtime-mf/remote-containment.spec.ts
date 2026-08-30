@@ -2,7 +2,7 @@ import { expect, test } from '../fixtures/runtime-mf';
 
 test.describe('remote containment', () => {
   test('shell chrome metrics stay stable across mount and unmount', async ({
-    captureChrome,
+    captureShellChromeMetrics,
     openRemote,
     page,
   }) => {
@@ -10,12 +10,14 @@ test.describe('remote containment', () => {
     await expect(
       page.getByRole('heading', { name: 'Host page' })
     ).toBeVisible();
-    const before = await captureChrome();
+    const before = await captureShellChromeMetrics();
     expect(before.sidebarWidth).toBeGreaterThan(0);
     expect(before.headerHeight).toBeGreaterThan(0);
 
     await openRemote();
-    const mounted = await captureChrome();
+    const mounted = await captureShellChromeMetrics();
+    expect(mounted.theme).toBe(before.theme);
+    expect(mounted.htmlHasDarkClass).toBe(before.htmlHasDarkClass);
     expect(mounted.htmlOverflow).toBe(before.htmlOverflow);
     expect(mounted.bodyOverflow).toBe(before.bodyOverflow);
     expect(mounted.htmlFontFamily).toBe(before.htmlFontFamily);
@@ -26,7 +28,9 @@ test.describe('remote containment', () => {
     await expect(
       page.getByRole('heading', { name: 'Host page' })
     ).toBeVisible();
-    const after = await captureChrome();
+    const after = await captureShellChromeMetrics();
+    expect(after.theme).toBe(before.theme);
+    expect(after.htmlHasDarkClass).toBe(before.htmlHasDarkClass);
     expect(after.htmlOverflow).toBe(before.htmlOverflow);
     expect(after.bodyOverflow).toBe(before.bodyOverflow);
     expect(after.htmlFontFamily).toBe(before.htmlFontFamily);
@@ -40,17 +44,24 @@ test.describe('remote containment', () => {
     page,
     target,
   }) => {
-    test.skip(
-      target.formPath === null,
-      'E2E_REMOTE_FORM_PATH is empty; demo form surface is not targeted'
-    );
+    if (target.formPath === null) {
+      test.skip(
+        true,
+        'E2E_REMOTE_FORM_PATH is empty; form surface is not targeted'
+      );
+      return;
+    }
 
-    await openRemote(target.formPath ?? undefined);
-    await page.getByLabel('Team').click();
-    await expect(page.getByRole('option', { name: 'Platform' })).toBeVisible();
+    await openRemote(target.formPath);
+    await page.getByLabel(target.formSelectLabel).click();
+    await expect(
+      page.getByRole('option', { name: target.formSelectOption })
+    ).toBeVisible();
 
     await page.keyboard.press('Escape');
-    await expect(page.getByRole('option', { name: 'Platform' })).toHaveCount(0);
+    await expect(
+      page.getByRole('option', { name: target.formSelectOption })
+    ).toHaveCount(0);
     await assertNoOrphanedPortals();
   });
 
@@ -60,14 +71,19 @@ test.describe('remote containment', () => {
     page,
     target,
   }) => {
-    test.skip(
-      target.formPath === null,
-      'E2E_REMOTE_FORM_PATH is empty; demo form surface is not targeted'
-    );
+    if (target.formPath === null) {
+      test.skip(
+        true,
+        'E2E_REMOTE_FORM_PATH is empty; form surface is not targeted'
+      );
+      return;
+    }
 
-    await openRemote(target.formPath ?? undefined);
-    await page.getByLabel('Team').click();
-    await expect(page.getByRole('option', { name: 'Platform' })).toBeVisible();
+    await openRemote(target.formPath);
+    await page.getByLabel(target.formSelectLabel).click();
+    await expect(
+      page.getByRole('option', { name: target.formSelectOption })
+    ).toBeVisible();
 
     await page.goto('/host');
     await expect(

@@ -1,34 +1,54 @@
-import { defineConfig, devices } from '@playwright/test';
-import { AUTH_STATE_PATH, DEMO_REMOTE_ROOT, readE2eTarget } from './e2e/env';
+import {
+  defineConfig,
+  devices,
+  type PlaywrightTestConfig,
+} from '@playwright/test';
+import {
+  AUTH_STATE_PATH,
+  DEMO_REMOTE_ROOT,
+  readE2eAuth,
+  readE2eTarget,
+} from './e2e/env';
 
 const target = readE2eTarget();
+readE2eAuth(target.shellBaseUrl);
 
-const webServers = target.skipWebServer
-  ? undefined
-  : [
-      {
-        command: 'pnpm dev',
-        url: target.shellBaseUrl,
-        reuseExistingServer: !process.env.CI,
-        timeout: 120_000,
-        stdout: 'pipe',
-        stderr: 'pipe',
-        cwd: '.',
-      },
-      ...(target.hasDemoRemote
-        ? [
-            {
-              command: 'pnpm dev',
-              url: `${target.remoteDevUrl}/mf-manifest.json`,
-              reuseExistingServer: !process.env.CI,
-              timeout: 120_000,
-              stdout: 'pipe',
-              stderr: 'pipe',
-              cwd: DEMO_REMOTE_ROOT,
-            },
-          ]
-        : []),
-    ];
+type HostWebServer = Exclude<
+  NonNullable<PlaywrightTestConfig['webServer']>,
+  unknown[]
+>;
+
+function createWebServers(): PlaywrightTestConfig['webServer'] {
+  if (target.skipWebServer) {
+    return undefined;
+  }
+
+  const servers: HostWebServer[] = [
+    {
+      command: 'pnpm dev',
+      url: target.shellBaseUrl,
+      reuseExistingServer: !process.env.CI,
+      timeout: 120_000,
+      stdout: 'pipe',
+      stderr: 'pipe',
+      cwd: '.',
+    },
+  ];
+
+  if (target.hasDemoRemote) {
+    servers.push({
+      command: 'pnpm dev',
+      url: `${target.remoteDevUrl}/mf-manifest.json`,
+      reuseExistingServer: !process.env.CI,
+      timeout: 120_000,
+      stdout: 'pipe',
+      stderr: 'pipe',
+      cwd: DEMO_REMOTE_ROOT,
+    });
+  }
+
+  return servers;
+}
 
 export default defineConfig({
   testDir: './e2e',
@@ -38,7 +58,7 @@ export default defineConfig({
   retries: process.env.CI ? 1 : 0,
   timeout: 60_000,
   reporter: [['list'], ['html', { open: 'never' }]],
-  webServer: webServers,
+  webServer: createWebServers(),
   use: {
     baseURL: target.shellBaseUrl,
     browserName: 'chromium',

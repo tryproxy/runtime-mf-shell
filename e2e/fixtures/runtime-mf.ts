@@ -1,8 +1,9 @@
 import { expect, test as base, type Page } from '@playwright/test';
 import { readE2eTarget, type E2eTarget } from '../env';
 
-type ChromeSnapshot = {
+export type ShellChromeMetrics = {
   theme: string | null;
+  htmlHasDarkClass: boolean;
   htmlOverflow: string;
   bodyOverflow: string;
   htmlFontFamily: string;
@@ -10,15 +11,22 @@ type ChromeSnapshot = {
   headerHeight: number;
 };
 
+export type RemoteThemeAppearance = {
+  documentTheme: string | null;
+  documentIsDark: boolean;
+  mountRootTheme: string | null;
+  mountRootIsDark: boolean;
+};
+
 type RuntimeMfFixtures = {
   target: E2eTarget;
   openRemote: (path?: string) => Promise<void>;
-  captureChrome: () => Promise<ChromeSnapshot>;
+  captureShellChromeMetrics: () => Promise<ShellChromeMetrics>;
   sessionStarts: (remoteId: string) => Promise<number>;
   assertNoOrphanedPortals: () => Promise<void>;
 };
 
-async function waitForRemoteReady(
+export async function waitForRemoteReady(
   page: Page,
   target: E2eTarget
 ): Promise<void> {
@@ -27,6 +35,28 @@ async function waitForRemoteReady(
       `[data-rmf-slot="${target.remoteId}"][data-rmf-slot-status="ready"]`
     )
   ).toBeVisible({ timeout: 45_000 });
+}
+
+export async function readRemoteThemeAppearance(
+  page: Page
+): Promise<RemoteThemeAppearance> {
+  return page.evaluate(() => {
+    const html = document.documentElement;
+    const mountRoot = document.querySelector('[data-rmf-slot-root]');
+
+    return {
+      documentTheme: html.dataset.rmfTheme ?? null,
+      documentIsDark: html.classList.contains('dark'),
+      mountRootTheme:
+        mountRoot instanceof HTMLElement
+          ? (mountRoot.dataset.rmfTheme ?? null)
+          : null,
+      mountRootIsDark:
+        mountRoot instanceof HTMLElement
+          ? mountRoot.classList.contains('dark')
+          : false,
+    };
+  });
 }
 
 export const test = base.extend<RuntimeMfFixtures>({
@@ -62,7 +92,7 @@ export const test = base.extend<RuntimeMfFixtures>({
     });
   },
 
-  captureChrome: async ({ page }, use) => {
+  captureShellChromeMetrics: async ({ page }, use) => {
     await use(async () => {
       return page.evaluate(() => {
         const html = document.documentElement;
@@ -72,6 +102,7 @@ export const test = base.extend<RuntimeMfFixtures>({
 
         return {
           theme: html.dataset.rmfTheme ?? null,
+          htmlHasDarkClass: html.classList.contains('dark'),
           htmlOverflow: getComputedStyle(html).overflow,
           bodyOverflow: getComputedStyle(body).overflow,
           htmlFontFamily: getComputedStyle(html).fontFamily,

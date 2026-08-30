@@ -88,5 +88,6 @@ devDependency. See [`e2e/README.md`](./e2e/README.md).
 
 ```bash
 pnpm playwright:install
+pnpm typecheck:e2e
 pnpm test:e2e
 ```

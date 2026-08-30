@@ -1,4 +1,4 @@
-import { expect, test } from '../fixtures/runtime-mf';
+import { expect, test, waitForRemoteReady } from '../fixtures/runtime-mf';
 
 test.describe('remote navigation', () => {
   test('shell shows child pages from remote nav.json', async ({
@@ -29,11 +29,7 @@ test.describe('remote navigation', () => {
     ).toBeVisible();
 
     await page.reload();
-    await expect(
-      page.locator(
-        `[data-rmf-slot="${target.remoteId}"][data-rmf-slot-status="ready"]`
-      )
-    ).toBeVisible({ timeout: 45_000 });
+    await waitForRemoteReady(page, target);
     await expect(
       page.getByRole('heading', { name: target.readyHeading, level: 3 })
     ).toBeVisible();
@@ -45,11 +41,7 @@ test.describe('remote navigation', () => {
     await expect(page).toHaveURL(new RegExp(`${target.childPath}/?$`));
 
     await page.reload();
-    await expect(
-      page.locator(
-        `[data-rmf-slot="${target.remoteId}"][data-rmf-slot-status="ready"]`
-      )
-    ).toBeVisible({ timeout: 45_000 });
+    await waitForRemoteReady(page, target);
     await expect(
       page.getByRole('heading', { name: target.childHeading, level: 3 })
     ).toBeVisible();

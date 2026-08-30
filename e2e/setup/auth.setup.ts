@@ -1,10 +1,10 @@
 import { expect, test as setup } from '@playwright/test';
 import fs from 'node:fs';
 import path from 'node:path';
-import { AUTH_STATE_PATH, readE2eAuth } from '../env';
+import { AUTH_STATE_PATH, readE2eAuth, readE2eTarget } from '../env';
 
 setup('authenticate through the shell login UI', async ({ page }) => {
-  const auth = readE2eAuth();
+  const auth = readE2eAuth(readE2eTarget().shellBaseUrl);
 
   await page.goto('/login');
   await expect(

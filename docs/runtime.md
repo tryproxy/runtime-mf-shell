@@ -94,12 +94,14 @@ Playwright to remotes or the React starter. First time on a machine:
 
 ```bash
 pnpm playwright:install
+pnpm typecheck:e2e
 pnpm test:e2e
 ```
 
 The suite starts (or reuses) the shell on `:5000` and the React demo on
-`:5001`, signs in with a dummy UX-guard token, and exercises the registered
-`/remote` module. Operator detail: [`e2e/README.md`](../e2e/README.md).
+`:5001`, signs in (dummy `e2e-local` only on loopback UI-guard runs), and
+exercises the registered `/remote` module. Operator detail:
+[`e2e/README.md`](../e2e/README.md).
 
 UI mode (`pnpm test:e2e:ui`) has two Playwright projects: `setup` (login) and
 `chromium` (the specs). Enable both in the Projects filter or you will only

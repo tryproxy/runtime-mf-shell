@@ -1,4 +1,8 @@
-import { expect, test } from '../fixtures/runtime-mf';
+import {
+  expect,
+  readRemoteThemeAppearance,
+  test,
+} from '../fixtures/runtime-mf';
 
 test.describe('remote lifecycle', () => {
   test('shell opens the registered React remote and it becomes usable', async ({
@@ -44,21 +48,20 @@ test.describe('remote lifecycle', () => {
     page,
     target,
   }) => {
-    test.skip(
-      target.crashPath === null,
-      'E2E_REMOTE_CRASH_PATH is empty; demo crash surface is not targeted'
-    );
+    if (target.crashPath === null) {
+      test.skip(
+        true,
+        'E2E_REMOTE_CRASH_PATH is empty; crash surface is not targeted'
+      );
+      return;
+    }
 
-    await openRemote(target.crashPath ?? undefined);
-    await page.getByRole('button', { name: 'Crash module render' }).click();
+    await openRemote(target.crashPath);
+    await page.getByRole('button', { name: target.crashControlLabel }).click();
 
     const remoteAlert = page.getByRole('alert');
-    await expect(remoteAlert).toContainText(
-      'Something went wrong in this module'
-    );
-    await expect(remoteAlert).toContainText(
-      'PoC crash: intentional module render error'
-    );
+    await expect(remoteAlert).toContainText(target.crashErrorTitle);
+    await expect(remoteAlert).toContainText(target.crashErrorDetail);
     await expect(page.getByText('PLATFORM').first()).toBeVisible();
     await expect(page.getByRole('button', { name: 'Log out' })).toBeVisible();
     await expect(
@@ -74,16 +77,33 @@ test.describe('remote lifecycle', () => {
   }) => {
     await openRemote();
     const startsBefore = await sessionStarts(target.remoteId);
+    const themeBefore = await readRemoteThemeAppearance(page);
 
-    const themeBefore = await page.evaluate(
-      () => document.documentElement.dataset.rmfTheme ?? ''
+    expect(themeBefore.mountRootTheme).toBe(themeBefore.documentTheme);
+    expect(themeBefore.mountRootIsDark).toBe(themeBefore.documentIsDark);
+    expect(themeBefore.documentIsDark).toBe(
+      themeBefore.documentTheme === 'dark'
     );
+
     await page.getByRole('button', { name: /Dark|Light/ }).click();
     await expect
-      .poll(async () =>
-        page.evaluate(() => document.documentElement.dataset.rmfTheme ?? '')
-      )
-      .not.toBe(themeBefore);
+      .poll(async () => {
+        const next = await readRemoteThemeAppearance(page);
+        return next.documentTheme === themeBefore.documentTheme ||
+          next.mountRootTheme !== next.documentTheme
+          ? null
+          : next.documentTheme;
+      })
+      .not.toBeNull();
+
+    const themeAfter = await readRemoteThemeAppearance(page);
+    expect(themeAfter.documentTheme).not.toBe(themeBefore.documentTheme);
+    expect(themeAfter.mountRootTheme).toBe(themeAfter.documentTheme);
+    expect(themeAfter.mountRootIsDark).toBe(themeAfter.documentIsDark);
+    expect(themeAfter.documentIsDark).toBe(themeAfter.documentTheme === 'dark');
+    expect(themeAfter.mountRootIsDark).toBe(
+      themeAfter.mountRootTheme === 'dark'
+    );
 
     await expect(page).toHaveURL(new RegExp(`${target.indexPath}/?$`));
     await expect(
