@@ -13,7 +13,7 @@ test.describe('remote lifecycle', () => {
     await openRemote();
 
     await expect(
-      page.getByRole('heading', { name: target.readyHeading, level: 3 })
+      page.getByRole('heading', { name: target.readyHeading, exact: true })
     ).toBeVisible();
     await expect(page.getByText('PLATFORM').first()).toBeVisible();
     await expect(page.getByRole('button', { name: 'Log out' })).toBeVisible();
@@ -36,7 +36,7 @@ test.describe('remote lifecycle', () => {
 
     await openRemote();
     await expect(
-      page.getByRole('heading', { name: target.readyHeading, level: 3 })
+      page.getByRole('heading', { name: target.readyHeading, exact: true })
     ).toBeVisible();
 
     const afterReturn = await sessionStarts(target.remoteId);
@@ -107,17 +107,20 @@ test.describe('remote lifecycle', () => {
 
     await expect(page).toHaveURL(new RegExp(`${target.indexPath}/?$`));
     await expect(
-      page.getByRole('heading', { name: target.readyHeading, level: 3 })
+      page.getByRole('heading', { name: target.readyHeading, exact: true })
     ).toBeVisible();
     await expect(page.getByText('PLATFORM').first()).toBeVisible();
 
     await page.getByLabel('Language').click();
     await page.getByRole('option', { name: 'RU' }).click();
     await expect(
-      page.getByRole('heading', { name: target.readyHeading, level: 3 })
+      page.getByRole('heading', { name: target.readyHeading, exact: true })
     ).toHaveCount(0);
     await expect(
-      page.locator(`[data-rmf-slot="${target.remoteId}"] h3`).first()
+      page
+        .locator(`[data-rmf-slot="${target.remoteId}"]`)
+        .getByRole('heading')
+        .first()
     ).toBeVisible();
     await expect(page).toHaveURL(new RegExp(`${target.indexPath}/?$`));
 

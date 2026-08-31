@@ -25,25 +25,25 @@ test.describe('remote navigation', () => {
   }) => {
     await openRemote(target.indexPath);
     await expect(
-      page.getByRole('heading', { name: target.readyHeading, level: 3 })
+      page.getByRole('heading', { name: target.readyHeading, exact: true })
     ).toBeVisible();
 
     await page.reload();
     await waitForRemoteReady(page, target);
     await expect(
-      page.getByRole('heading', { name: target.readyHeading, level: 3 })
+      page.getByRole('heading', { name: target.readyHeading, exact: true })
     ).toBeVisible();
 
     await openRemote(target.childPath);
     await expect(
-      page.getByRole('heading', { name: target.childHeading, level: 3 })
+      page.getByRole('heading', { name: target.childHeading, exact: true })
     ).toBeVisible();
     await expect(page).toHaveURL(new RegExp(`${target.childPath}/?$`));
 
     await page.reload();
     await waitForRemoteReady(page, target);
     await expect(
-      page.getByRole('heading', { name: target.childHeading, level: 3 })
+      page.getByRole('heading', { name: target.childHeading, exact: true })
     ).toBeVisible();
     await expect(page).toHaveURL(new RegExp(`${target.childPath}/?$`));
   });

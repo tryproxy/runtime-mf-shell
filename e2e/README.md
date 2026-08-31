@@ -88,6 +88,9 @@ exists as a sibling repository on `:5004` but is **not** a shell module.
 Set `E2E_REMOTE_CRASH_PATH=` or `E2E_REMOTE_FORM_PATH=` (empty) to skip the
 demo-only crash or portal surfaces.
 
+Heading checks match the configured accessible name exactly but do not require
+a particular `h1`/`h2`/`h3` level; semantic heading hierarchy is remote-owned.
+
 `pnpm test:e2e` auto-starts the shell and, when
 `../runtime-mf-module/package.json` exists, that demo on **its** Vite port
 (`:5001`). `E2E_REMOTE_DEV_URL` only changes the URL Playwright waits on; it
