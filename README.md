@@ -28,7 +28,7 @@ Research / backlog: [`docs/reserach.local/`](./docs/reserach.local/).
 4. **Stay under basename** — interpret paths only under the shell-assigned prefix (e.g. `/remote/*`). Do not own top-level history when embedded.
 5. **Optional `nav.json`** — pre-mount page list at `{origin}/nav.json` so the shell can render chrome without loading remote JS.
 
-Contract package: `github:tryproxy/runtime-mf-contract#v0.5.2`. The shell uses its runtime parsers before invoking independently deployed code.
+Contract package: `github:tryproxy/runtime-mf-contract#v0.5.3`. The shell uses its runtime parsers before invoking independently deployed code.
 
 ---
 
@@ -68,8 +68,11 @@ Page → RemoteSlot → Remote Runtime → federation manifest → ./mount
 
 ## Local run
 
+pnpm 11 (Corepack `packageManager`) and Node 22+. Everyday local install can
+be `pnpm install`. Use `pnpm ci` for a clean lockfile-frozen install.
+
 ```bash
-pnpm install
+pnpm ci
 pnpm dev          # shell → :5000
 ```
 
