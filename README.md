@@ -86,8 +86,10 @@ Copy `env.example` → `.env` as needed (`VITE_API_BASE_URL` must be the API hos
 
 ## Browser tests
 
-Host-level Runtime MF checks live in `e2e/`. Playwright is a shell-only
-devDependency. See [`e2e/README.md`](./e2e/README.md).
+Host-level Runtime MF checks live in `e2e/`; their Playwright dependency and
+configuration are shell-owned. Product remotes and the React starter do not
+need to copy this suite. The Angular demo keeps a separate scaffolded
+standalone Playwright smoke suite. See [`e2e/README.md`](./e2e/README.md).
 
 ```bash
 pnpm playwright:install

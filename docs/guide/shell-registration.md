@@ -87,5 +87,6 @@ pages, routes) inside the shell tree — search `aso` /
 [runtime-mf-shell](https://github.com/tryproxy/runtime-mf-shell).
 
 After the shell and React demo are running locally, host-level checks are
-`pnpm test:e2e` in this repository (Playwright is not installed in remotes).
-See [`e2e/README.md`](../../e2e/README.md).
+`pnpm test:e2e` in this repository. A new remote does not need to copy the
+Shell Playwright suite; framework-owned standalone tests remain a separate
+choice. See [`e2e/README.md`](../../e2e/README.md).

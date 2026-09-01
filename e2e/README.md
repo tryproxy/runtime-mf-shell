@@ -1,8 +1,9 @@
 # Shell Playwright suite
 
-Host-level Runtime MF browser tests. Playwright is installed only in
-`runtime-mf-shell`. Product remotes and the React starter do not get their own
-Playwright dependency.
+Host-level Runtime MF browser tests. This integration suite and its Playwright
+dependency are owned by `runtime-mf-shell`; product remotes and the React
+starter do not copy it. `runtime-mf-module-angular` has a separate scaffolded
+standalone Playwright smoke suite, which is not host-level Runtime MF evidence.
 
 ## Install browsers
 
