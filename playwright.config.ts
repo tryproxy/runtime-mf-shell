@@ -6,6 +6,7 @@ import {
 import {
   AUTH_STATE_PATH,
   DEMO_REMOTE_ROOT,
+  STARTER_REMOTE_ROOT,
   readE2eAuth,
   readE2eTarget,
 } from './e2e/env';
@@ -44,6 +45,18 @@ function createWebServers(): PlaywrightTestConfig['webServer'] {
       stdout: 'pipe',
       stderr: 'pipe',
       cwd: DEMO_REMOTE_ROOT,
+    });
+  }
+
+  if (target.starterProfile && target.hasStarterRemote) {
+    servers.push({
+      command: 'pnpm dev',
+      url: target.starterProfile.devUrl,
+      reuseExistingServer: !process.env.CI,
+      timeout: 120_000,
+      stdout: 'pipe',
+      stderr: 'pipe',
+      cwd: STARTER_REMOTE_ROOT,
     });
   }
 

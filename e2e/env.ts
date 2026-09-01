@@ -13,6 +13,10 @@ export const AUTH_STATE_PATH = path.join(
 );
 
 export const DEMO_REMOTE_ROOT = path.resolve(shellRoot, '../runtime-mf-module');
+export const STARTER_REMOTE_ROOT = path.resolve(
+  shellRoot,
+  '../runtime-mf-react-remote-starter'
+);
 
 declare global {
   interface Window {
@@ -23,6 +27,16 @@ declare global {
 export type E2eAuth =
   | { kind: 'token'; token: string }
   | { kind: 'password'; email: string; password: string };
+
+export type StarterE2eProfile = {
+  surfaceUrl: string;
+  devUrl: string;
+  embedded: boolean;
+  formSelectLabel: string;
+  compactSelectLabel: string;
+  hintControlLabel: string;
+  hintText: string;
+};
 
 export type E2eTarget = {
   shellBaseUrl: string;
@@ -42,8 +56,10 @@ export type E2eTarget = {
   crashErrorDetail: string;
   formSelectLabel: string;
   formSelectOption: string;
+  starterProfile: StarterE2eProfile | null;
   skipWebServer: boolean;
   hasDemoRemote: boolean;
+  hasStarterRemote: boolean;
 };
 
 /** Dummy value for RequireAuth's localStorage check. Not a real ASO token. */
@@ -165,6 +181,7 @@ export function readE2eAuth(shellBaseUrl = readShellBaseUrl()): E2eAuth {
 export function readE2eTarget(): E2eTarget {
   const remotePath = process.env.E2E_REMOTE_PATH ?? '/remote';
   const shellBaseUrl = readShellBaseUrl();
+  const starterSurfaceUrl = process.env.E2E_STARTER_SURFACE_URL?.trim() ?? '';
 
   return {
     shellBaseUrl,
@@ -193,7 +210,33 @@ export function readE2eTarget(): E2eTarget {
     ),
     formSelectLabel: envString('E2E_REMOTE_FORM_SELECT_LABEL', 'Team'),
     formSelectOption: envString('E2E_REMOTE_FORM_SELECT_OPTION', 'Platform'),
+    starterProfile: starterSurfaceUrl
+      ? {
+          surfaceUrl: starterSurfaceUrl,
+          devUrl: envString('E2E_STARTER_DEV_URL', 'http://127.0.0.1:5004'),
+          embedded: process.env.E2E_STARTER_EMBEDDED === '1',
+          formSelectLabel: envString(
+            'E2E_STARTER_FORM_SELECT_LABEL',
+            'Example state'
+          ),
+          compactSelectLabel: envString(
+            'E2E_STARTER_COMPACT_SELECT_LABEL',
+            'Language'
+          ),
+          hintControlLabel: envString(
+            'E2E_STARTER_HINT_CONTROL_LABEL',
+            'Show hint'
+          ),
+          hintText: envString(
+            'E2E_STARTER_HINT_TEXT',
+            'Helpful context belongs close to the action.'
+          ),
+        }
+      : null,
     skipWebServer: process.env.E2E_SKIP_WEBSERVER === '1',
     hasDemoRemote: fs.existsSync(path.join(DEMO_REMOTE_ROOT, 'package.json')),
+    hasStarterRemote: fs.existsSync(
+      path.join(STARTER_REMOTE_ROOT, 'package.json')
+    ),
   };
 }

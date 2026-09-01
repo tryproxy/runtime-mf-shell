@@ -40,6 +40,17 @@ Use `bridge.theme` (`getSnapshot` / `subscribe`). The shell sets
 `html[data-rmf-theme]` and the shadcn `.dark` class. Embedded remotes should
 not fight document theme by writing their own `html` / `body` background.
 
+Treat a theme change as one visual transaction. Page surfaces, cards, form
+controls, and overlays should reach the target semantic-token state in the same
+paint. Avoid broad `transition-all` or `transition-colors` rules that delay
+semantic color changes during the global switch; keep hover/focus motion
+separate and honor `prefers-reduced-motion`.
+
+The React starter is the current reference proof: it applies theme ownership at
+the layout boundary, keeps semantic controls/overlays free of broad color/all
+transitions, and passes normal plus reduced-motion boundary sampling. See the
+starter [style guide](https://github.com/tryproxy/runtime-mf-react-remote-starter/blob/main/docs/style-guide.md#closed-wp61-quality-gates).
+
 ## Embedded stylesheet
 
 Keep standalone CSS on `main.tsx`. Federation `./mount` imports a **second**
@@ -89,11 +100,11 @@ worker from the embedded entry; hide product sidebar/header when embedded.
 
 ## Tailwind version
 
-| Path                                                   | Version                                                                 |
-| ------------------------------------------------------ | ----------------------------------------------------------------------- |
-| Product remotes (PostCSS + classic Tailwind), e.g. ASO | **`^3.4`** — preferred                                                  |
-| Demo React remote / shell (`@tailwindcss/vite`)        | **v4**                                                                  |
-| React starter (copy of the demo, same Vite plugin)     | **v4** — not yet embedded-safe (mount graph still has document globals) |
+| Path                                                   | Version                                                                          |
+| ------------------------------------------------------ | -------------------------------------------------------------------------------- |
+| Product remotes (PostCSS + classic Tailwind), e.g. ASO | **`^3.4`** — preferred                                                           |
+| Demo React remote / shell (`@tailwindcss/vite`)        | **v4**                                                                           |
+| React starter (copy lineage, separate embedded graph)  | **v4** — embedded graph omits Preflight/document globals and is artifact-checked |
 
 Do not mix v3 PostCSS assumptions with v4’s Vite plugin casually.
 
@@ -104,19 +115,46 @@ The React demo wraps emitted CSS in `@layer rmf-remote` via
 Useful for utility collision reduction; **not** a substitute for selector
 scoping on a product stylesheet with preflight.
 
-## Breakpoints (shell)
+## Breakpoints and responsive ownership
 
-| Name         |               Min | Notes                      |
-| ------------ | ----------------: | -------------------------- |
-| compact      |             500px | `--breakpoint-compact`     |
-| comfortable  |             560px | `--breakpoint-comfortable` |
-| sm           |             640px | Tailwind default           |
-| wideMobile   |             740px | `--breakpoint-wideMobile`  |
-| md / lg / xl | 768 / 1024 / 1280 | Tailwind defaults          |
+| Name        | Minimum | Notes                      |
+| ----------- | ------: | -------------------------- |
+| compact     |   500px | `--breakpoint-compact`     |
+| comfortable |   560px | `--breakpoint-comfortable` |
+| sm          |   640px | Tailwind default           |
+| wideMobile  |   740px | `--breakpoint-wideMobile`  |
+| md          |   768px | Tailwind default           |
+| lg          |  1024px | Tailwind default           |
+| xl          |  1280px | Tailwind default           |
+| 2xl         |  1536px | Tailwind default           |
 
 Defined in shell
 [`breakpoints.ts`](https://github.com/tryproxy/runtime-mf-shell/blob/dev/src/shared/config/breakpoints.ts)
-and mirrored in `tokens.css`. No shared released breakpoint package yet.
+and mirrored in `tokens.css`. ASO currently keeps equivalent product-owned
+values. The React starter no longer copies the Shell-specific custom scale. No
+shared released breakpoint package or drift check exists yet.
+
+The 2026-09-01 starter policy is implemented: its unused custom `px` copies are
+removed, Tailwind defaults remain, and viewport ownership stays local to
+Shell/product remotes. Runtime MF Contract does not publish breakpoints.
+
+For embedded page composition, prefer container queries because the remote slot
+can be narrow while the browser viewport is wide. The starter neutral pages use
+`@2xl/page` (42rem), `@3xl/page` (48rem), and `@5xl/page` (64rem). Viewport
+breakpoints remain appropriate only for behavior that truly depends on the
+browser viewport.
+
+## Primitive behavior
+
+- A Select listbox must align to its trigger on its first open and after
+  trigger/content resize or ancestor scrolling. Calculate alignment from the
+  final rendered width.
+- Tooltip is hover/focus supplementary help and must not insert an inline
+  block that shifts surrounding controls. Persistent tap/click help, when a
+  product needs it, should use a disclosure, Popover, or inline region.
+- Keep component files component-only for React Fast Refresh. Move hooks,
+  contexts, constants, and variant definitions to adjacent `.ts` modules rather
+  than disabling `react-refresh/only-export-components`.
 
 ## Verify
 
@@ -125,6 +163,10 @@ and mirrored in `tokens.css`. No shared released breakpoint package yet.
 3. Shell chrome stays stable after remote CSS loads.
 4. Exercise portaled UI; leave/re-enter; no duplicate style links or stale
    document state.
+5. Open each Select once and verify its listbox is aligned before any reopen.
+6. Hover “Show hint” and confirm the tooltip does not shift the actions row.
+7. On a control-heavy page, check the theme switch boundary for mixed old/new
+   semantic colors and repeat with reduced motion enabled.
 
 For the registered React demo, the shell Playwright suite covers mount,
 theme/locale chrome survival, and a portaled Select open/close plus forced
