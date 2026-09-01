@@ -1,11 +1,18 @@
 # React remote quick start
 
-Use this checklist to connect an existing Vite + React application to
-`runtime-mf-shell` without removing its standalone entry.
+**New React remote:** copy
+[runtime-mf-react-remote-starter](https://github.com/tryproxy/runtime-mf-react-remote-starter)
+and follow [its README](https://github.com/tryproxy/runtime-mf-react-remote-starter#readme).
+This checklist is only for an **existing** Vite + React app.
+
+Use this checklist to connect that existing application to `runtime-mf-shell`
+without removing its standalone entry.
 
 This is the short implementation path. See
 [Adding a new remote project](./adding-a-new-remote.md) for lifecycle rationale,
 Angular, CSS isolation details, hosting examples, and failure policies.
+The step-by-step existing-SPA walkthrough in the guide folder is
+[Connect a React remote](./guide/react-remote.md).
 
 ## Choose the identifiers once
 
@@ -31,8 +38,8 @@ example — pick an unused port.
 ### 1. Install the platform packages
 
 ```bash
-pnpm add 'github:tryproxy/runtime-mf-contract#v0.5.2'
-pnpm add 'github:tryproxy/runtime-mf-adapters#v0.1.2'
+pnpm add 'github:tryproxy/runtime-mf-contract#v0.5.3'
+pnpm add 'github:tryproxy/runtime-mf-adapters#v0.1.3'
 pnpm add -D '@module-federation/vite@^1.20.5'
 ```
 

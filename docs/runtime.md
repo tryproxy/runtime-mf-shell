@@ -2,25 +2,30 @@
 
 Brief operator guide for the current PoC. Deeper research lives in [`docs/reserach.local/`](./reserach.local/) — start with [POC-STATUS.md](./reserach.local/POC-STATUS.md).
 
-**Connect a React product remote:** [guide/react-remote.md](./guide/react-remote.md)
+**New React remote:** copy
+[runtime-mf-react-remote-starter](https://github.com/tryproxy/runtime-mf-react-remote-starter)
+and follow [its README](https://github.com/tryproxy/runtime-mf-react-remote-starter#readme),
+then [shell registration](./guide/shell-registration.md).
+
+**Existing Vite + React SPA:** [guide/react-remote.md](./guide/react-remote.md)
 ([guide index](./guide/README.md)).
 
 ## Repositories
 
-| Repo                              | Role                                                                                              |
-| --------------------------------- | ------------------------------------------------------------------------------------------------- |
-| `runtime-mf-shell`                | React host (layout, React Router, auth, Remote Runtime, host Playwright)                          |
-| `runtime-mf-module`               | React demo remote (`runtime_mf_module`, alias `demo_remote`, port 5001)                           |
-| `runtime-mf-module-angular`       | Angular remote (`runtime_mf_module_angular`, alias `angular_remote`, port 5002)                   |
-| `runtime-mf-react-remote-starter` | Neutralized React template copy (`starter`, port 5004). Not registered; not a published template. |
-| `runtime-mf-contract`             | `@platform/runtime-mf-contract` — types, runtime parsers and mock bridge                          |
-| `runtime-mf-adapters`             | `@platform/runtime-mf-adapters` — React and Angular lifecycle implementations                     |
+| Repo                              | Role                                                                            |
+| --------------------------------- | ------------------------------------------------------------------------------- |
+| `runtime-mf-shell`                | React host (layout, React Router, auth, Remote Runtime, host Playwright)        |
+| `runtime-mf-module`               | React demo remote (`runtime_mf_module`, alias `demo_remote`, port 5001)         |
+| `runtime-mf-module-angular`       | Angular remote (`runtime_mf_module_angular`, alias `angular_remote`, port 5002) |
+| `runtime-mf-react-remote-starter` | Greenfield React remote (`starter`, port 5004). Not registered in this shell.   |
+| `runtime-mf-contract`             | `@platform/runtime-mf-contract` — types, runtime parsers and mock bridge        |
+| `runtime-mf-adapters`             | `@platform/runtime-mf-adapters` — React and Angular lifecycle implementations   |
 
-Install contract: `pnpm add 'github:tryproxy/runtime-mf-contract#v0.5.2'`.
+Install contract: `pnpm add 'github:tryproxy/runtime-mf-contract#v0.5.3'`.
 The shell and all current remotes pin this release, including its shell-owned
 `bridge.auth.signOut()` capability.
 
-Install framework adapters: `pnpm add 'github:tryproxy/runtime-mf-adapters#v0.1.2'`. React and Angular remotes pin this release; each still supplies its own framework runtime.
+Install framework adapters: `pnpm add 'github:tryproxy/runtime-mf-adapters#v0.1.3'`. React and Angular remotes pin this release; each still supplies its own framework runtime.
 
 ## Current delivery state
 
@@ -134,9 +139,9 @@ The shell currently derives `nav.json` from each federation-manifest origin. Thi
 
 ## Further reading
 
-- [guide/react-remote.md](./guide/react-remote.md) — connect a Vite + React product remote ([index](./guide/README.md))
+- [guide/react-remote.md](./guide/react-remote.md) — existing Vite + React SPA path ([index](./guide/README.md))
 - [e2e/README.md](../e2e/README.md) — host Playwright suite
-- [React remote starter task](./reserach.local/tasks/react-remote-starter.md) — in-progress template
+- [React remote starter](https://github.com/tryproxy/runtime-mf-react-remote-starter) — greenfield React remote
 - [POC-STATUS.md](./reserach.local/POC-STATUS.md) — what is ready
 - [phases.md](./reserach.local/phases.md) — active delivery sequence
 - [repository-map.md](./reserach.local/reference/repository-map.md) — FSD layout

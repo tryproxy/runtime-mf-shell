@@ -3,16 +3,23 @@
 This guide describes the current supported path for creating an independently
 deployed application and mounting it in `runtime-mf-shell`.
 
-For the shorter React-only checklist, start with
-[React remote quick start](./react-remote-quick-start.md).
+**New React remote:** copy
+[runtime-mf-react-remote-starter](https://github.com/tryproxy/runtime-mf-react-remote-starter)
+and follow [its README](https://github.com/tryproxy/runtime-mf-react-remote-starter#readme)
+for rename, HostBridge, CSS/portals, and hosting. Then return here at
+[§11 Register the remote](#11-register-the-remote-in-the-current-shell).
+Do not copy `runtime-mf-module` as a product skeleton.
+
+**Existing SPA or Angular:** continue below. The shorter React-only checklist
+is [React remote quick start](./react-remote-quick-start.md).
 
 The repositories are independent. A remote does not live in the shell
 repository, does not import shell source code, and can use its own framework,
 package manager, release process, and hosting provider.
 
 The currently certified producer path is a browser application built with
-Vite and `@module-federation/vite`. Start from the normal framework scaffold or
-adapt an existing SPA; do not clone the shell into the remote repository.
+Vite and `@module-federation/vite`. Do not clone the shell into the remote
+repository.
 
 ## Current platform boundary
 
@@ -100,16 +107,16 @@ independent repositories.
 With pnpm:
 
 ```bash
-pnpm add 'github:tryproxy/runtime-mf-contract#v0.5.2'
-pnpm add 'github:tryproxy/runtime-mf-adapters#v0.1.2'
+pnpm add 'github:tryproxy/runtime-mf-contract#v0.5.3'
+pnpm add 'github:tryproxy/runtime-mf-adapters#v0.1.3'
 pnpm add -D '@module-federation/vite@^1.20.5'
 ```
 
 With npm:
 
 ```bash
-npm install 'github:tryproxy/runtime-mf-contract#v0.5.2'
-npm install 'github:tryproxy/runtime-mf-adapters#v0.1.2'
+npm install 'github:tryproxy/runtime-mf-contract#v0.5.3'
+npm install 'github:tryproxy/runtime-mf-adapters#v0.1.3'
 npm install --save-dev '@module-federation/vite@^1.20.5'
 ```
 
@@ -581,9 +588,9 @@ or Angular-specific proof.
 
 - `runtime-mf-module`: React remote, React Router basename, bridge hooks, and
   `nav.json` projection.
-- `runtime-mf-react-remote-starter`: neutralized copy of the React demo
-  (`starter`, port `5004`). Baseline only — not a published GitHub template
-  and not registered in the shell.
+- `runtime-mf-react-remote-starter`: greenfield React remote (`starter`, port
+  `5004`). Not registered in the shell. Rename from its README; do not copy
+  `runtime-mf-module` as a product skeleton.
 - `runtime-mf-module-angular`: Angular remote, embedded navigation adaptation,
   DI bridge, and async lifecycle.
 - `runtime-mf-adapters`: framework root lifecycle and cleanup.

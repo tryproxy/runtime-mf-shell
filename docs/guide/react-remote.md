@@ -1,9 +1,16 @@
 # Connect a React remote to the shell
 
-Wire an existing **Vite + React** app into `runtime-mf-shell` without removing
-its standalone entry. Example module: fictional **Store** — rename consistently.
+| Starting point                | Path                                                                                                                                                                                                                                                                 |
+| ----------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **New React app**             | Copy [runtime-mf-react-remote-starter](https://github.com/tryproxy/runtime-mf-react-remote-starter). Rename from [its README](https://github.com/tryproxy/runtime-mf-react-remote-starter#readme). Register the copy: [Shell registration](./shell-registration.md). |
+| **Existing Vite + React SPA** | This document (fictional **Store** — rename consistently).                                                                                                                                                                                                           |
 
-Package manager: **npm** (remote). Shell uses **pnpm**.
+Do not copy `runtime-mf-module` as a product skeleton. The starter is not
+registered here; there is no `/starter` route until you onboard a copy.
+
+The rest of this page is the existing-SPA path. Package manager for that
+walkthrough: **npm** (remote). Shell uses **pnpm**. The starter itself uses
+**pnpm**.
 
 More detail (same folder): [Embedded entry](./embedded-entry.md) ·
 [CSS and tokens](./css-and-tokens.md) · [Vite federation](./vite-federation.md) ·
@@ -13,12 +20,12 @@ More detail (same folder): [Embedded entry](./embedded-entry.md) ·
 
 ### Reference repositories
 
-| Role                 | Repo                                                                                                                                                    |
-| -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Shell                | [tryproxy/runtime-mf-shell](https://github.com/tryproxy/runtime-mf-shell) (`dev`)                                                                       |
-| React demo remote    | [tryproxy/runtime-mf-module](https://github.com/tryproxy/runtime-mf-module) (`dev`)                                                                     |
-| React starter        | [tryproxy/runtime-mf-react-remote-starter](https://github.com/tryproxy/runtime-mf-react-remote-starter) — neutralized copy, not the greenfield path yet |
-| Product remote (ASO) | [asmarketr/aso-market-admin](https://github.com/asmarketr/aso-market-admin) (`mf-remote-integraion`)                                                    |
+| Role                 | Repo                                                                                                                              |
+| -------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| Shell                | [tryproxy/runtime-mf-shell](https://github.com/tryproxy/runtime-mf-shell) (`dev`)                                                 |
+| React demo remote    | [tryproxy/runtime-mf-module](https://github.com/tryproxy/runtime-mf-module) (`dev`)                                               |
+| React starter        | [tryproxy/runtime-mf-react-remote-starter](https://github.com/tryproxy/runtime-mf-react-remote-starter) — greenfield React remote |
+| Product remote (ASO) | [asmarketr/aso-market-admin](https://github.com/asmarketr/aso-market-admin) (`mf-remote-integraion`)                              |
 
 ## TL;DR — how it works
 
@@ -71,8 +78,8 @@ Env + static module + `RemoteSlot` page + i18n + redeploy. Details:
 ## 2. Install (remote)
 
 ```bash
-npm install github:tryproxy/runtime-mf-contract#v0.5.2
-npm install github:tryproxy/runtime-mf-adapters#v0.1.2
+npm install github:tryproxy/runtime-mf-contract#v0.5.3
+npm install github:tryproxy/runtime-mf-adapters#v0.1.3
 npm install -D @module-federation/vite@^1.20.5
 ```
 
