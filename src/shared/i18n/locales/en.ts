@@ -162,8 +162,13 @@ export const en = {
     retry: 'Retry',
   },
   auth: {
+    providerLabel: 'Authentication provider',
+    providerAso: 'ASO Pilot',
+    providerCustom: 'Custom',
     loginTitle: 'Sign in',
     loginDescription: 'Enter your email and password to continue.',
+    customLoginDescription:
+      'Sign in through the replaceable custom backend configured for this Shell.',
     registerTitle: 'Create account',
     registerDescription: 'Fill in the form to register.',
     email: 'Email',

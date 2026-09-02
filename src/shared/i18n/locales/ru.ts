@@ -161,8 +161,13 @@ export const ru = {
     retry: 'Повторить',
   },
   auth: {
+    providerLabel: 'Способ входа',
+    providerAso: 'ASO Pilot',
+    providerCustom: 'Custom',
     loginTitle: 'Вход',
     loginDescription: 'Введите email и пароль, чтобы продолжить.',
+    customLoginDescription:
+      'Войдите через заменяемый custom backend, настроенный для этого Shell.',
     registerTitle: 'Регистрация',
     registerDescription: 'Заполните форму, чтобы создать аккаунт.',
     email: 'Email',

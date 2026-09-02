@@ -4,6 +4,7 @@ import type { RemoteRuntimeAdapters } from '@/remote-runtime';
 import {
   getAccessToken,
   getAuthEmail,
+  getAuthProvider,
   logoutSession,
   subscribeSession,
 } from '@/shared/auth';
@@ -59,7 +60,8 @@ function createAuthForRemote(remoteId: string): HostBridge['auth'] {
   return {
     ...authSession,
     http: createRemoteAuthHttp(remoteId, {
-      getLegacyAsoAccessToken: getAccessToken,
+      getAuthProvider,
+      getStoredAccessToken: getAccessToken,
     }),
   };
 }

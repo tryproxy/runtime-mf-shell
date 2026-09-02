@@ -506,7 +506,6 @@ function TokenSpecimen({ token }: { token: RmfDesignTokenName }) {
   const radius = `var(${RMF_DESIGN_TOKENS.radius})`;
   const surface = `var(${RMF_DESIGN_TOKENS.surface})`;
   const surfaceFg = `var(${RMF_DESIGN_TOKENS.surfaceForeground})`;
-  const page = `var(${RMF_DESIGN_TOKENS.page})`;
 
   let sample: ReactNode;
 
@@ -551,10 +550,9 @@ function TokenSpecimen({ token }: { token: RmfDesignTokenName }) {
     case 'input':
       sample = (
         <span
-          className="h-8 w-14 shrink-0"
+          className="dark:bg-input/30 h-8 w-14 shrink-0 border bg-transparent"
           style={{
-            backgroundColor: page,
-            border: `1px solid var(${token})`,
+            borderColor: `var(${token})`,
             borderRadius: radius,
           }}
         />

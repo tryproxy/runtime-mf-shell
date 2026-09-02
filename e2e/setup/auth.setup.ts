@@ -25,6 +25,11 @@ setup('authenticate through the shell login UI', async ({ page }) => {
   await page.waitForURL((url) => url.pathname !== '/login', {
     timeout: 20_000,
   });
+  await expect
+    .poll(() =>
+      page.evaluate(() => window.localStorage.getItem('rmf-auth-provider'))
+    )
+    .toBe('aso');
 
   fs.mkdirSync(path.dirname(AUTH_STATE_PATH), { recursive: true });
   await page.context().storageState({ path: AUTH_STATE_PATH });
