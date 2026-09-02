@@ -2,7 +2,7 @@
 
 React host for the runtime microfrontend PoC. Remotes (React / Angular) mount into this shell through a shared contract — not by importing shell internals.
 
-For a longer operator guide see [`docs/runtime.md`](./docs/runtime.md).
+Documentation router: [`docs/README.md`](./docs/README.md). Brief operator overview: [`docs/runtime.md`](./docs/runtime.md).
 **Connect a React remote:** [`docs/guide/react-remote.md`](./docs/guide/react-remote.md)
 ([guide index](./docs/guide/README.md)).
 Research / backlog: [`docs/reserach.local/`](./docs/reserach.local/).
