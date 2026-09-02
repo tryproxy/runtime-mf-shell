@@ -89,6 +89,14 @@ export const navModules: NavModule[] = [
     descriptionKey: 'nav.asoDesc',
     pages: [],
   },
+  {
+    id: 'zeywin',
+    path: 'zeywin',
+    group: 'pilots',
+    labelKey: 'nav.zeywin',
+    descriptionKey: 'nav.zeywinDesc',
+    pages: [],
+  },
 ];
 
 export function groupNavModules(modules: NavModule[]): NavModuleGroup[] {

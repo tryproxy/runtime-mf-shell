@@ -44,6 +44,7 @@ test.describe('shell lab navigation', () => {
     await expect(
       sidebar.getByRole('button', { name: 'ASO Pilot' })
     ).toBeVisible();
+    await expect(sidebar.getByRole('button', { name: 'Zeywin' })).toBeVisible();
 
     await platform.click();
     await expect(page).toHaveURL(/\/host\/?$/);

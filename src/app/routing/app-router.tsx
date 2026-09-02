@@ -8,6 +8,7 @@ import {
   RemoteAngularRoute,
   RemoteRoute,
   ShellLayout,
+  ZeywinRoute,
 } from '@/app/routing/route-elements';
 import { installHistorySync } from '@/app/routing/router-navigation';
 import { ShellRouteError } from '@/app/error-handling/shell-route-error';
@@ -44,6 +45,7 @@ export const appRouter = createBrowserRouter([
               remote: { element: <RemoteRoute /> },
               remoteAngular: { element: <RemoteAngularRoute /> },
               aso: { element: <AsoRoute /> },
+              zeywin: { element: <ZeywinRoute /> },
             }),
           },
         ],

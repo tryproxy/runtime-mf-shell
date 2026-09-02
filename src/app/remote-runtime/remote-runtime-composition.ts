@@ -70,11 +70,39 @@ const remoteRequests: Record<string, string> = {
   remote: 'demo_remote/mount',
   remoteAngular: 'angular_remote/mount',
   aso: 'aso_remote/mount',
+  zeywin: 'zeywin_remote/mount',
 };
 
 const asoRemoteManifestUrl =
   import.meta.env.VITE_ASO_REMOTE_MANIFEST_URL ||
   'http://localhost:5003/mf-manifest.json';
+
+const zeywinRemoteManifestUrl = readFederationManifestUrl(
+  import.meta.env.VITE_ZEYWIN_REMOTE_MANIFEST_URL
+);
+
+function readFederationManifestUrl(
+  value: string | undefined
+): string | undefined {
+  const entry = value?.trim();
+  if (!entry) {
+    return undefined;
+  }
+
+  try {
+    const url = new URL(entry);
+    if (
+      (url.protocol === 'http:' || url.protocol === 'https:') &&
+      url.hostname.length > 0
+    ) {
+      return entry;
+    }
+  } catch {
+    return undefined;
+  }
+
+  return undefined;
+}
 
 function unwrapFederationModule(value: unknown): unknown {
   if (typeof value !== 'object' || value === null || 'mount' in value) {
@@ -106,6 +134,15 @@ const federationRuntime = createInstance({
       alias: 'aso_remote',
       entry: asoRemoteManifestUrl,
     },
+    ...(zeywinRemoteManifestUrl
+      ? [
+          {
+            name: 'zeywin_app',
+            alias: 'zeywin_remote',
+            entry: zeywinRemoteManifestUrl,
+          },
+        ]
+      : []),
   ],
 });
 

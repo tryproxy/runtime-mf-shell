@@ -32,6 +32,8 @@ export const ru = {
     remoteAngularDesc: 'Демо соответствия для Angular-адаптера.',
     aso: 'ASO Pilot',
     asoDesc: 'Продуктовый пилот. Не эталон платформы.',
+    zeywin: 'Zeywin',
+    zeywinDesc: 'Продуктовый пилот. Не эталон платформы.',
     pageHome: 'Главная',
     pageOverview: 'Обзор',
     pageStyleGuide: 'Гайд стиля',

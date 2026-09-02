@@ -12,6 +12,33 @@ const asoRemoteManifestUrl =
   import.meta.env.VITE_ASO_REMOTE_MANIFEST_URL ||
   'http://localhost:5003/mf-manifest.json';
 
+function readFederationManifestUrl(
+  value: string | undefined
+): string | undefined {
+  const entry = value?.trim();
+  if (!entry) {
+    return undefined;
+  }
+
+  try {
+    const url = new URL(entry);
+    if (
+      (url.protocol === 'http:' || url.protocol === 'https:') &&
+      url.hostname.length > 0
+    ) {
+      return entry;
+    }
+  } catch {
+    return undefined;
+  }
+
+  return undefined;
+}
+
+const zeywinRemoteManifestUrl = readFederationManifestUrl(
+  import.meta.env.VITE_ZEYWIN_REMOTE_MANIFEST_URL
+);
+
 export const REMOTE_NAV_SOURCES: readonly RemoteNavSource[] = [
   {
     moduleId: 'remote',
@@ -29,6 +56,14 @@ export const REMOTE_NAV_SOURCES: readonly RemoteNavSource[] = [
         {
           moduleId: 'aso',
           federationEntryUrl: asoRemoteManifestUrl,
+        },
+      ]
+    : []),
+  ...(zeywinRemoteManifestUrl
+    ? [
+        {
+          moduleId: 'zeywin',
+          federationEntryUrl: zeywinRemoteManifestUrl,
         },
       ]
     : []),

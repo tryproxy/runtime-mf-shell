@@ -32,6 +32,8 @@ export const en = {
     remoteAngularDesc: 'Conformance remote for the Angular adapter.',
     aso: 'ASO Pilot',
     asoDesc: 'Product pilot. Not a platform reference implementation.',
+    zeywin: 'Zeywin',
+    zeywinDesc: 'Product pilot. Not a platform reference implementation.',
     pageHome: 'Home',
     pageOverview: 'Overview',
     pageStyleGuide: 'Style Guide',

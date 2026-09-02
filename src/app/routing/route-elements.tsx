@@ -5,6 +5,7 @@ import { AuthPage } from '@/pages/authentication';
 import { AsoPage } from '@/pages/aso';
 import { RemotePage } from '@/pages/remote';
 import { RemoteAngularPage } from '@/pages/remote-angular';
+import { ZeywinPage } from '@/pages/zeywin';
 import { getAccessToken, persistAccessToken } from '@/shared/auth';
 import type { ShellTheme } from '@/shared/config';
 import {
@@ -173,6 +174,19 @@ export function AsoRoute() {
       theme={theme}
       locale={locale}
       onRetry={() => void ensureNav('aso')}
+    />
+  );
+}
+
+export function ZeywinRoute() {
+  const { theme, locale } = useOutletContext<ShellOutletContext>();
+  const { ensureNav } = useRemoteNavManifests();
+
+  return (
+    <ZeywinPage
+      theme={theme}
+      locale={locale}
+      onRetry={() => void ensureNav('zeywin')}
     />
   );
 }

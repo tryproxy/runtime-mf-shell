@@ -34,6 +34,9 @@ export const es = {
     aso: 'ASO Pilot',
     asoDesc:
       'Piloto de producto. No es la implementación de referencia de la plataforma.',
+    zeywin: 'Zeywin',
+    zeywinDesc:
+      'Piloto de producto. No es la implementación de referencia de la plataforma.',
     pageHome: 'Inicio',
     pageOverview: 'Resumen',
     pageStyleGuide: 'Guía de estilo',
