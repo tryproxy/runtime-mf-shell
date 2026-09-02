@@ -17,9 +17,28 @@ test.describe('shell style guide', () => {
     await expect(
       page.getByRole('switch', { name: 'Notifications' })
     ).toBeVisible();
+    await expect(
+      page.getByText('--rmf-color-page', { exact: true })
+    ).toBeVisible();
+    await expect(
+      page.getByText('--rmf-font-sans', { exact: true })
+    ).toBeVisible();
+    await expect(
+      page.getByRole('textbox', { name: 'Notes', exact: true })
+    ).toBeVisible();
+    await expect(page.getByRole('radio', { name: 'Draft' })).toHaveCount(1);
+    await expect(
+      page.getByRole('radio', { name: 'Plan disabled' })
+    ).toBeDisabled();
+    await expect(
+      page.getByRole('textbox', { name: 'Name invalid', exact: true })
+    ).toHaveAttribute('aria-invalid', 'true');
+    await expect(
+      page.getByRole('button', { name: 'Save example', exact: true })
+    ).toHaveAttribute('aria-busy', 'true');
     await expect(page.locator('[data-slot="badge"]')).toHaveCount(4);
 
-    const trigger = page.getByRole('combobox', { name: 'State' });
+    const trigger = page.getByRole('combobox', { name: 'State', exact: true });
     const triggerBox = await trigger.boundingBox();
     expect(triggerBox, 'state select trigger bounds').not.toBeNull();
 

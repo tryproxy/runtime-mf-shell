@@ -65,4 +65,6 @@ export { Separator } from './separator';
 export { Checkbox } from './checkbox';
 export { Input } from './input';
 export { Label } from './label';
+export { RadioGroup, RadioGroupItem } from './radio-group';
 export { Switch } from './switch';
+export { Textarea } from './textarea';

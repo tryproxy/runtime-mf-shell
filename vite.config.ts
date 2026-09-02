@@ -21,6 +21,12 @@ export default defineConfig({
     port: 5000,
     strictPort: true,
   },
+  optimizeDeps: {
+    include: [
+      '@platform/runtime-mf-contract',
+      '@platform/runtime-mf-contract/design-tokens',
+    ],
+  },
   build: {
     target: 'esnext',
   },
