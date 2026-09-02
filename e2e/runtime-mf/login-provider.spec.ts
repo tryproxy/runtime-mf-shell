@@ -10,10 +10,9 @@ test.describe('login provider selector', () => {
   test('signs in through the replaceable custom backend adapter', async ({
     page,
   }) => {
-    await expect(page.getByRole('tab', { name: 'ASO Pilot' })).toHaveAttribute(
-      'aria-selected',
-      'true'
-    );
+    await expect(
+      page.getByRole('tab', { name: 'ASO Customer Admin' })
+    ).toHaveAttribute('aria-selected', 'true');
 
     await page.getByRole('tab', { name: 'Custom' }).click();
     await expect(page.getByRole('tab', { name: 'Custom' })).toHaveAttribute(
@@ -39,7 +38,7 @@ test.describe('login provider selector', () => {
     await page.getByLabel('Password', { exact: true }).fill('custom-password');
     await page.getByRole('button', { name: 'Sign in', exact: true }).click();
 
-    await expect(page).toHaveURL(/\/host\/?$/);
+    await expect(page).toHaveURL(/\/host\/style-guide\/?$/);
     await expect
       .poll(() =>
         page.evaluate(() => ({
@@ -71,9 +70,11 @@ test.describe('login provider selector', () => {
       });
     });
 
-    await page.getByRole('button', { name: 'Log in as test user' }).click();
+    await page
+      .getByRole('button', { name: 'Quick login as a Custom test user' })
+      .click();
 
-    await expect(page).toHaveURL(/\/host\/?$/);
+    await expect(page).toHaveURL(/\/host\/style-guide\/?$/);
     await expect
       .poll(() =>
         page.evaluate(() => ({
@@ -111,7 +112,7 @@ test.describe('login provider selector', () => {
   }) => {
     await page.getByRole('tab', { name: 'Custom' }).click();
     await page.getByLabel('Email').fill('custom@example.com');
-    await page.getByRole('tab', { name: 'ASO Pilot' }).click();
+    await page.getByRole('tab', { name: 'ASO Customer Admin' }).click();
     await expect(page.getByLabel('Email')).toHaveValue('');
   });
 });

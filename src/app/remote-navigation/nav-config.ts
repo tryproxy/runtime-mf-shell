@@ -18,7 +18,7 @@ export type NavPage = {
   label?: NavPageLabel;
 };
 
-export type NavModuleGroupId = 'platform' | 'demos' | 'pilots';
+export type NavModuleGroupId = 'platform' | 'demos' | 'products';
 
 export type NavModule = {
   id: string;
@@ -42,7 +42,7 @@ const NAV_MODULE_GROUP_ORDER: readonly {
 }[] = [
   { id: 'platform', labelKey: 'nav.groupPlatform' },
   { id: 'demos', labelKey: 'nav.groupDemos' },
-  { id: 'pilots', labelKey: 'nav.groupPilots' },
+  { id: 'products', labelKey: 'nav.groupProducts' },
 ];
 
 /**
@@ -84,7 +84,7 @@ export const navModules: NavModule[] = [
   {
     id: 'aso',
     path: 'aso',
-    group: 'pilots',
+    group: 'products',
     labelKey: 'nav.aso',
     descriptionKey: 'nav.asoDesc',
     pages: [],
@@ -92,7 +92,7 @@ export const navModules: NavModule[] = [
   {
     id: 'zeywin',
     path: 'zeywin',
-    group: 'pilots',
+    group: 'products',
     labelKey: 'nav.zeywin',
     descriptionKey: 'nav.zeywinDesc',
     pages: [],

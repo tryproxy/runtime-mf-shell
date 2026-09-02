@@ -12,18 +12,18 @@ Shell repo: [tryproxy/runtime-mf-shell](https://github.com/tryproxy/runtime-mf-s
 
 ## Files to touch
 
-| File                                                          | Add                                                                     |
-| ------------------------------------------------------------- | ----------------------------------------------------------------------- |
-| `src/shared/env.d.ts`                                         | `VITE_STORE_REMOTE_MANIFEST_URL?`                                       |
-| `env.example`                                                 | Local / documented manifest URL                                         |
-| `src/app/remote-runtime/remote-runtime-composition.ts`        | Manifest URL, alias, load request                                       |
-| `src/app/remote-navigation/nav-config.ts`                     | Module with `pages: []` and `group` (`platform` \| `demos` \| `pilots`) |
-| `src/shared/i18n/locales/en.ts` (+ `ru.ts` / `es.ts`)         | Module label keys                                                       |
-| `src/pages/store/`                                            | Thin `RemoteSlot` page                                                  |
-| `src/app/routing/route-elements.tsx`                          | Route composition export                                                |
-| `src/app/routing/app-router.tsx`                              | Wire into `buildModuleRoutes({ … })`                                    |
-| `src/app/remote-navigation/remote-nav-sources.ts`             | `{ moduleId, federationEntryUrl }` in `REMOTE_NAV_SOURCES`              |
-| `src/app/remote-navigation/remote-nav-manifests-provider.tsx` | No source-table change — lifecycle / `ensureNav` only                   |
+| File                                                          | Add                                                                       |
+| ------------------------------------------------------------- | ------------------------------------------------------------------------- |
+| `src/shared/env.d.ts`                                         | `VITE_STORE_REMOTE_MANIFEST_URL?`                                         |
+| `env.example`                                                 | Local / documented manifest URL                                           |
+| `src/app/remote-runtime/remote-runtime-composition.ts`        | Manifest URL, alias, load request                                         |
+| `src/app/remote-navigation/nav-config.ts`                     | Module with `pages: []` and `group` (`platform` \| `demos` \| `products`) |
+| `src/shared/i18n/locales/en.ts` (+ `ru.ts` / `es.ts`)         | Module label keys                                                         |
+| `src/pages/store/`                                            | Thin `RemoteSlot` page                                                    |
+| `src/app/routing/route-elements.tsx`                          | Route composition export                                                  |
+| `src/app/routing/app-router.tsx`                              | Wire into `buildModuleRoutes({ … })`                                      |
+| `src/app/remote-navigation/remote-nav-sources.ts`             | `{ moduleId, federationEntryUrl }` in `REMOTE_NAV_SOURCES`                |
+| `src/app/remote-navigation/remote-nav-manifests-provider.tsx` | No source-table change — lifecycle / `ensureNav` only                     |
 
 ## Env
 
@@ -64,7 +64,7 @@ store: 'store_remote/mount',
 {
   id: 'store',
   path: 'store',
-  group: 'pilots',
+  group: 'products',
   labelKey: 'nav.store',
   descriptionKey: 'nav.storeDesc',
   pages: [], // filled from remote nav.json

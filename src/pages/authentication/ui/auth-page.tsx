@@ -56,6 +56,8 @@ type AuthPageProps = {
   onLocaleChange(locale: AppLocale): void;
 };
 
+const CUSTOM_POST_AUTH_PATH = '/host/style-guide';
+
 function resolvePostAuthPath(state: unknown): string {
   if (
     typeof state === 'object' &&
@@ -70,7 +72,7 @@ function resolvePostAuthPath(state: unknown): string {
     }
   }
 
-  return '/host';
+  return CUSTOM_POST_AUTH_PATH;
 }
 
 function resolveAsoPath(redirectTo: string): string {
@@ -79,6 +81,16 @@ function resolveAsoPath(redirectTo: string): string {
   }
 
   return '/aso';
+}
+
+function resolveCustomPath(redirectTo: string): string {
+  const pathname = redirectTo.split(/[?#]/, 1)[0];
+
+  if (pathname === '/' || pathname === '/host' || pathname === '/host/') {
+    return CUSTOM_POST_AUTH_PATH;
+  }
+
+  return redirectTo;
 }
 
 type CredentialsFieldsProps = {
@@ -204,7 +216,7 @@ export function AuthPage({
         password: customPassword,
       });
       persistSession(accessToken, customEmail.trim(), 'custom');
-      void navigate(redirectTo, { replace: true });
+      void navigate(resolveCustomPath(redirectTo), { replace: true });
     } catch (err) {
       setError(err instanceof Error ? err.message : t('auth.errorGeneric'));
     } finally {
@@ -260,7 +272,7 @@ export function AuthPage({
         password: CUSTOM_TEST_USER.password,
       });
       persistSession(accessToken, CUSTOM_TEST_USER.email, 'custom');
-      void navigate(redirectTo, { replace: true });
+      void navigate(resolveCustomPath(redirectTo), { replace: true });
     } catch (err) {
       setError(err instanceof Error ? err.message : t('auth.errorGeneric'));
     } finally {
@@ -352,7 +364,7 @@ export function AuthPage({
                     disabled={pending}
                     onClick={() => void loginAsAsoTestUser()}
                   >
-                    {t('auth.testUserLogin')}
+                    {t('auth.asoTestUserLogin')}
                   </button>
                   <form
                     noValidate
@@ -438,7 +450,7 @@ export function AuthPage({
                       className="h-11 w-full"
                       disabled={pending}
                     >
-                      {t('auth.asoTestUserLogin')}
+                      {t('auth.asoTokenSubmit')}
                     </Button>
                   </form>
                 </TabsContent>
@@ -453,7 +465,7 @@ export function AuthPage({
                     disabled={pending}
                     onClick={() => void loginAsCustomTestUser()}
                   >
-                    {t('auth.testUserLogin')}
+                    {t('auth.customTestUserLogin')}
                   </button>
                   <form
                     noValidate

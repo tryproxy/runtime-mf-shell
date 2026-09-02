@@ -287,6 +287,7 @@ function ModulesLayer({
                 <button
                   key={module.id}
                   type="button"
+                  title={t(module.descriptionKey)}
                   className={cn(
                     'flex w-full min-w-0 cursor-pointer items-center gap-2 rounded-lg px-2.5 py-1.5 text-left transition-colors',
                     isActive

@@ -44,6 +44,7 @@ export function AppNavSwitcher({
             key={module.id}
             ref={isActive ? activeRef : undefined}
             type="button"
+            title={t(module.descriptionKey)}
             aria-current={isActive ? 'page' : undefined}
             className={cn(
               'relative shrink-0 cursor-pointer px-3.5 pt-3 pb-2.5 text-[15px] transition-colors',

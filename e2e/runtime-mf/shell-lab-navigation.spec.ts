@@ -22,15 +22,15 @@ test.describe('shell lab navigation', () => {
     const sidebar = page.locator('[data-rmf-shell="sidebar"]');
     const platform = sidebar.locator('[data-rmf-nav-group="platform"]');
     const demos = sidebar.locator('[data-rmf-nav-group="demos"]');
-    const pilots = sidebar.locator('[data-rmf-nav-group="pilots"]');
+    const products = sidebar.locator('[data-rmf-nav-group="products"]');
 
     await expect(platform).toHaveText('Platform');
     await expect(demos).toHaveText('Demos');
-    await expect(pilots).toHaveText('Pilots');
+    await expect(products).toHaveText('Products');
     await expect(platform).not.toHaveRole('button');
     await expect(platform).not.toHaveRole('link');
     await expect(demos).not.toHaveRole('link');
-    await expect(pilots).not.toHaveRole('button');
+    await expect(products).not.toHaveRole('button');
 
     await expect(
       sidebar.getByRole('button', { name: 'Shell Lab' })
@@ -42,9 +42,11 @@ test.describe('shell lab navigation', () => {
       sidebar.getByRole('button', { name: 'Angular Demo' })
     ).toBeVisible();
     await expect(
-      sidebar.getByRole('button', { name: 'ASO Pilot' })
+      sidebar.getByRole('button', { name: 'ASO Customer Admin' })
     ).toBeVisible();
-    await expect(sidebar.getByRole('button', { name: 'Zeywin' })).toBeVisible();
+    await expect(
+      sidebar.getByRole('button', { name: 'Zeywin' })
+    ).toHaveAttribute('title', 'Product app connected to this shell.');
 
     await platform.click();
     await expect(page).toHaveURL(/\/host\/?$/);
@@ -113,8 +115,8 @@ test.describe('shell lab compact navigation', () => {
       header.getByRole('button', { name: 'React Demo' })
     ).toBeVisible();
     await expect(
-      header.getByRole('button', { name: 'ASO Pilot' })
-    ).toBeVisible();
+      header.getByRole('button', { name: 'ASO Customer Admin' })
+    ).toHaveAttribute('title', 'Product app connected to this shell.');
     await expect(header.getByText('Platform', { exact: true })).toHaveCount(0);
     await expect(header.getByText('Demos', { exact: true })).toHaveCount(0);
 
