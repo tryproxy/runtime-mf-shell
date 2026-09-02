@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "author": "asdqdsa",
+  "author": "tryproxy",
   "license": "MIT",
   "engines": {
     "node": ">=22.13.0"
