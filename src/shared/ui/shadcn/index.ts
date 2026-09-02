@@ -62,5 +62,7 @@ export {
   SelectValue,
 } from './select';
 export { Separator } from './separator';
+export { Checkbox } from './checkbox';
 export { Input } from './input';
 export { Label } from './label';
+export { Switch } from './switch';

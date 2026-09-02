@@ -22,7 +22,7 @@ export function ShellAccountFooter({
   return (
     <div
       className={cn(
-        'border-sidebar-border flex shrink-0 items-center gap-2.5 border-t px-3 py-3',
+        'border-sidebar-border flex shrink-0 items-center gap-2.5 border-t px-3 py-2.5',
         className
       )}
     >

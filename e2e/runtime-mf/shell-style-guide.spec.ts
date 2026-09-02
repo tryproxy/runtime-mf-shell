@@ -8,6 +8,17 @@ test.describe('shell style guide', () => {
     page,
   }) => {
     await page.goto('/host/style-guide');
+    await expect(
+      page.getByRole('button', { name: 'Destructive' })
+    ).toBeVisible();
+    await expect(
+      page.getByRole('checkbox', { name: 'Subscribe' })
+    ).toBeVisible();
+    await expect(
+      page.getByRole('switch', { name: 'Notifications' })
+    ).toBeVisible();
+    await expect(page.locator('[data-slot="badge"]')).toHaveCount(4);
+
     const trigger = page.getByRole('combobox', { name: 'State' });
     const triggerBox = await trigger.boundingBox();
     expect(triggerBox, 'state select trigger bounds').not.toBeNull();
@@ -45,9 +56,10 @@ test.describe('shell style guide', () => {
     await expect(page.getByRole('tooltip')).toHaveCount(0);
 
     await page.getByRole('button', { name: 'Show toast' }).click();
-    await expect(
-      page.getByRole('status').filter({ hasText: 'Saved' })
-    ).toBeVisible();
+    const toast = page.getByRole('status').filter({ hasText: 'Saved' });
+    await expect(toast).toBeVisible();
+    await toast.getByRole('button', { name: 'Close' }).click();
+    await expect(toast).toHaveCount(0);
 
     await assertNoOrphanedPortals();
   });
@@ -62,6 +74,13 @@ test.describe('shell style guide', () => {
     await page.getByRole('option', { name: 'RU' }).click();
     await expect(
       page.getByRole('heading', { name: 'Гайд стиля Shell' })
+    ).toBeVisible();
+    await expect(page.getByRole('button', { name: 'Опасное' })).toBeVisible();
+    await expect(
+      page.getByRole('checkbox', { name: 'Подписка' })
+    ).toBeVisible();
+    await expect(
+      page.getByRole('switch', { name: 'Уведомления' })
     ).toBeVisible();
     await expect(header.getByRole('button', { name: 'Выйти' })).toBeVisible();
 

@@ -24,7 +24,7 @@ export function HostPage() {
   }
 
   return (
-    <section className="space-y-6">
+    <section className="flex flex-col gap-3">
       <div>
         <h3 className="text-lg font-semibold tracking-tight">
           {t('host.title')}
@@ -81,7 +81,7 @@ export function HostPage() {
         </CardContent>
       </Card>
 
-      <div className="grid gap-4 sm:grid-cols-2">
+      <div className="grid gap-3 sm:grid-cols-2">
         <Panel
           title={t('host.owner')}
           value={t('host.ownerValue')}

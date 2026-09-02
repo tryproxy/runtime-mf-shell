@@ -28,6 +28,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
+  Separator,
 } from '@/shared/ui/shadcn';
 import {
   ChevronLeftIcon,
@@ -38,6 +39,7 @@ import {
 import {
   type MouseEvent,
   type PropsWithChildren,
+  Fragment,
   useEffect,
   useState,
 } from 'react';
@@ -117,7 +119,7 @@ export function AppShell({
       </div>
 
       <header
-        className="bg-card/80 supports-backdrop-filter:bg-card/60 wideMobile:px-6 z-10 flex flex-col justify-center border-b px-4 pt-3 backdrop-blur md:col-start-2 md:row-start-1 md:pb-3"
+        className="bg-sidebar text-sidebar-foreground border-sidebar-border wideMobile:px-6 z-10 flex flex-col justify-center border-b px-4 pt-3 md:col-start-2 md:row-start-1 md:pb-3"
         data-rmf-shell="header"
       >
         <div className="flex items-start justify-between gap-3 pb-3 md:pb-0">
@@ -209,7 +211,7 @@ export function AppShell({
         className="bg-sidebar text-sidebar-foreground border-sidebar-border hidden min-h-0 flex-col border-r md:row-start-2 md:flex"
         data-rmf-shell="sidebar"
       >
-        <ScrollArea className="min-h-0 min-w-0 flex-1 px-3 py-4">
+        <ScrollArea className="min-h-0 min-w-0 flex-1 px-2.5 py-3">
           <div
             key={navLayer}
             className={cn(
@@ -266,49 +268,52 @@ function ModulesLayer({
   const groups = groupNavModules(moduleList);
 
   return (
-    <nav className="flex flex-col gap-4" aria-label={t('nav.modulesAria')}>
-      {groups.map((group) => (
-        <section key={group.id} className="flex flex-col gap-1">
-          <p
-            data-rmf-nav-group={group.id}
-            className="text-muted-foreground px-2 pb-1 text-[11px] font-semibold tracking-wide uppercase"
-          >
-            {t(group.labelKey)}
-          </p>
-          {group.modules.map((module) => {
-            const isActive = module.id === activeModuleId;
-            const hasPages = moduleHasPages(module);
+    <nav className="flex flex-col" aria-label={t('nav.modulesAria')}>
+      {groups.map((group, index) => (
+        <Fragment key={group.id}>
+          {index > 0 ? <Separator className="bg-sidebar-border my-2" /> : null}
+          <section className="flex flex-col gap-1">
+            <p
+              data-rmf-nav-group={group.id}
+              className="text-muted-foreground px-2 pb-0.5 text-[11px] font-semibold tracking-wide uppercase"
+            >
+              {t(group.labelKey)}
+            </p>
+            {group.modules.map((module) => {
+              const isActive = module.id === activeModuleId;
+              const hasPages = moduleHasPages(module);
 
-            return (
-              <button
-                key={module.id}
-                type="button"
-                className={cn(
-                  'flex w-full min-w-0 cursor-pointer items-center gap-2 rounded-lg px-3 py-2.5 text-left transition-colors',
-                  isActive
-                    ? 'bg-sidebar-accent text-sidebar-accent-foreground'
-                    : 'text-sidebar-foreground/80 hover:bg-sidebar-accent/70 hover:text-sidebar-accent-foreground'
-                )}
-                onClick={() => onOpenModule(module)}
-              >
-                <span className="min-w-0 flex-1 overflow-hidden">
-                  <span className="block truncate text-sm font-medium">
-                    {t(module.labelKey)}
+              return (
+                <button
+                  key={module.id}
+                  type="button"
+                  className={cn(
+                    'flex w-full min-w-0 cursor-pointer items-center gap-2 rounded-lg px-2.5 py-1.5 text-left transition-colors',
+                    isActive
+                      ? 'bg-sidebar-accent text-sidebar-accent-foreground'
+                      : 'text-sidebar-foreground/80 hover:bg-sidebar-accent/70 hover:text-sidebar-accent-foreground'
+                  )}
+                  onClick={() => onOpenModule(module)}
+                >
+                  <span className="min-w-0 flex-1 overflow-hidden">
+                    <span className="block truncate text-sm font-medium">
+                      {t(module.labelKey)}
+                    </span>
+                    <span className="text-muted-foreground block truncate text-xs">
+                      {t(module.descriptionKey)}
+                    </span>
                   </span>
-                  <span className="text-muted-foreground mt-0.5 block truncate text-xs">
-                    {t(module.descriptionKey)}
-                  </span>
-                </span>
-                {hasPages ? (
-                  <ChevronRightIcon
-                    aria-hidden
-                    className="text-muted-foreground size-4 shrink-0"
-                  />
-                ) : null}
-              </button>
-            );
-          })}
-        </section>
+                  {hasPages ? (
+                    <ChevronRightIcon
+                      aria-hidden
+                      className="text-muted-foreground size-4 shrink-0"
+                    />
+                  ) : null}
+                </button>
+              );
+            })}
+          </section>
+        </Fragment>
       ))}
     </nav>
   );
@@ -333,7 +338,7 @@ function PagesLayer({
     <nav className="flex flex-col gap-1" aria-label={t('nav.pagesAria')}>
       <button
         type="button"
-        className="text-sidebar-foreground/90 hover:bg-sidebar-accent/70 hover:text-sidebar-accent-foreground mb-2 flex w-full cursor-pointer items-center gap-1.5 rounded-lg px-2 py-2 text-left transition-colors"
+        className="text-sidebar-foreground/90 hover:bg-sidebar-accent/70 hover:text-sidebar-accent-foreground mb-1.5 flex w-full cursor-pointer items-center gap-1.5 rounded-lg px-2 py-1.5 text-left transition-colors"
         onClick={onBack}
       >
         <ChevronLeftIcon className="text-muted-foreground size-4 shrink-0" />
@@ -353,7 +358,7 @@ function PagesLayer({
             key={page.id}
             href={href}
             className={cn(
-              'cursor-pointer truncate rounded-lg px-3 py-2 text-sm font-medium transition-colors',
+              'cursor-pointer truncate rounded-lg px-2.5 py-1.5 text-sm font-medium transition-colors',
               isActive
                 ? 'bg-sidebar-accent text-sidebar-accent-foreground'
                 : 'text-sidebar-foreground/80 hover:bg-sidebar-accent/70 hover:text-sidebar-accent-foreground'
