@@ -116,7 +116,7 @@ export function AsoAccessTokenRoute() {
       return;
     }
 
-    persistAccessToken(accessToken);
+    persistAccessToken(accessToken, 'aso');
     setTarget(resolveAsoReturnTo(returnTo));
   }, [accessToken, returnTo]);
 

@@ -3,6 +3,7 @@ import type { HostBridge } from '@platform/runtime-mf-contract';
 type RemoteAuthPolicyId = 'none' | 'legacy-aso-bearer';
 
 type RemoteAuthPolicyDependencies = {
+  getAuthProvider(): string | null;
   getLegacyAsoAccessToken(): string | null;
 };
 
@@ -22,7 +23,10 @@ export function createRemoteAuthHttp(
     case 'legacy-aso-bearer':
       return {
         mode: 'bearer',
-        getAccessToken: async () => dependencies.getLegacyAsoAccessToken(),
+        getAccessToken: async () =>
+          dependencies.getAuthProvider() === 'aso'
+            ? dependencies.getLegacyAsoAccessToken()
+            : null,
       };
     case 'none':
       return {

@@ -1,5 +1,5 @@
 import { API_BASE_URL } from '@/shared/config';
-import { clearSession, getAccessToken } from './session';
+import { clearSession, getAccessToken, getAuthProvider } from './session';
 
 const LOGOUT_NOTIFICATION_TIMEOUT_MS = 2_000;
 
@@ -17,7 +17,8 @@ async function notifyLogoutApi(): Promise<void> {
 
 /** Clear the local session immediately; notify the legacy API best-effort. */
 export async function logoutSession(): Promise<void> {
-  const shouldNotifyApi = Boolean(getAccessToken());
+  const shouldNotifyApi =
+    getAuthProvider() === 'custom' && Boolean(getAccessToken());
 
   clearSession();
 

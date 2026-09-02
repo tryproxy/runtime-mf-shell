@@ -15,10 +15,30 @@ function getBearerAccessToken(
 test.describe('remote auth policy', () => {
   test('passes the legacy ASO bearer only to the ASO remote', async () => {
     const getLegacyAsoAccessToken = () => 'aso-access-token';
+    const getAuthProvider = () => 'aso' as const;
 
-    const http = createRemoteAuthHttp('aso', { getLegacyAsoAccessToken });
+    const http = createRemoteAuthHttp('aso', {
+      getAuthProvider,
+      getLegacyAsoAccessToken,
+    });
 
     await expect(getBearerAccessToken(http)).resolves.toBe('aso-access-token');
+  });
+
+  test('does not expose a custom credential to the ASO remote', async () => {
+    let accessTokenReads = 0;
+    const getLegacyAsoAccessToken = () => {
+      accessTokenReads += 1;
+      return 'custom-access-token';
+    };
+
+    const http = createRemoteAuthHttp('aso', {
+      getAuthProvider: () => 'custom',
+      getLegacyAsoAccessToken,
+    });
+
+    await expect(getBearerAccessToken(http)).resolves.toBeNull();
+    expect(accessTokenReads).toBe(0);
   });
 
   test('gives unknown remotes no credential and does not read the ASO token', async () => {
@@ -29,6 +49,7 @@ test.describe('remote auth policy', () => {
     };
 
     const http = createRemoteAuthHttp('future-product', {
+      getAuthProvider: () => 'aso',
       getLegacyAsoAccessToken,
     });
 

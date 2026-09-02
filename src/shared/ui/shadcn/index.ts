@@ -66,3 +66,4 @@ export { Checkbox } from './checkbox';
 export { Input } from './input';
 export { Label } from './label';
 export { Switch } from './switch';
+export { Tabs, TabsContent, TabsList, TabsTrigger } from './tabs';
