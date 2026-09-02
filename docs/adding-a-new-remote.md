@@ -2,7 +2,7 @@
 
 This former all-in-one guide was split because it duplicated the starter and the focused Shell guides.
 
-- New React remote: use the [React remote starter](https://github.com/tryproxy/runtime-mf-react-remote-starter#readme).
+- New React remote: use the [React remote starter `v0.1.0`](https://github.com/tryproxy/runtime-mf-react-remote-starter/tree/v0.1.0).
 - Existing Vite + React SPA: use the [existing-SPA guide](./guide/react-remote.md).
 - Register the delivered artifact: use [Shell registration](./guide/shell-registration.md).
 

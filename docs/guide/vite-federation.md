@@ -3,7 +3,7 @@
 Detail for the producer config. Summary: [React remote guide](./react-remote.md) §5.
 
 Example (greenfield):
-[`runtime-mf-react-remote-starter/vite.config.ts`](https://github.com/tryproxy/runtime-mf-react-remote-starter/blob/main/vite.config.ts).
+[`runtime-mf-react-remote-starter/vite.config.ts`](https://github.com/tryproxy/runtime-mf-react-remote-starter/blob/v0.1.0/vite.config.ts).
 
 Demo producer:
 [`runtime-mf-module/vite.config.ts`](https://github.com/tryproxy/runtime-mf-module/blob/dev/vite.config.ts).

@@ -1,9 +1,9 @@
 # Connect a React remote to the shell
 
-| Starting point                | Path                                                                                                                                                                                                                                                                 |
-| ----------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **New React app**             | Copy [runtime-mf-react-remote-starter](https://github.com/tryproxy/runtime-mf-react-remote-starter). Rename from [its README](https://github.com/tryproxy/runtime-mf-react-remote-starter#readme). Register the copy: [Shell registration](./shell-registration.md). |
-| **Existing Vite + React SPA** | This document (fictional **Store** — rename consistently).                                                                                                                                                                                                           |
+| Starting point                | Path                                                                                                                                                                                                                                                                                                                  |
+| ----------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **New React app**             | Copy [runtime-mf-react-remote-starter `v0.1.0`](https://github.com/tryproxy/runtime-mf-react-remote-starter/tree/v0.1.0) (not `main`). Rename from [its README](https://github.com/tryproxy/runtime-mf-react-remote-starter/blob/v0.1.0/README.md). Register the copy: [Shell registration](./shell-registration.md). |
+| **Existing Vite + React SPA** | This document (fictional **Store** — rename consistently).                                                                                                                                                                                                                                                            |
 
 Do not copy `runtime-mf-module` as a product skeleton. The starter is not
 registered here; there is no `/starter` route until you onboard a copy.
@@ -20,12 +20,12 @@ More detail (same folder): [Embedded entry](./embedded-entry.md) ·
 
 ### Reference repositories
 
-| Role                 | Repo                                                                                                                              |
-| -------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
-| Shell                | [tryproxy/runtime-mf-shell](https://github.com/tryproxy/runtime-mf-shell) (`dev`)                                                 |
-| React demo remote    | [tryproxy/runtime-mf-module](https://github.com/tryproxy/runtime-mf-module) (`dev`)                                               |
-| React starter        | [tryproxy/runtime-mf-react-remote-starter](https://github.com/tryproxy/runtime-mf-react-remote-starter) — greenfield React remote |
-| Product remote (ASO) | [asmarketr/aso-market-admin](https://github.com/asmarketr/aso-market-admin) (`mf-remote-integraion`)                              |
+| Role                 | Repo                                                                                                                                                     |
+| -------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Shell                | [tryproxy/runtime-mf-shell](https://github.com/tryproxy/runtime-mf-shell) (`dev`)                                                                        |
+| React demo remote    | [tryproxy/runtime-mf-module](https://github.com/tryproxy/runtime-mf-module) (`dev`)                                                                      |
+| React starter        | [tryproxy/runtime-mf-react-remote-starter](https://github.com/tryproxy/runtime-mf-react-remote-starter/tree/v0.1.0) (`v0.1.0`) — greenfield React remote |
+| Product remote (ASO) | [asmarketr/aso-market-admin](https://github.com/asmarketr/aso-market-admin) (`mf-remote-integraion`)                                                     |
 
 ## TL;DR — how it works
 

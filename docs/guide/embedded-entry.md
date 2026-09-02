@@ -25,7 +25,7 @@ src/app/entry/remote-app.tsx    # providers / BrowserRouter / product root
 
 Copy shapes from:
 
-- Greenfield: [`runtime-mf-react-remote-starter/.../mount.tsx`](https://github.com/tryproxy/runtime-mf-react-remote-starter/blob/main/src/app/entry/mount.tsx)
+- Greenfield: [`runtime-mf-react-remote-starter/.../mount.tsx`](https://github.com/tryproxy/runtime-mf-react-remote-starter/blob/v0.1.0/src/app/entry/mount.tsx)
 - Demo: [`runtime-mf-module/.../mount.tsx`](https://github.com/tryproxy/runtime-mf-module/blob/dev/src/app/entry/mount.tsx)
 - Product (attribute + dispose): [ASO `mount.tsx`](https://github.com/asmarketr/aso-market-admin/blob/mf-remote-integraion/src/app/entry/mount.tsx)
 
