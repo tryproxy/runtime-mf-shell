@@ -17,6 +17,7 @@ Shell repo: [tryproxy/runtime-mf-shell](https://github.com/tryproxy/runtime-mf-s
 | `src/shared/env.d.ts`                                         | `VITE_STORE_REMOTE_MANIFEST_URL?`                                         |
 | `env.example`                                                 | Local / documented manifest URL                                           |
 | `src/app/remote-runtime/remote-runtime-composition.ts`        | Manifest URL, alias, load request                                         |
+| `src/app/remote-runtime/remote-auth-policy.ts`                | Credential policy, only when the remote backend requires one              |
 | `src/app/remote-navigation/nav-config.ts`                     | Module with `pages: []` and `group` (`platform` \| `demos` \| `products`) |
 | `src/shared/i18n/locales/en.ts` (+ `ru.ts` / `es.ts`)         | Module label keys                                                         |
 | `src/pages/store/`                                            | Thin `RemoteSlot` page                                                    |
@@ -79,6 +80,19 @@ store: 'store_remote/mount',
   locale={toRemoteLocale(locale)}
 />
 ```
+
+## Credential policy
+
+A newly registered `remoteId` is intentionally unmapped in
+`remote-auth-policy.ts`. It therefore uses the Shell's internal `none` policy:
+the public bridge still exposes bearer transport, but `getAccessToken()`
+resolves to `null` and the remote must omit the `Authorization` header.
+
+Leave the remote unmapped when its backend is public or does not use a
+Shell-provided credential. If it requires a bearer, the platform must first
+agree which Shell login provider and backend accept it, then map the `remoteId`
+to that policy. Do not reuse the ASO or Custom bearer merely because one is
+already stored.
 
 ## Reference existing module
 

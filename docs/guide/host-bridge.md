@@ -30,12 +30,20 @@ mount({ container, bridge, basename }) → { unmount(), ready? }
 ## Auth
 
 Shell owns login, storage, logout UX, and the credential policy for each
-`remoteId`. Product login in the PoC shell is ASO email/password (plus optional
-token paste). The `aso` remote currently receives that legacy ASO bearer
-when the stored provider is `aso`. The React and Angular demo remotes receive
-the Custom bearer when the stored provider is `custom`. Unmapped remotes
-receive no credential (`getAccessToken()` resolves to `null`). This policy is
-private Shell composition and does not change the HostBridge contract.
+`remoteId`. The PoC shell currently offers two shell-owned login providers:
+
+- **ASO Customer Admin** — email/password against `VITE_ASO_API_BASE_URL`,
+  plus optional manual token entry and the URL token handoff below;
+- **Custom** — a replaceable email/password placeholder against
+  `VITE_API_BASE_URL/v1/auth/login`.
+
+The stored session includes its provider. The `aso` remote receives the legacy
+ASO bearer only for an `aso` session; the React and Angular demo remotes receive
+the Custom bearer only for a `custom` session. Unmapped remotes use the Shell's
+internal `none` policy and receive no credential: the public HTTP transport
+still has `mode: 'bearer'`, but `getAccessToken()` resolves to `null`. `none` is
+not a `HostBridge` transport mode. This policy is private Shell composition and
+does not change the HostBridge contract.
 
 Remote HTTP clients must tolerate a missing token and must not add an
 `Authorization` header in that case. A new product gets a credential only after
