@@ -11,7 +11,7 @@ export type RemoteRuntimeClock = {
 
 export type RemoteRuntimeAdapters = {
   loadRemote(remoteId: string): Promise<unknown>;
-  auth: HostBridge['auth'];
+  createAuthForRemote(remoteId: string): HostBridge['auth'];
   navigation: HostBridge['navigation'];
   telemetry?: HostTelemetry;
   clock?: RemoteRuntimeClock;

@@ -21,7 +21,7 @@ mount({ container, bridge, basename }) → { unmount(), ready? }
 | Do                                                     | Don’t                                           |
 | ------------------------------------------------------ | ----------------------------------------------- |
 | Read theme / locale / session / location from `bridge` | Own shell chrome or top-level history           |
-| `await bridge.auth.http.getAccessToken()` per API call | Read/write shell token in `localStorage`        |
+| Branch on `auth.http.mode`; request a bearer per call  | Read/write shell token in `localStorage`        |
 | `bridge.auth.signOut()` for logout                     | Clear shell storage yourself                    |
 | Stay under `basename`                                  | Register SW / web-push while embedded           |
 | Scope CSS + portals to the mount root                  | Put product permission DTOs on the bridge       |
@@ -29,9 +29,16 @@ mount({ container, bridge, basename }) → { unmount(), ready? }
 
 ## Auth
 
-Shell owns login, storage, and logout UX. Product login in the PoC shell is
-ASO email/password (plus optional token paste). Remotes only request the
-bearer through `bridge.auth.http`.
+Shell owns login, storage, logout UX, and the credential policy for each
+`remoteId`. Product login in the PoC shell is ASO email/password (plus optional
+token paste). The `aso` remote currently receives that legacy ASO bearer;
+unmapped remotes receive no credential (`getAccessToken()` resolves to `null`).
+This policy is private Shell composition and does not change the HostBridge
+contract or the login form.
+
+Remote HTTP clients must tolerate a missing token and must not add an
+`Authorization` header in that case. A new product gets a credential only after
+the platform explicitly assigns an appropriate policy for its backend.
 
 Optional ASO token handoff (shell strips the query after persist):
 

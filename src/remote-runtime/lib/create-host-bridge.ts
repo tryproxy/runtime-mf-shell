@@ -1,13 +1,10 @@
 import type {
   AppLocale,
   HostBridge,
+  HostTelemetry,
   ThemeMode,
 } from '@platform/runtime-mf-contract';
-import type {
-  RemoteHostContext,
-  RemoteRuntimeAdapters,
-} from '../model/remote-runtime';
-import { createNoopTelemetry } from './create-noop-telemetry';
+import type { RemoteHostContext } from '../model/remote-runtime';
 
 type Listener = () => void;
 
@@ -21,7 +18,9 @@ function subscribe(set: Set<Listener>, listener: Listener): () => void {
 export function createHostBridge(options: {
   initialTheme: ThemeMode;
   initialLocale: AppLocale;
-  adapters: RemoteRuntimeAdapters;
+  auth: HostBridge['auth'];
+  navigation: HostBridge['navigation'];
+  telemetry: HostTelemetry;
 }): {
   bridge: HostBridge;
   updateHostContext(context: RemoteHostContext): void;
@@ -32,7 +31,7 @@ export function createHostBridge(options: {
   let disposed = false;
   const themeListeners = new Set<Listener>();
   const localeListeners = new Set<Listener>();
-  const telemetry = options.adapters.telemetry ?? createNoopTelemetry();
+  const telemetry = options.telemetry;
 
   function notify(listeners: Set<Listener>, facet: 'theme' | 'i18n'): void {
     listeners.forEach((listener) => {
@@ -64,8 +63,8 @@ export function createHostBridge(options: {
         disposed ? () => undefined : subscribe(localeListeners, listener),
     },
 
-    auth: options.adapters.auth,
-    navigation: options.adapters.navigation,
+    auth: options.auth,
+    navigation: options.navigation,
     telemetry,
   };
 

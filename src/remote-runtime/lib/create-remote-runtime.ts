@@ -66,7 +66,9 @@ function createSession(options: {
   const bridgeController = createHostBridge({
     initialTheme: options.start.hostContext.theme,
     initialLocale: options.start.hostContext.locale,
-    adapters: options.adapters,
+    auth: options.adapters.createAuthForRemote(options.start.remoteId),
+    navigation: options.adapters.navigation,
+    telemetry,
   });
   const listeners = new Set<() => void>();
   let snapshot: RemoteSessionSnapshot = { status: 'loading', stage: 'load' };

@@ -9,6 +9,7 @@ import {
 } from '@/shared/auth';
 import { appRouter } from '@/app/routing/app-router';
 import { createRouterNavigation } from '@/app/routing/router-navigation';
+import { createRemoteAuthHttp } from './remote-auth-policy';
 
 type HostSession = NonNullable<ReturnType<HostBridge['auth']['getSnapshot']>>;
 
@@ -45,18 +46,23 @@ function getAuthSnapshot(): HostSession | null {
   return authSnapshot;
 }
 
-const auth: HostBridge['auth'] = {
+const authSession: Omit<HostBridge['auth'], 'http'> = {
   getSnapshot: getAuthSnapshot,
   subscribe: subscribeSession,
   async signOut() {
     await logoutSession();
     await appRouter.navigate('/login', { replace: true });
   },
-  http: {
-    mode: 'bearer',
-    getAccessToken: async () => getAccessToken(),
-  },
 };
+
+function createAuthForRemote(remoteId: string): HostBridge['auth'] {
+  return {
+    ...authSession,
+    http: createRemoteAuthHttp(remoteId, {
+      getLegacyAsoAccessToken: getAccessToken,
+    }),
+  };
+}
 
 const remoteRequests: Record<string, string> = {
   remote: 'demo_remote/mount',
@@ -113,6 +119,6 @@ export const shellRemoteRuntimeAdapters = {
 
     return federationRuntime.loadRemote(request).then(unwrapFederationModule);
   },
-  auth,
+  createAuthForRemote,
   navigation: createRouterNavigation(appRouter),
 } satisfies RemoteRuntimeAdapters;
