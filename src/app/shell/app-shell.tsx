@@ -1,4 +1,5 @@
 import {
+  groupNavModules,
   moduleHasPages,
   moduleHref,
   pageHref,
@@ -262,44 +263,53 @@ function ModulesLayer({
   onOpenModule: (module: NavModule) => void;
   t: Translate;
 }) {
-  return (
-    <nav className="flex flex-col gap-1" aria-label={t('nav.modulesAria')}>
-      <p className="text-muted-foreground px-2 pb-1 text-[11px] font-semibold tracking-wide uppercase">
-        {t('nav.groupModules')}
-      </p>
-      {moduleList.map((module) => {
-        const isActive = module.id === activeModuleId;
-        const hasPages = moduleHasPages(module);
+  const groups = groupNavModules(moduleList);
 
-        return (
-          <button
-            key={module.id}
-            type="button"
-            className={cn(
-              'flex w-full min-w-0 cursor-pointer items-center gap-2 rounded-lg px-3 py-2.5 text-left transition-colors',
-              isActive
-                ? 'bg-sidebar-accent text-sidebar-accent-foreground'
-                : 'text-sidebar-foreground/80 hover:bg-sidebar-accent/70 hover:text-sidebar-accent-foreground'
-            )}
-            onClick={() => onOpenModule(module)}
+  return (
+    <nav className="flex flex-col gap-4" aria-label={t('nav.modulesAria')}>
+      {groups.map((group) => (
+        <section key={group.id} className="flex flex-col gap-1">
+          <p
+            data-rmf-nav-group={group.id}
+            className="text-muted-foreground px-2 pb-1 text-[11px] font-semibold tracking-wide uppercase"
           >
-            <span className="min-w-0 flex-1 overflow-hidden">
-              <span className="block truncate text-sm font-medium">
-                {t(module.labelKey)}
-              </span>
-              <span className="text-muted-foreground mt-0.5 block truncate text-xs">
-                {t(module.descriptionKey)}
-              </span>
-            </span>
-            {hasPages ? (
-              <ChevronRightIcon
-                aria-hidden
-                className="text-muted-foreground size-4 shrink-0"
-              />
-            ) : null}
-          </button>
-        );
-      })}
+            {t(group.labelKey)}
+          </p>
+          {group.modules.map((module) => {
+            const isActive = module.id === activeModuleId;
+            const hasPages = moduleHasPages(module);
+
+            return (
+              <button
+                key={module.id}
+                type="button"
+                className={cn(
+                  'flex w-full min-w-0 cursor-pointer items-center gap-2 rounded-lg px-3 py-2.5 text-left transition-colors',
+                  isActive
+                    ? 'bg-sidebar-accent text-sidebar-accent-foreground'
+                    : 'text-sidebar-foreground/80 hover:bg-sidebar-accent/70 hover:text-sidebar-accent-foreground'
+                )}
+                onClick={() => onOpenModule(module)}
+              >
+                <span className="min-w-0 flex-1 overflow-hidden">
+                  <span className="block truncate text-sm font-medium">
+                    {t(module.labelKey)}
+                  </span>
+                  <span className="text-muted-foreground mt-0.5 block truncate text-xs">
+                    {t(module.descriptionKey)}
+                  </span>
+                </span>
+                {hasPages ? (
+                  <ChevronRightIcon
+                    aria-hidden
+                    className="text-muted-foreground size-4 shrink-0"
+                  />
+                ) : null}
+              </button>
+            );
+          })}
+        </section>
+      ))}
     </nav>
   );
 }

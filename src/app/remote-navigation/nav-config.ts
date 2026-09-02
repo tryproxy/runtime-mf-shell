@@ -18,14 +18,32 @@ export type NavPage = {
   label?: NavPageLabel;
 };
 
+export type NavModuleGroupId = 'platform' | 'demos' | 'pilots';
+
 export type NavModule = {
   id: string;
   /** First URL segment, e.g. `host`, `remote`, `remote-angular`. */
   path: string;
+  group: NavModuleGroupId;
   labelKey: string;
   descriptionKey: string;
   pages: NavPage[];
 };
+
+export type NavModuleGroup = {
+  id: NavModuleGroupId;
+  labelKey: string;
+  modules: NavModule[];
+};
+
+const NAV_MODULE_GROUP_ORDER: readonly {
+  id: NavModuleGroupId;
+  labelKey: string;
+}[] = [
+  { id: 'platform', labelKey: 'nav.groupPlatform' },
+  { id: 'demos', labelKey: 'nav.groupDemos' },
+  { id: 'pilots', labelKey: 'nav.groupPilots' },
+];
 
 /**
  * Static module list. Remote `pages` stay empty and are filled at runtime
@@ -35,13 +53,22 @@ export const navModules: NavModule[] = [
   {
     id: 'host',
     path: 'host',
+    group: 'platform',
     labelKey: 'nav.hostHome',
     descriptionKey: 'nav.hostHomeDesc',
-    pages: [{ id: 'home', segment: '', labelKey: 'nav.pageHome' }],
+    pages: [
+      { id: 'overview', segment: '', labelKey: 'nav.pageOverview' },
+      {
+        id: 'style-guide',
+        segment: 'style-guide',
+        labelKey: 'nav.pageStyleGuide',
+      },
+    ],
   },
   {
     id: 'remote',
     path: 'remote',
+    group: 'demos',
     labelKey: 'nav.remoteModule',
     descriptionKey: 'nav.remoteModuleDesc',
     pages: [],
@@ -49,6 +76,7 @@ export const navModules: NavModule[] = [
   {
     id: 'remoteAngular',
     path: 'remote-angular',
+    group: 'demos',
     labelKey: 'nav.remoteAngular',
     descriptionKey: 'nav.remoteAngularDesc',
     pages: [],
@@ -56,11 +84,20 @@ export const navModules: NavModule[] = [
   {
     id: 'aso',
     path: 'aso',
+    group: 'pilots',
     labelKey: 'nav.aso',
     descriptionKey: 'nav.asoDesc',
     pages: [],
   },
 ];
+
+export function groupNavModules(modules: NavModule[]): NavModuleGroup[] {
+  return NAV_MODULE_GROUP_ORDER.map((group) => ({
+    id: group.id,
+    labelKey: group.labelKey,
+    modules: modules.filter((module) => module.group === group.id),
+  })).filter((group) => group.modules.length > 0);
+}
 
 export function moduleHref(module: NavModule): string {
   return `/${module.path}`;

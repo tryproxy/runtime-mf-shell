@@ -27,11 +27,16 @@ export function initialFrom(label: string): string {
   return trimmed.charAt(0).toUpperCase();
 }
 
+/** Nest `/v1/account/me` is leftover PoC chrome. ASO login does not use it. */
+const ACCOUNT_ME_TIMEOUT_MS = 2_000;
+
 /** Loads GET /v1/account/me when a bearer token exists. */
 export function useShellAccount(): UseShellAccountResult {
   const fallbackEmail = getAuthEmail();
   const [me, setMe] = useState<AccountMe | null>(null);
-  const [loading, setLoading] = useState(Boolean(getAccessToken()));
+  const [loading, setLoading] = useState(
+    () => Boolean(getAccessToken()) && !getAuthEmail()
+  );
 
   useEffect(() => {
     const token = getAccessToken();
@@ -44,11 +49,14 @@ export function useShellAccount(): UseShellAccountResult {
     let cancelled = false;
 
     void (async () => {
-      setLoading(true);
+      if (!getAuthEmail()) {
+        setLoading(true);
+      }
       try {
         const response = await fetch(`${API_BASE_URL}/v1/account/me`, {
           method: 'GET',
           headers: { Authorization: `Bearer ${token}` },
+          signal: AbortSignal.timeout(ACCOUNT_ME_TIMEOUT_MS),
         });
 
         if (!response.ok) {

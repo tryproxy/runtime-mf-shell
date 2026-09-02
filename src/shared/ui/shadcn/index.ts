@@ -33,6 +33,23 @@ export {
 } from './dropdown-menu';
 export { ScrollArea, ScrollBar } from './scroll-area';
 export {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogOverlay,
+  DialogPortal,
+  DialogTitle,
+  DialogTrigger,
+} from './dialog';
+export {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from './tooltip';
+export {
   Select,
   SelectContent,
   SelectGroup,

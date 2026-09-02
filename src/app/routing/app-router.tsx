@@ -12,8 +12,8 @@ import {
 import { installHistorySync } from '@/app/routing/router-navigation';
 import { ShellRouteError } from '@/app/error-handling/shell-route-error';
 import { RequireAuth } from '@/app/routing/require-auth';
-import { HostPage } from '@/pages/host';
-import { Navigate, createBrowserRouter } from 'react-router-dom';
+import { HostPage, HostStyleGuidePage } from '@/pages/host';
+import { Navigate, Outlet, createBrowserRouter } from 'react-router-dom';
 
 export const appRouter = createBrowserRouter([
   {
@@ -34,10 +34,16 @@ export const appRouter = createBrowserRouter([
             element: <ShellLayout />,
             errorElement: <ShellRouteError />,
             children: buildModuleRoutes({
-              host: <HostPage />,
-              remote: <RemoteRoute />,
-              remoteAngular: <RemoteAngularRoute />,
-              aso: <AsoRoute />,
+              host: {
+                element: <Outlet />,
+                children: [
+                  { index: true, element: <HostPage /> },
+                  { path: 'style-guide', element: <HostStyleGuidePage /> },
+                ],
+              },
+              remote: { element: <RemoteRoute /> },
+              remoteAngular: { element: <RemoteAngularRoute /> },
+              aso: { element: <AsoRoute /> },
             }),
           },
         ],

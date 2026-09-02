@@ -7,21 +7,37 @@ import type { AppRouteHandle } from '@/app/routing/route-handle';
 import type { ReactNode } from 'react';
 import type { RouteObject } from 'react-router-dom';
 
-type ModuleElements = Record<NavModule['id'], ReactNode>;
+type ModuleRouteInput = {
+  element: ReactNode;
+  children?: RouteObject[];
+};
+
+type ModuleElements = Record<NavModule['id'], ModuleRouteInput>;
 
 /**
- * One splat route per module (`remote/*`) so RemoteSlot stays mounted while the
+ * One splat route per remote (`remote/*`) so RemoteSlot stays mounted while the
  * embedded remote's BrowserRouter changes paths under the basename.
+ * Shell-owned modules may declare nested children instead of a splat.
  * Page `handle` is resolved at runtime via `useActiveNav` + nav config.
  */
 export function buildModuleRoutes(elements: ModuleElements): RouteObject[] {
   return navModules.map((module) => {
     const moduleHandle: AppRouteHandle = { kind: 'module', module };
+    const input = elements[module.id];
+
+    if (input.children) {
+      return {
+        path: module.path,
+        handle: moduleHandle,
+        element: input.element,
+        children: input.children,
+      } satisfies RouteObject;
+    }
 
     return {
       path: `${module.path}/*`,
       handle: moduleHandle,
-      element: elements[module.id],
+      element: input.element,
     } satisfies RouteObject;
   });
 }
