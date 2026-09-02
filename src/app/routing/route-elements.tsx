@@ -1,4 +1,5 @@
 import { defaultModuleHref } from '@/app/remote-navigation/nav-config';
+import { useRemoteNavManifests } from '@/app/remote-navigation/use-remote-nav-manifests';
 import { AppShell } from '@/app/shell/app-shell';
 import { AuthPage } from '@/pages/authentication';
 import { AsoPage } from '@/pages/aso';
@@ -139,18 +140,39 @@ export function ShellLayout() {
 
 export function RemoteRoute() {
   const { theme, locale } = useOutletContext<ShellOutletContext>();
+  const { ensureNav } = useRemoteNavManifests();
 
-  return <RemotePage theme={theme} locale={locale} />;
+  return (
+    <RemotePage
+      theme={theme}
+      locale={locale}
+      onRetry={() => void ensureNav('remote')}
+    />
+  );
 }
 
 export function RemoteAngularRoute() {
   const { theme, locale } = useOutletContext<ShellOutletContext>();
+  const { ensureNav } = useRemoteNavManifests();
 
-  return <RemoteAngularPage theme={theme} locale={locale} />;
+  return (
+    <RemoteAngularPage
+      theme={theme}
+      locale={locale}
+      onRetry={() => void ensureNav('remoteAngular')}
+    />
+  );
 }
 
 export function AsoRoute() {
   const { theme, locale } = useOutletContext<ShellOutletContext>();
+  const { ensureNav } = useRemoteNavManifests();
 
-  return <AsoPage theme={theme} locale={locale} />;
+  return (
+    <AsoPage
+      theme={theme}
+      locale={locale}
+      onRetry={() => void ensureNav('aso')}
+    />
+  );
 }

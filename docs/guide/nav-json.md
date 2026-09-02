@@ -51,3 +51,8 @@ Register `rmfNavJson()` in `vite.config.ts`.
 `nav.json` must live on the **same origin** as `mf-manifest.json` (PoC: shell
 derives the nav URL from the federation manifest origin). Revalidate caching
 for the stable name; do not SPA-fallback it to `index.html`.
+
+When a remote origin recovers after a failed load, the Shell's slot-level
+**Retry** restarts both the executable remote session and the corresponding
+`nav.json` request. Users must not need to leave the module and re-enter it to
+restore child navigation.

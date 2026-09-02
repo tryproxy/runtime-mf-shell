@@ -15,6 +15,7 @@ type RemoteSlotProps = {
   basename: string;
   theme: ThemeMode;
   locale: AppLocale;
+  onRetry?: () => void;
 };
 
 const LOADING_SNAPSHOT: RemoteSessionSnapshot = {
@@ -27,6 +28,7 @@ export function RemoteSlot({
   basename,
   theme,
   locale,
+  onRetry,
 }: RemoteSlotProps) {
   const { t } = useTranslation();
   const runtime = useRemoteRuntime();
@@ -92,7 +94,10 @@ export function RemoteSlot({
           <RemoteErrorFallback
             title={t('remote.failedTitle')}
             message={errorMessage}
-            onRetry={() => setRetryCount((count) => count + 1)}
+            onRetry={() => {
+              onRetry?.();
+              setRetryCount((count) => count + 1);
+            }}
           />
         ) : null}
         <div ref={containerRef} className="min-h-0" data-rmf-slot-root="" />

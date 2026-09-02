@@ -40,6 +40,10 @@ Remote HTTP clients must tolerate a missing token and must not add an
 `Authorization` header in that case. A new product gets a credential only after
 the platform explicitly assigns an appropriate policy for its backend.
 
+`bridge.auth.signOut()` clears the Shell-held session immediately. A legacy
+backend logout notification is best-effort and cannot block navigation to the
+Shell login page.
+
 Optional ASO token handoff (shell strips the query after persist):
 
 ```text

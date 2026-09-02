@@ -2,6 +2,7 @@ import {
   expect,
   readRemoteThemeAppearance,
   test,
+  waitForRemoteReady,
 } from '../fixtures/runtime-mf';
 
 test.describe('remote lifecycle', () => {
@@ -17,6 +18,44 @@ test.describe('remote lifecycle', () => {
     ).toBeVisible();
     await expect(page.getByText('PLATFORM').first()).toBeVisible();
     await expect(page.getByRole('button', { name: 'Log out' })).toBeVisible();
+  });
+
+  test('one retry restores the remote and its navigation after its origin recovers', async ({
+    page,
+    target,
+  }) => {
+    const remotePort = new URL(target.remoteDevUrl).port;
+    let originRecovered = false;
+    let failedRequests = 0;
+
+    await page.route(
+      (url) => url.port === remotePort,
+      async (route) => {
+        if (!originRecovered) {
+          failedRequests += 1;
+          await route.abort('failed');
+          return;
+        }
+
+        await route.continue();
+      }
+    );
+
+    await page.goto(target.indexPath);
+    await expect(
+      page.locator(
+        `[data-rmf-slot="${target.remoteId}"][data-rmf-slot-status="error"]`
+      )
+    ).toBeVisible({ timeout: 15_000 });
+
+    originRecovered = true;
+    await page.getByRole('button', { name: 'Retry', exact: true }).click();
+    await waitForRemoteReady(page, target);
+
+    expect(failedRequests).toBeGreaterThan(0);
+    await expect(
+      page.getByRole('navigation', { name: 'Module pages' })
+    ).toBeVisible({ timeout: 3_000 });
   });
 
   test('leaving the remote and returning creates a clean mount', async ({
