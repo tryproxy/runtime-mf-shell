@@ -1,45 +1,36 @@
-/**
- * Runtime MF design-token contract.
- * Shell owns paint. Remotes read via var(--rmf-*).
- * Values bridge from shadcn semantic tokens so shell UI and remotes stay aligned.
- *
- * Theme switches: html[data-rmf-theme] + class "dark" (shadcn).
- */
+@import '@platform/runtime-mf-contract/design-tokens/tailwind-v4.css';
 
-html[data-rmf-theme='light'],
-html:not(.dark) {
+/**
+ * Shell adapter for Runtime MF Design Tokens v1.
+ * CSS inheritance is the transport; HostBridge only carries the theme mode.
+ */
+html {
   --rmf-color-page: var(--background);
-  --rmf-color-surface: var(--card);
   --rmf-color-fg: var(--foreground);
-  --rmf-color-muted: var(--muted-foreground);
-  --rmf-color-subtle: var(--muted-foreground);
+  --rmf-color-surface: var(--card);
+  --rmf-color-surface-fg: var(--card-foreground);
+  --rmf-color-muted: var(--muted);
+  --rmf-color-muted-fg: var(--muted-foreground);
+  --rmf-color-primary: var(--primary);
+  --rmf-color-primary-fg: var(--primary-foreground);
+  --rmf-color-secondary: var(--secondary);
+  --rmf-color-secondary-fg: var(--secondary-foreground);
+  --rmf-color-accent: var(--accent);
+  --rmf-color-accent-fg: var(--accent-foreground);
+  --rmf-color-destructive: var(--destructive);
   --rmf-color-border: var(--border);
+  --rmf-color-input: var(--input);
+  --rmf-color-ring: var(--ring);
   --rmf-radius-md: var(--radius);
   --rmf-shadow-sm: 0 1px 2px rgb(15 23 42 / 0.06);
+  --rmf-font-sans: var(--font-sans);
 }
 
-html[data-rmf-theme='dark'],
 html.dark {
-  --rmf-color-page: var(--background);
-  --rmf-color-surface: var(--card);
-  --rmf-color-fg: var(--foreground);
-  --rmf-color-muted: var(--muted-foreground);
-  --rmf-color-subtle: var(--muted-foreground);
-  --rmf-color-border: var(--border);
-  --rmf-radius-md: var(--radius);
   --rmf-shadow-sm: 0 1px 2px rgb(0 0 0 / 0.35);
 }
 
 @theme {
-  --color-rmf-page: var(--rmf-color-page);
-  --color-rmf-surface: var(--rmf-color-surface);
-  --color-rmf-fg: var(--rmf-color-fg);
-  --color-rmf-muted: var(--rmf-color-muted);
-  --color-rmf-subtle: var(--rmf-color-subtle);
-  --color-rmf-border: var(--rmf-color-border);
-  --radius-rmf-md: var(--rmf-radius-md);
-  --shadow-rmf-sm: var(--rmf-shadow-sm);
-
   /* Company custom screens (see APP_BREAKPOINTS). sm/md/lg/xl keep TW defaults. */
   --breakpoint-compact: 500px;
   --breakpoint-comfortable: 560px;

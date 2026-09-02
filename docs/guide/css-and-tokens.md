@@ -13,26 +13,49 @@ shell selects light / dark
 
 - Shell owns document theme and paint tokens.
 - Remotes **consume** `var(--rmf-*)` — they do not import shell Tailwind CSS.
-- Product colors stay in the remote; provide standalone fallbacks when `--rmf-*`
-  are missing.
+- Common primitives use the shared semantic roles. Product/domain colors stay
+  in the remote.
+- A remote provides its own standalone fallbacks when `--rmf-*` are missing.
 
-Source of truth:
-[`runtime-mf-shell/src/shared/styles/tokens.css`](https://github.com/tryproxy/runtime-mf-shell/blob/dev/src/shared/styles/tokens.css).
+The canonical names and optional Tailwind v4 adapter are published by
+`@platform/runtime-mf-contract/design-tokens`. The Shell values are mapped in
+[`src/shared/styles/tokens.css`](../../src/shared/styles/tokens.css).
 
-## Tokens (PoC)
+## Design Tokens v1
 
-| Token                 | Meaning                  |
-| --------------------- | ------------------------ |
-| `--rmf-color-page`    | Page / canvas background |
-| `--rmf-color-surface` | Card / panel surface     |
-| `--rmf-color-fg`      | Primary text             |
-| `--rmf-color-muted`   | Secondary text           |
-| `--rmf-color-subtle`  | Tertiary / label text    |
-| `--rmf-color-border`  | Borders                  |
-| `--rmf-radius-md`     | Medium radius            |
-| `--rmf-shadow-sm`     | Light elevation          |
+| Token                      | Purpose                            |
+| -------------------------- | ---------------------------------- |
+| `--rmf-color-page`         | Page/canvas background             |
+| `--rmf-color-fg`           | Default page text                  |
+| `--rmf-color-surface`      | Card, panel, popover background    |
+| `--rmf-color-surface-fg`   | Text on a surface                  |
+| `--rmf-color-muted`        | Muted/secondary background         |
+| `--rmf-color-muted-fg`     | Secondary text and labels          |
+| `--rmf-color-primary`      | Primary action                     |
+| `--rmf-color-primary-fg`   | Text/icon on primary               |
+| `--rmf-color-secondary`    | Secondary action                   |
+| `--rmf-color-secondary-fg` | Text/icon on secondary             |
+| `--rmf-color-accent`       | Ghost/interactive hover background |
+| `--rmf-color-accent-fg`    | Text/icon on accent                |
+| `--rmf-color-destructive`  | Error and destructive action       |
+| `--rmf-color-border`       | Dividers and structural borders    |
+| `--rmf-color-input`        | Form-control chrome                |
+| `--rmf-color-ring`         | Keyboard focus ring                |
+| `--rmf-radius-md`          | Base control radius                |
+| `--rmf-shadow-sm`          | Light elevation                    |
+| `--rmf-font-sans`          | Shared sans-serif font stack       |
 
-Names are a PoC convention, not a frozen public API yet.
+The interface intentionally excludes shell sidebar/chart roles, spacing, and
+breakpoints. Remotes derive their smaller/larger radii from the single base
+radius and keep business-state colors local.
+
+Tailwind v4 remotes may import the adapter:
+
+```css
+@import '@platform/runtime-mf-contract/design-tokens/tailwind-v4.css';
+```
+
+This adds `rmf-*` utilities; it does not publish values or set a theme.
 
 ## Theme from HostBridge
 
@@ -46,10 +69,9 @@ paint. Avoid broad `transition-all` or `transition-colors` rules that delay
 semantic color changes during the global switch; keep hover/focus motion
 separate and honor `prefers-reduced-motion`.
 
-The React starter is the current reference proof: it applies theme ownership at
-the layout boundary, keeps semantic controls/overlays free of broad color/all
-transitions, and passes normal plus reduced-motion boundary sampling. See the
-starter [style guide](https://github.com/tryproxy/runtime-mf-react-remote-starter/blob/main/docs/style-guide.md#closed-wp61-quality-gates).
+The React starter is the reference consumer: it maps the shared roles at its
+mount boundary and keeps semantic controls/overlays free of broad color/all
+transitions.
 
 ## Embedded stylesheet
 
