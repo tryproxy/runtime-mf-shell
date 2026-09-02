@@ -28,7 +28,7 @@ Research / backlog: [`docs/reserach.local/`](./docs/reserach.local/).
 4. **Stay under basename** — interpret paths only under the shell-assigned prefix (e.g. `/remote/*`). Do not own top-level history when embedded.
 5. **Optional `nav.json`** — pre-mount page list at `{origin}/nav.json` so the shell can render chrome without loading remote JS.
 
-Contract package: `github:tryproxy/runtime-mf-contract#v0.5.3`. The shell uses its runtime parsers before invoking independently deployed code.
+Contract package: `github:tryproxy/runtime-mf-contract#v0.5.4`. The shell uses its runtime parsers before invoking independently deployed code.
 
 ---
 

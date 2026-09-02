@@ -2,7 +2,7 @@
 
 Detail for the host seam. Summary: [React remote guide](./react-remote.md) §7.
 
-Contract pin: `github:tryproxy/runtime-mf-contract#v0.5.3`.
+Contract pin: `github:tryproxy/runtime-mf-contract#v0.5.4`.
 
 ## What the shell passes into `mount`
 

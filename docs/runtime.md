@@ -7,7 +7,7 @@ For the maintained documentation routes, start at [Shell documentation](./README
 - Shell owns top-level routes, chrome, the Remote Runtime lifecycle, and HostBridge.
 - A remote publishes Module Federation `./mount` and may publish `nav.json` for child navigation.
 - The current Shell uses static remote descriptors; onboarding requires a Shell deployment.
-- Contract: `@platform/runtime-mf-contract` `v0.5.3`; framework adapters: `v0.1.3`.
+- Contract: `@platform/runtime-mf-contract` `v0.5.4`; framework adapters: `v0.1.3`.
 - Host E2E is owned by the Shell in [`e2e/`](../e2e/README.md), not copied into product remotes or the starter.
 
 ## Read only what applies

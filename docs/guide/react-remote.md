@@ -78,7 +78,7 @@ Env + static module + `RemoteSlot` page + i18n + redeploy. Details:
 ## 2. Install (remote)
 
 ```bash
-npm install github:tryproxy/runtime-mf-contract#v0.5.3
+npm install github:tryproxy/runtime-mf-contract#v0.5.4
 npm install github:tryproxy/runtime-mf-adapters#v0.1.3
 npm install -D @module-federation/vite@^1.20.5
 ```
